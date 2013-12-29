@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price: 9.99
+  quote_time: 2013-11-18 22:05:59
+
+two:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price: 9.99
+  quote_time: 2013-11-18 22:05:59

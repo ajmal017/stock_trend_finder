@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker_id: 1
+  ticker_symbol: MyString
+  quarter: MyString
+  year: 1
+  low_liquidity_days: 1
+
+two:
+  ticker_id: 1
+  ticker_symbol: MyString
+  quarter: MyString
+  year: 1
+  low_liquidity_days: 1

@@ -1,0 +1,7 @@
+with price_dates_and_tickers_to_screen as
+(select dsp.id as dsp_id, ll.ticker_id, ll.ticker_symbol, ll.quarter, ll.year, low_liquidity_days, dsp.price_date from low_liquidity_quarters ll
+inner join price_dates pd on ll.year=pd.year and ll.quarter=pd.quarter
+inner join daily_stock_prices dsp on ll.ticker_id=dsp.ticker_id and dsp.price_date=pd.price_date
+order by dsp.price_date)
+
+update daily_stock_prices dsp_upd set exclude=true where id in (select dsp_id from price_dates_and_tickers_to_screen as screendsp)

@@ -1,0 +1,1 @@
+select symbol, price_date, close from daily_stock_prices inner join tickers on ticker_id=tickers.id where symbol='A';

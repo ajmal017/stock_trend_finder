@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker: 1
+  date: 2013-10-28
+  open: 
+  high: 
+  low: 
+  close: 
+  volume: 1
+
+two:
+  ticker: 1
+  date: 2013-10-28
+  open: 
+  high: 
+  low: 
+  close: 
+  volume: 1

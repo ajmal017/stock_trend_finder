@@ -1,0 +1,20 @@
+﻿Today's Trade Activity for 861214584 (Winston Primary) on 11/24/13 13:50:27
+
+Working Orders
+Notes,,Time Placed,Spread,Side,Qty,Pos Effect,Symbol,Exp,Strike,Type,PRICE,,TIF,Mark,Status
+,,11/24/13 13:44:10,STOCK,BUY,+300,TO OPEN,HCN,,,STOCK,57.76,LMT,GTC,57.76,WORKING
+,,11/24/13 08:44:07,STOCK,SELL,-300,TO CLOSE,WSM,,,STOCK,56.35,LMT,GTC,58.76,WORKING
+,,,,,,,,,,,56.35,STP,STD,,
+,,11/22/13 17:56:05,SINGLE,SELL,-2,TO OPEN,ATHN,JAN 14,125,PUT,7.50,LMT,GTC,7.20,WAIT TRG
+,,,RE #645749240,,,,,,,,,,,,
+
+Filled Orders
+,,Exec Time,Spread,Side,Qty,Pos Effect,Symbol,Exp,Strike,Type,Price,Net Price,Order Type
+
+Cancelled Orders
+Notes,,Time Cancelled,Spread,Side,Qty,Pos Effect,Symbol,Exp,Strike,Type,PRICE,,TIF,Status
+,,11/24/13 13:11:45,SINGLE,SELL,-2,TO OPEN,ATHN,JAN 14,120,PUT,8.40,LMT,GTC,CANCELED
+,,,RE #645749240,,,,,,,,,,,
+
+Rolling Strategies
+Covered Call Position,New Exp,Call By,Begin (Days),Order Price,Active Time,Move to MKT Time,Status
