@@ -1,0 +1,35 @@
+<h1>Listing tickers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Company name</th>
+      <th>Scrape data</th>
+      <th>Track gap up</th>
+      <th>Date removed</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tickers.each do |ticker| %>
+      <tr>
+        <td><%= ticker.symbol %></td>
+        <td><%= ticker.company_name %></td>
+        <td><%= ticker.scrape_data %></td>
+        <td><%= ticker.track_gap_up %></td>
+        <td><%= ticker.date_removed %></td>
+        <td><%= link_to 'Show', ticker %></td>
+        <td><%= link_to 'Edit', edit_ticker_path(ticker) %></td>
+        <td><%= link_to 'Destroy', ticker, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ticker', new_ticker_path %>

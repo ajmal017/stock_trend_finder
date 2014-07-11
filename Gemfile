@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
+gem 'haml', '~> 4.0'
 
 # Use sqlite3 as the database for Active Record
 gem 'pg'
@@ -28,8 +29,11 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
 gem "rufus-scheduler"
-gem "ystock", "~> 0.4.5"
 gem "dalli"
+gem 'httparty', '~> 0.13'
+
+gem "tdameritrade_api", "~> 0.0.1.3.alpha", :path=>'~/Development/gem-development/tdameritrade_api'
+gem "bindata"
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -49,3 +53,4 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'nokogiri', '~>1.6'
+gem 'squeel'

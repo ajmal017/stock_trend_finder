@@ -17,3 +17,6 @@
 
 # Ignore temporary import files
 /downloads
+
+# Ignore the old versions of files I'm hoarding
+/lib/old

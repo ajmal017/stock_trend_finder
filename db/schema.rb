@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131213005453) do
+ActiveRecord::Schema.define(version: 20140706000647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,10 @@ ActiveRecord::Schema.define(version: 20131213005453) do
     t.decimal  "previous_high"
     t.decimal  "previous_low"
     t.boolean  "exclude",                                                     default: false
+    t.decimal  "range_pct"
+    t.decimal  "average_volume_50day"
+    t.decimal  "ema13"
+    t.string   "candle_vs_ema13"
   end
 
   add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree
@@ -126,6 +130,23 @@ ActiveRecord::Schema.define(version: 20131213005453) do
     t.datetime "updated_at"
   end
 
+  create_table "minute_stock_prices", force: true do |t|
+    t.integer  "ticker_id"
+    t.string   "ticker_symbol"
+    t.datetime "price_time"
+    t.decimal  "open"
+    t.decimal  "high"
+    t.decimal  "low"
+    t.decimal  "close"
+    t.decimal  "volume",        precision: 15, scale: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "minute_stock_prices", ["price_time"], name: "index_minute_stock_prices_on_price_time", using: :btree
+  add_index "minute_stock_prices", ["ticker_id", "price_time"], name: "index_minute_stock_prices_on_ticker_id_and_price_time", unique: true, using: :btree
+  add_index "minute_stock_prices", ["ticker_symbol"], name: "index_minute_stock_prices_on_ticker_symbol", using: :btree
+
   create_table "open_positions", force: true do |t|
     t.integer  "ticker_id"
     t.string   "ticker_symbol"
@@ -163,6 +184,7 @@ ActiveRecord::Schema.define(version: 20131213005453) do
     t.decimal  "open"
     t.decimal  "low"
     t.decimal  "high"
+    t.decimal  "volume",        precision: 15, scale: 0
   end
 
   create_table "stock_splits", force: true do |t|
@@ -200,6 +222,8 @@ ActiveRecord::Schema.define(version: 20131213005453) do
     t.string   "gap_up_note"
     t.boolean  "adr"
     t.boolean  "russell3000"
+    t.datetime "date_removed"
+    t.string   "note"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree

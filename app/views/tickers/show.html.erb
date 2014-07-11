@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Symbol:</strong>
+  <%= @ticker.symbol %>
+</p>
+
+<p>
+  <strong>Company name:</strong>
+  <%= @ticker.company_name %>
+</p>
+
+<p>
+  <strong>Scrape data:</strong>
+  <%= @ticker.scrape_data %>
+</p>
+
+<p>
+  <strong>Track gap up:</strong>
+  <%= @ticker.track_gap_up %>
+</p>
+
+<p>
+  <strong>Date removed:</strong>
+  <%= @ticker.date_removed %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @ticker.note %>
+</p>
+
+
+<%= link_to 'Edit', edit_ticker_path(@ticker) %> |
+<%= link_to 'Back', tickers_path %>

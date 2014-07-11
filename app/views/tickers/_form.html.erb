@@ -1,0 +1,41 @@
+<%= form_for(@ticker) do |f| %>
+  <% if @ticker.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ticker.errors.count, "error") %> prohibited this ticker from being saved:</h2>
+
+      <ul>
+      <% @ticker.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :symbol %><br>
+    <%= f.text_field :symbol %>
+  </div>
+  <div class="field">
+    <%= f.label :company_name %><br>
+    <%= f.text_field :company_name %>
+  </div>
+  <div class="field">
+    <%= f.label :scrape_data %><br>
+    <%= f.check_box :scrape_data %>
+  </div>
+  <div class="field">
+    <%= f.label :track_gap_up %><br>
+    <%= f.check_box :track_gap_up %>
+  </div>
+  <div class="field">
+    <%= f.label :date_removed %><br>
+    <%= f.date_select :date_removed %>
+  </div>
+    <div class="field">
+      <%= f.label :note %><br>
+      <%= f.text_area :note %>
+    </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

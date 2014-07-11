@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_time: 2014-01-26 00:31:05
+  open: 9.99
+  high: 
+  low: 
+  close: 
+  volume: 9.99
+
+two:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_time: 2014-01-26 00:31:05
+  open: 9.99
+  high: 
+  low: 
+  close: 
+  volume: 9.99
