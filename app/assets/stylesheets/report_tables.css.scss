@@ -1,0 +1,14 @@
+.report-container {
+  // set up the center alignment of the table
+  width: 90%;
+  margin: 0% 5%;
+  padding-top: 30px;
+
+  table {
+    width: 100%;
+    font-size: 9pt;
+    th, td {
+      padding: 2px;
+    }
+  }
+}

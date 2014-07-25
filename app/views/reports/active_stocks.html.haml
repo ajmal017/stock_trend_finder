@@ -1,0 +1,24 @@
+%h1 Active Stocks Report
+
+-if @report.count > 0
+  %div Last Updated: #{@report.first['quote_time']}
+  %div Items: #{@report.count}
+
+
+.report-container
+  %table.table-bordered#active-stocks
+    %thead
+      %th#ticker-symbol Ticker Symbol
+      %th#last-trade Last
+      %th#pct-change % Chg
+      %th#volume Volume
+      %th#average-volume Avg Vol (K)
+      %th#volume-ratio Volume Ratio
+    -@report.each do |r|
+      %tr
+        %td= r['ticker_symbol']
+        %td= r['last_trade']
+        %td= r['pct_change']
+        %td= r['volume']
+        %td= r['average_volume']
+        %td= r['volume_ratio']

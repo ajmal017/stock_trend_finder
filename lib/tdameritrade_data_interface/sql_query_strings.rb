@@ -6,6 +6,58 @@ module TDAmeritradeDataInterface
 
     module ClassMethods
 
+      def select_active_stocks
+        <<SQL
+-- active stocks
+select
+  rtq.ticker_symbol,
+  last_trade,
+  round(((last_trade / dsp.close) - 1) * 100, 2) as pct_change,
+  dsp.close as prev_close,
+  round(rtq.volume / 1000) as volume,
+  dsp.average_volume_50day as average_volume,
+  round(round(rtq.volume / 1000) / dsp.average_volume_50day, 2) as volume_ratio,
+  quote_time,
+  dsp.price_date as last_price_date
+
+from real_time_quotes as rtq inner join
+daily_stock_prices dsp on dsp.ticker_id=rtq.ticker_id inner join
+tickers tix on tix.id=rtq.ticker_id
+where
+tix.scrape_data=true and
+dsp.price_date = (select price_date from daily_stock_prices dspd where dspd.ticker_id=rtq.ticker_id and dspd.price_date < date_trunc('day', rtq.quote_time) order by price_date desc limit 1) and
+(last_trade * rtq.volume > 1000000) and
+abs(round(((last_trade / dsp.close) - 1) * 100, 2)) > 1 and
+average_volume_50day is not null
+order by volume_ratio desc
+limit 50
+SQL
+      end
+
+      def select_ema13_bullish_breaks
+
+      end
+
+      def select_hammers
+        <<SQL
+select ticker_symbol, open, high, low, last_trade, volume, quote_time,
+(select average_volume_50day from daily_stock_prices dsp where dsp.ticker_id=rtq.ticker_id order by price_date desc limit 1) * 1000 as average_volume_50day,
+round(volume / ((select average_volume_50day from daily_stock_prices dsp where dsp.ticker_id=rtq.ticker_id order by price_date desc limit 1) * 1000), 2) as average_volume_ratio
+from real_time_quotes rtq
+where
+last_trade != 0 and open != 0 and high != 0 and low != 0 and high != low and
+(abs(last_trade - open) / (high - low) < 0.33) and
+((high - low) / last_trade > 0.05) and
+(
+((greatest(last_trade, open)  - low) / (high-low) > 0.95) or
+((least(last_trade, open) - low + 0.001) / (high-low) < 0.05)
+) and
+(volume * last_trade  > 3000000) and
+(round(volume / ((select average_volume_50day from daily_stock_prices dsp where dsp.ticker_id=rtq.ticker_id order by price_date desc limit 1) * 1000), 2)  > 1)
+order by average_volume_ratio desc
+SQL
+      end
+
       def update_average_volume_50day(begin_date)
         raise Exception.new("No begin_date given for update_average_volume_50day query") if begin_date.nil?
         <<SQL

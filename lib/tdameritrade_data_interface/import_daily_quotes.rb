@@ -1,4 +1,4 @@
-load 'lib/tdameritrade_data_interface/sql_query_strings.rb'
+require 'tdameritrade_data_interface/sql_query_strings'
 
 module TDAmeritradeDataInterface
   NEW_TICKER_BEGIN_DATE=Date.new(2012,01,02)
@@ -7,6 +7,7 @@ module TDAmeritradeDataInterface
 
   def self.import_quotes(opts={})
     begin_date = (opts.has_key? :begin_date) && (opts[:begin_date].is_a? Date) ? opts[:begin_date] : nil
+    end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date].strftime('%Y%m%d') : Date.today.strftime('%Y%m%d')
 
     cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
     log_file = File.join(Rails.root, 'downloads', 'import_quotes.log')
@@ -31,17 +32,18 @@ module TDAmeritradeDataInterface
               prices = [{already_processed: true}]
             else
               if begin_date.nil?
-                prices = c.get_daily_price_history(ticker.symbol, (last_dsp.price_date+1).strftime('%Y%m%d'))
+                prices = c.get_daily_price_history(ticker.symbol, (last_dsp.price_date+1), end_date)
                 #prices = c.get_daily_price_history(ticker.symbol, Date.today.strftime('%Y%m%d'))
                 #prices = c.get_daily_price_history(ticker.symbol, '20140708')
               else
-                prices = c.get_daily_price_history(ticker.symbol, begin_date.strftime('%Y%m%d'))
+                prices = c.get_daily_price_history(ticker.symbol, begin_date, end_date)
               end
             end
           else
-            prices = c.get_daily_price_history(ticker.symbol, NEW_TICKER_BEGIN_DATE.strftime('%Y%m%d'))
+            prices = c.get_daily_price_history(ticker.symbol, NEW_TICKER_BEGIN_DATE, end_date)
           end
           if get_history_returned_error?(prices)
+            # TODO Change this so that it handles an exception rather than checks for error condition
             error_count += 1
             puts "Error processing #{ticker.symbol} - (attempt ##{error_count}) #{prices.first[:error]}"
             log = log + "Error processing #{ticker.symbol} - (attempt ##{error_count}) #{prices.first[:error]}\n"
@@ -160,6 +162,7 @@ module TDAmeritradeDataInterface
 
     puts log
   end
+
 
   def self.populate_average_volume_50day(begin_date=Date.today)
     ActiveRecord::Base.connection.execute update_average_volume_50day(begin_date)

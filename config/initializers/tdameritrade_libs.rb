@@ -1,0 +1,18 @@
+require File.join(Rails.root, 'lib/tdameritrade_data_interface/tdameritrade_data_interface')
+
+# This method is here to initially load the libraries at the command line, and
+# it uses the 'load' method vs 'require' so that I can make minor changes to the libs without
+# the need for restarting the rails console
+def reload_libs!
+  load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'tdameritrade_data_interface.rb')
+  load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'sql_query_strings.rb')
+  load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_daily_quotes.rb')
+  load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_minute_quotes.rb')
+end
+
+def tda_login!
+  $c = TDAmeritradeApi::Client.new
+  $c.login
+end
+
+$stf = TDAmeritradeDataInterface  # I've created the $stf variable as an alias to make it easier to access TDAmeritradeDataInterface methods on the command line
