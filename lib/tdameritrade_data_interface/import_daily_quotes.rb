@@ -93,7 +93,7 @@ module TDAmeritradeDataInterface
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
     puts "Calculating EMA13's"
-    populate_ema13(NEW_TICKER_BEGIN_DATE)
+    populate_ema13
 
     of = open(log_file, "w")
     of.write(log)
@@ -163,12 +163,33 @@ module TDAmeritradeDataInterface
     puts log
   end
 
+  def self.run_realtime_quotes_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0,15,30,45 8-15 * * MON-FRI') do
+      puts "Real Time Quote Import: #{Time.now}"
+      import_realtime_quotes
+    end
+    puts "Beginning realtime quote import daemon..."
+    puts "Current Time: #{Time.now}"
+    scheduler
+  end
+
+  def self.run_daily_quotes_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0 20 * * MON-FRI') do
+      puts "Daily Quote Import: #{Time.now}"
+      import_quotes
+    end
+    puts "Beginning daily quotes update daemon..."
+    puts "Current Time: #{Time.now}"
+    scheduler
+  end
 
   def self.populate_average_volume_50day(begin_date=Date.today)
     ActiveRecord::Base.connection.execute update_average_volume_50day(begin_date)
   end
 
-  def self.populate_ema13(begin_date=Date.new(2012,01,02))
+  def self.populate_ema13(begin_date=Date.new(2014,05,02))
 
     begin
       # Populate the first entry - sma13

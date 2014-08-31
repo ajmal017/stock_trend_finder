@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724184630) do
+ActiveRecord::Schema.define(version: 20140825174422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -262,6 +262,8 @@ ActiveRecord::Schema.define(version: 20140724184630) do
     t.boolean  "russell3000"
     t.datetime "date_removed"
     t.string   "note"
+    t.decimal  "float"
+    t.decimal  "institutional_holdings_percent"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree

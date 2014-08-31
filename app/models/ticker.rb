@@ -26,6 +26,10 @@ class Ticker < ActiveRecord::Base
     end
   end
 
+  def self.get_float(symbol)
+    Ticker.find_by(symbol: symbol).float.to_s
+  end
+
   def self.update_all_daily_stock_prices
     watching.each do |t|
       t.update_daily_stock_prices

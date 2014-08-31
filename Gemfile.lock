@@ -37,6 +37,13 @@ GEM
     bootstrap-sass (3.2.0.0)
       sass (~> 3.2)
     builder (3.1.4)
+    capybara (2.1.0)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
+    cliver (0.3.2)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -72,6 +79,11 @@ GEM
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     pg (0.17.1)
+    poltergeist (1.5.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     polyglot (0.3.5)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -124,6 +136,9 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    websocket-driver (0.3.1)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -132,6 +147,7 @@ DEPENDENCIES
   autoprefixer-rails (~> 2.1)
   bindata
   bootstrap-sass (~> 3.2)
+  capybara (~> 2.1)
   coffee-rails (~> 4.0.0)
   dalli
   haml (~> 4.0)
@@ -140,8 +156,9 @@ DEPENDENCIES
   jquery-rails
   nokogiri (~> 1.6)
   pg
+  poltergeist (~> 1.5)
   rails (= 4.0.0)
-  rufus-scheduler
+  rufus-scheduler (~> 3.0)
   sass-rails (~> 4.0.0)
   sdoc
   tdameritrade_api (~> 0.0.1.3.alpha)!

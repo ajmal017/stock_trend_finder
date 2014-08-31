@@ -28,7 +28,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
-gem "rufus-scheduler"
+gem "rufus-scheduler", '~> 3.0'
 gem "dalli"
 gem 'httparty', '~> 0.13'
 
@@ -53,3 +53,6 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'nokogiri', '~>1.6'
+
+gem 'capybara', '~>2.1'
+gem 'poltergeist', '~>1.5'

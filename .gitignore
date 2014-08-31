@@ -5,6 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore bundler config.
+.DS_Store
 /.bundle
 
 # Ignore the default SQLite database.
@@ -17,6 +18,7 @@
 
 # Ignore temporary import files
 /downloads
+/data_stream_archive
 
 # Ignore the old versions of files I'm hoarding
 /lib/old
