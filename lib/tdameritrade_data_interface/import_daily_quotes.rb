@@ -88,6 +88,95 @@ module TDAmeritradeDataInterface
 
     puts log
 
+    puts "Updating Previous Close Cache"
+    populate_previous_close
+
+    puts "Calculating Average Daily Volumes"
+    populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
+
+    puts "Calculating EMA13's"
+    populate_ema13
+
+    of = open(log_file, "w")
+    of.write(log)
+    of.close
+
+    log_problem_tickers=""
+    log.lines.each do |line|
+      log_problem_tickers+="#{/Error processing (.*?) -/.match(line)[1]}," if /\b#{/Error processing (.*?) -/.match(line)[1]}\b/.match(log_problem_tickers).nil?
+    end
+    log_problem_tickers.slice!(log_problem_tickers.length-1) if log_problem_tickers.last==","
+    puts "Summary report of problem tickers: #{log_problem_tickers}"
+
+  end
+
+  #TODO this needs to be refactored to work better with import_quotes
+  def self.update_daily_stock_prices_from_real_time_snapshot(opts={})
+    log_file = File.join(Rails.root, 'downloads', 'import_quotes.log')
+
+    c = TDAmeritradeApi::Client.new
+    c.login
+    log = ""
+
+    records_to_update = DailyStockPrice.where.not(snapshot_time: nil).order(:ticker_symbol, :price_date)
+    #records_to_update = DailyStockPrice.where(symbol: 'IDIX', price_date: Date.today).order(:ticker_symbol, :price_date)
+    count = records_to_update.count
+    records_to_update.each.with_index(1) do |r, i|
+      puts "Processing #{i} of #{count}: #{r[:ticker_symbol]}, #{r[:price_date]}"
+
+      begin
+        begin_date = end_date = r[:price_date]
+        error_count = 0
+        prices = Array.new
+
+        while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+          prices = c.get_daily_price_history(r[:ticker_symbol], begin_date, end_date)
+          if get_history_returned_error?(prices)
+            error_count += 1
+            puts "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{prices.first[:error]}"
+            log = log + "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{prices.first[:error]}\n"
+          else
+            error_count = -1
+          end
+        end
+
+        next if get_history_returned_error?(prices)
+        p = prices.first
+        if p[:timestamp].to_date != r[:price_date]
+          puts "Error: price date does not match"
+          log = log + "Error processing #{r[:ticker_symbol]}: incorrect price date #{p[:timestamp]} vs #{r[:price_date]} in the record"
+          next
+        end
+        new_attributes = {
+            open: p[:open],
+            high: p[:high],
+            low: p[:low],
+            close: p[:close],
+            volume: p[:volume]/10,
+            previous_close: nil,
+            previous_high: nil,
+            previous_low: nil,
+            average_volume_50day: nil,
+            ema13: nil,
+            candle_vs_ema13: nil,
+            snapshot_time: nil
+        }
+
+        r.update(new_attributes)
+
+      rescue => e
+        puts "Error processing #{r[:ticker_symbol]} - #{e.message}"
+        log = log + "Error processing #{r[:ticker_symbol]} - #{e.message}\n"
+        next
+      end
+
+    end
+
+
+    puts log
+
+    puts "Updating Previous Close Cache"
+    populate_previous_close
 
     puts "Calculating Average Daily Volumes"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
@@ -160,7 +249,7 @@ module TDAmeritradeDataInterface
 
     end while list != []
 
-    puts log
+    puts log if log && log != ""
   end
 
   def self.run_realtime_quotes_daemon
@@ -168,6 +257,8 @@ module TDAmeritradeDataInterface
     scheduler.cron('0,15,30,45 8-15 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
+      copy_realtime_quotes_to_daily_stock_prices
+      puts "Done #{Time.now}\n\n"
     end
     puts "Beginning realtime quote import daemon..."
     puts "Current Time: #{Time.now}"
@@ -176,13 +267,18 @@ module TDAmeritradeDataInterface
 
   def self.run_daily_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0 20 * * MON-FRI') do
+    scheduler.cron('10 16 * * MON-FRI') do
       puts "Daily Quote Import: #{Time.now}"
-      import_quotes
+      update_daily_stock_prices_from_real_time_snapshot
     end
     puts "Beginning daily quotes update daemon..."
     puts "Current Time: #{Time.now}"
     scheduler
+  end
+
+
+  def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_previous_close(begin_date)
   end
 
   def self.populate_average_volume_50day(begin_date=Date.today)
@@ -208,6 +304,22 @@ module TDAmeritradeDataInterface
       log = log + "#{e.message}\n"
     end
 
+  end
+
+  def self.copy_realtime_quotes_to_daily_stock_prices
+    DailyStockPrice.transaction do
+      ActiveRecord::Base.connection.execute insert_daily_stock_prices_from_realtime_quotes
+      ActiveRecord::Base.connection.execute update_daily_stock_prices_from_realtime_quotes
+
+      puts "Updating Previous Close Cache"
+      populate_previous_close(Date.today)
+
+      puts "Calculating Average Daily Volumes"
+      populate_average_volume_50day(Date.today)
+
+      puts "Calculating EMA13's"
+      populate_ema13(Date.today)
+    end
   end
 
   private

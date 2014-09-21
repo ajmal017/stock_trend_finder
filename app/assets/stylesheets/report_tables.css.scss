@@ -11,4 +11,42 @@
       padding: 2px;
     }
   }
+
+  .table-bordered > tbody > tr > td {
+    border: 0px;
+    border-bottom: 1px solid $table-border-color;
+  }
+
+  .table-bordered > thead > tr > th {
+    border: 0px;
+    border-bottom: 1px solid $table-border-color;
+  }
+}
+
+.green {
+  color: greenyellow;
+}
+
+.red {
+  color: red;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.gold-bg {
+  background-color: #272524;
+}
+
+.darkgreen-bg {
+  background-color: darkolivegreen;
+}
+
+.darkred-bg {
+  background-color: darkred;
 }

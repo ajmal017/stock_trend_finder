@@ -7,6 +7,7 @@ namespace :stock_trend_finder do
 
     while 1 do
       # infinite loop until Ctrl+C hit
+      sleep 200
     end
   end
 end

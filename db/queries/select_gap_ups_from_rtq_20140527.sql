@@ -8,7 +8,8 @@ select
   dsp.average_volume_50day as average_volume,
   round(round(rtq.volume / 1000) / dsp.average_volume_50day, 2) as volume_ratio,
   quote_time,
-  dsp.price_date as last_price_date
+  dsp.price_date as last_price_date,
+  tix.float
 
 from real_time_quotes as rtq inner join
 daily_stock_prices dsp on dsp.ticker_id=rtq.ticker_id inner join

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825174422) do
+ActiveRecord::Schema.define(version: 20140921022255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,48 +23,18 @@ ActiveRecord::Schema.define(version: 20140825174422) do
     t.decimal  "high"
     t.decimal  "low"
     t.decimal  "close"
-    t.decimal  "volume",                             precision: 15, scale: 0
-    t.decimal  "yahoo_adj_close"
-    t.decimal  "adj_close"
+    t.decimal  "volume",               precision: 15, scale: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "days_since_previous_trading_day"
-    t.boolean  "open_higher_than_previous_day_high"
-    t.boolean  "low_higher_than_previous_day_high"
-    t.boolean  "day_gap"
-    t.boolean  "close_higher_than_open"
-    t.decimal  "low_pct_of_previous_day_high"
-    t.decimal  "close_5day"
-    t.decimal  "high_5day"
-    t.decimal  "low_5day"
-    t.decimal  "close_10day"
-    t.decimal  "high_10day"
-    t.decimal  "low_10day"
-    t.decimal  "close_30day"
-    t.decimal  "high_30day"
-    t.decimal  "low_30day"
-    t.decimal  "close_pct_of_previous_day_high"
-    t.decimal  "close_60day"
-    t.decimal  "high_60day"
-    t.decimal  "low_60day"
-    t.date     "high_5day_date"
-    t.date     "low_5day_date"
-    t.date     "high_10day_date"
-    t.date     "low_10day_date"
-    t.date     "high_30day_date"
-    t.date     "low_30day_date"
-    t.date     "high_60day_date"
-    t.date     "low_60day_date"
     t.string   "ticker_symbol"
-    t.date     "previous_trading_day"
     t.decimal  "previous_close"
     t.decimal  "previous_high"
     t.decimal  "previous_low"
-    t.boolean  "exclude",                                                     default: false
-    t.decimal  "range_pct"
+    t.boolean  "exclude",                                       default: false
     t.decimal  "average_volume_50day"
     t.decimal  "ema13"
     t.string   "candle_vs_ema13"
+    t.datetime "snapshot_time"
   end
 
   add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree
@@ -264,6 +234,7 @@ ActiveRecord::Schema.define(version: 20140825174422) do
     t.string   "note"
     t.decimal  "float"
     t.decimal  "institutional_holdings_percent"
+    t.date     "hide_from_reports_until"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree

@@ -1,4 +1,4 @@
-%h1 Hammers and Dojis Report
+%h1 Bullish 13 EMA Breaks
 
 -if @report.count > 0
   %div Last Updated: #{@report.first['quote_time']}
@@ -6,7 +6,7 @@
 
 
 .report-container
-  %table.table-bordered#hammers
+  %table.table-bordered#active-stocks
     %thead
       %th#index
       %th#ticker-symbol Ticker Symbol
@@ -16,10 +16,8 @@
       %th#average-volume Avg Vol (K)
       %th#volume-ratio Volume Ratio
       %th#float Float
-      %th#hide{ style: "width: 100px;"} Hide
-      %th#unscrape{ style: "width: 100px;"} Unscrape
     -@report.each_with_index do |r, i|
-      %tr{ id: r['ticker_symbol'] }
+      %tr
         %td= i+1
         %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
         %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
@@ -28,5 +26,3 @@
         %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
         %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
         %td{ class: set_css_class(r, :float) }= r['float']
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

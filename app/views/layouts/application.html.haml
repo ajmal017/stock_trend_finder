@@ -6,5 +6,13 @@
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
+    %nav.navbar.navbar-default{ role: "navigation" }
+      .container
+        %ul.nav.navbar-nav
+          %li.active= link_to "Active Stocks", reports_active_stocks_path
+          %li.active= link_to "Hammers", reports_hammers_path
+          %li.active= link_to "13EMA Breaks", reports_ema13_breaks_path
+          %li.active= link_to "4-candle", reports_candle_row_path
+          %li.active= link_to "10% g/l", reports_pctgainloss_path
     .container
       = yield

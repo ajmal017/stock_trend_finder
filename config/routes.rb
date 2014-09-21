@@ -11,7 +11,12 @@ StockTrendFinder::Application.routes.draw do
     get 'active_stocks'
     get 'hammers'
     get 'ema13_breaks'
+    get 'candle_row'
+    get 'pctgainloss'
   end
+  patch 'reports/hide/:symbol(.:format)', to: 'reports#hide_symbol', as: 'reports_hide_symbol'
+  patch 'reports/unscrape/:symbol(.:format)', to: 'reports#unscrape_symbol', as: 'reports_unscrape_symbol'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

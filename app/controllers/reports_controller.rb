@@ -1,22 +1,19 @@
 require 'tdameritrade_data_interface/tdameritrade_data_interface'
 
-module MyIncludedModule
-  def self.included(klass)
-    klass.extend ClassMethods
-    puts "MyInCludedModules has been included in #{klass}"
-  end
-
-  module ClassMethods
-    def test_method
-      puts "test successful"
-    end
-  end
-end
-
 class ReportsController < ApplicationController
 
-  def ema13_breaks
+  def hide_symbol
+    @symbol = params[:symbol]
+    Ticker.find_by(symbol: @symbol).hide_from_reports
+  end
 
+  def unscrape_symbol
+    @symbol = params[:symbol]
+    Ticker.unscrape(@symbol)
+  end
+
+  def ema13_breaks
+    @report = run_query(TDAmeritradeDataInterface.select_ema13_bullish_breaks)
   end
 
   def hammers
@@ -25,6 +22,17 @@ class ReportsController < ApplicationController
 
   def active_stocks
     @report = run_query(TDAmeritradeDataInterface.select_active_stocks)
+  end
+
+  def candle_row
+    @report_winners = run_query(TDAmeritradeDataInterface.select_4_green_candles)
+    @report_losers = run_query(TDAmeritradeDataInterface.select_4_red_candles)
+
+  end
+
+  def pctgainloss
+    @report_winners = run_query(TDAmeritradeDataInterface.select_10pct_gainers)
+    @report_losers = run_query(TDAmeritradeDataInterface.select_10pct_losers)
   end
 
 private

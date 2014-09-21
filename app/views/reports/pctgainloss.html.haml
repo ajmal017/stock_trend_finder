@@ -1,0 +1,59 @@
+%h1 10% Gainers and Losers
+
+%h2 Winners
+-if @report_winners.count > 0
+  %div Last Updated: #{@report_winners.first['quote_time']}
+  %div Items: #{@report_winners.count}
+
+.report-container
+  %table.table-bordered#active-stocks
+    %thead
+      %th#index
+      %th#ticker-symbol Ticker Symbol
+      %th#last-trade Last
+      %th#pct_change %Chg
+      %th#pct_change %Chg-10day
+      %th#volume Volume (K)
+      %th#average-volume Avg Vol (K)
+      %th#volume-ratio Volume Ratio
+      %th#float Float
+    -@report_winners.each_with_index do |r, i|
+      %tr
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change_10day']
+        %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
+
+%h2 Losers
+-if @report_losers.count > 0
+  %div Last Updated: #{@report_losers.first['quote_time']}
+  %div Items: #{@report_losers.count}
+
+.report-container
+  %table.table-bordered#active-stocks
+    %thead
+      %th#index
+      %th#ticker-symbol Ticker Symbol
+      %th#last-trade Last
+      %th#pct_change %Chg
+      %th#pct_change %Chg-10day
+      %th#volume Volume (K)
+      %th#average-volume Avg Vol (K)
+      %th#volume-ratio Volume Ratio
+      %th#float Float
+    -@report_losers.each_with_index do |r, i|
+      %tr
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change_10day']
+        %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']

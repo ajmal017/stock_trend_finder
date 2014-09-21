@@ -14,8 +14,18 @@ module TDAmeritradeDataInterface
       float_index = headers.map { |h| h.text }.index('Float:')
       institutional_holdings_percent_index = headers.map { |h| h.text }.index('% Held by Institutions1:')
       if float_index && institutional_holdings_percent_index
+        float_value = data.map { |d| d.text }[float_index]
+        float_size = float_value.slice!(-1, 1)
+        case float_size
+          when "K" then float_value = (float_value.to_f / 1000).round(2)
+          when "M" then float_value = float_value.to_f.round(2)
+          when "B" then float_value = (float_value.to_f * 1000).round(2)
+          else
+            puts "Couldn't find K, M or B after float value"
+            return false
+        end
         {
-            float: data.map { |d| d.text }[float_index].chop.to_f,
+            float: float_value,
             institutional_holdings_percent: data.map { |d| d.text }[institutional_holdings_percent_index].chop.to_f
         }
       else
