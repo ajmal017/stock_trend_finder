@@ -97,6 +97,12 @@ module TDAmeritradeDataInterface
     puts "Calculating EMA13's"
     populate_ema13
 
+    puts "Calculating SMA50's"
+    populate_sma50
+
+    puts "Calculating SMA200's"
+    populate_sma200
+
     of = open(log_file, "w")
     of.write(log)
     of.close
@@ -110,7 +116,6 @@ module TDAmeritradeDataInterface
 
   end
 
-  #TODO this needs to be refactored to work better with import_quotes
   def self.update_daily_stock_prices_from_real_time_snapshot(opts={})
     log_file = File.join(Rails.root, 'downloads', 'import_quotes.log')
 
@@ -184,6 +189,12 @@ module TDAmeritradeDataInterface
     puts "Calculating EMA13's"
     populate_ema13
 
+    puts "Calculating SMA50's"
+    populate_sma50
+
+    puts "Calculating SMA200's"
+    populate_sma200
+
     of = open(log_file, "w")
     of.write(log)
     of.close
@@ -254,7 +265,7 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0,15,30,45 8-15 * * MON-FRI') do
+    scheduler.cron('0,20,40 8-15 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
       copy_realtime_quotes_to_daily_stock_prices
@@ -306,6 +317,32 @@ module TDAmeritradeDataInterface
 
   end
 
+  def self.populate_sma50
+
+    begin
+      # Populate the first entry - sma13
+      ActiveRecord::Base.connection.execute update_sma50
+
+    rescue => e
+      puts "#{e.message}"
+      log = log + "#{e.message}\n"
+    end
+
+  end
+
+  def self.populate_sma200
+
+    begin
+      # Populate the first entry - sma13
+      ActiveRecord::Base.connection.execute update_sma200
+
+    rescue => e
+      puts "#{e.message}"
+      log = log + "#{e.message}\n"
+    end
+
+  end
+
   def self.copy_realtime_quotes_to_daily_stock_prices
     DailyStockPrice.transaction do
       ActiveRecord::Base.connection.execute insert_daily_stock_prices_from_realtime_quotes
@@ -319,6 +356,12 @@ module TDAmeritradeDataInterface
 
       puts "Calculating EMA13's"
       populate_ema13(Date.today)
+
+      puts "Calculating SMA50's"
+      populate_sma50
+
+      puts "Calculating SMA200's"
+      populate_sma200
     end
   end
 

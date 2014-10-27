@@ -8,7 +8,6 @@ module TDAmeritradeDataInterface
 
       def select_active_stocks
         <<SQL
--- active stocks
 select
   rtq.ticker_symbol,
   last_trade,
@@ -27,6 +26,7 @@ tickers tix on tix.id=rtq.ticker_id
 where
 (tix.hide_from_reports_until is null or tix.hide_from_reports_until <= current_date) and
 tix.scrape_data=true and
+(round(((last_trade / dsp.close) - 1) * 100, 2) < -4.5 or round(((last_trade / dsp.close) - 1) * 100, 2) > 4.5)and
 dsp.price_date = (select price_date from daily_stock_prices dspd where dspd.ticker_id=rtq.ticker_id and dspd.price_date < date_trunc('day', rtq.quote_time) order by price_date desc limit 1) and
 (last_trade * rtq.volume > 2000000) and
 abs(round(((last_trade / dsp.close) - 1) * 100, 2)) > 1 and
@@ -78,7 +78,7 @@ SQL
       def select_4_green_candles
         <<SQL
 with last_4_days as (
-select ticker_symbol, price_date, high, low, close, (round(close/previous_close, 4)-1)*100 as pct_change, volume, average_volume_50day as average_volume, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float,
+select ticker_symbol, price_date, high, low, close, (round(close/previous_close, 2)-1)*100 as pct_change, volume, average_volume_50day as average_volume, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float,
 case
   when close > open then 'green'
   when close < open then 'red'
@@ -105,7 +105,7 @@ SQL
       def select_4_red_candles
         <<SQL
 with last_4_days as (
-select ticker_symbol, price_date, high, low, close, (round(close/previous_close, 4)-1)*100 as pct_change, volume, average_volume_50day as average_volume, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float,
+select ticker_symbol, price_date, high, low, close, (round(close/previous_close, 2)-1)*100 as pct_change, volume, average_volume_50day as average_volume, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float,
 case
   when close > open then 'green'
   when close < open then 'red'
@@ -171,6 +171,106 @@ order by ltd.close / (select low from last_5_days ltdpd where ltdpd.ticker_symbo
 SQL
       end
 
+      def select_sma50_bear_cross(most_recent_date)
+        <<SQL
+with trading_days as
+(
+select distinct price_date from daily_stock_prices where price_date < '#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc
+)
+select price_date, close, volume, ticker_symbol, sma50, close as last_trade, (round(close/previous_close, 2)-1)*100 as pct_change, average_volume_50day as average_volume, round(round(volume / 1000) / average_volume_50day, 2) as volume_ratio, float,
+round(volume / average_volume_50day, 2) as volume_ratio,
+round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_symbol=d.ticker_symbol and dsp60.price_date=(select price_date from trading_days offset 60 limit 1)) - 1) * 100, 2) as change_60days
+from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
+where
+t.scrape_data=true and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+volume > 1000 and
+close < sma50 and
+not exists (select * from daily_stock_prices dsa where dsa.ticker_symbol=d.ticker_symbol and dsa.close < dsa.sma50 and dsa.price_date < d.price_date and dsa.price_date > (select price_date from trading_days offset 15 limit 1))
+order by
+change_60days desc
+SQL
+      end
+
+      def select_sma50_bull_cross(most_recent_date)
+        <<SQL
+with trading_days as
+(
+select distinct price_date from daily_stock_prices where price_date < '#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc
+)
+select price_date, close, volume, ticker_symbol, sma50, close as last_trade, (round(close/previous_close, 2)-1)*100 as pct_change, average_volume_50day as average_volume, round(round(volume / 1000) / average_volume_50day, 2) as volume_ratio, float,
+round(volume / average_volume_50day, 2) as volume_ratio,
+round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_symbol=d.ticker_symbol and dsp60.price_date=(select price_date from trading_days offset 60 limit 1)) - 1) * 100, 2) as change_60days
+from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
+where
+t.scrape_data=true and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+volume > 1000 and
+close > sma50 and
+not exists (select * from daily_stock_prices dsa where dsa.ticker_symbol=d.ticker_symbol and dsa.close > dsa.sma50 and dsa.price_date < d.price_date and dsa.price_date > (select price_date from trading_days offset 15 limit 1))
+order by
+change_60days
+SQL
+      end
+
+      def select_sma200_bear_cross(most_recent_date)
+        <<SQL
+with trading_days as
+(
+select distinct price_date from daily_stock_prices where price_date < '#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc
+)
+select price_date, close, volume, ticker_symbol, sma200, close as last_trade, (round(close/previous_close, 2)-1)*100 as pct_change, average_volume_50day as average_volume, round(round(volume / 1000) / average_volume_50day, 2) as volume_ratio, float,
+round(volume / average_volume_50day, 2) as volume_ratio,
+round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_symbol=d.ticker_symbol and dsp60.price_date=(select price_date from trading_days offset 60 limit 1)) - 1) * 100, 2) as change_60days
+from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
+where
+t.scrape_data=true and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+volume > 1000 and
+close < sma200 and
+not exists (select * from daily_stock_prices dsa where dsa.ticker_symbol=d.ticker_symbol and dsa.close < dsa.sma200 and dsa.price_date < d.price_date and dsa.price_date > (select price_date from trading_days offset 15 limit 1))
+order by
+change_60days desc
+SQL
+      end
+
+      def select_sma200_bull_cross(most_recent_date)
+        <<SQL
+with trading_days as
+(
+select distinct price_date from daily_stock_prices where price_date < '#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc
+)
+select price_date, close, volume, ticker_symbol, sma200, close as last_trade, (round(close/previous_close, 2)-1)*100 as pct_change, average_volume_50day as average_volume, round(round(volume / 1000) / average_volume_50day, 2) as volume_ratio, float,
+round(volume / average_volume_50day, 2) as volume_ratio,
+round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_symbol=d.ticker_symbol and dsp60.price_date=(select price_date from trading_days offset 60 limit 1)) - 1) * 100, 2) as change_60days
+from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
+where
+t.scrape_data=true and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+volume > 1000 and
+close > sma200 and
+not exists (select * from daily_stock_prices dsa where dsa.ticker_symbol=d.ticker_symbol and dsa.close > dsa.sma200 and dsa.price_date < d.price_date and dsa.price_date > (select price_date from trading_days offset 15 limit 1))
+order by
+change_60days
+SQL
+      end
+
+      def update_sma50
+        <<SQL
+update daily_stock_prices dsp
+set sma50=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 50) as daq), 2)
+where dsp.sma50 is null or dsp.snapshot_time is not null
+SQL
+      end
+
+      def update_sma200
+        <<SQL
+update daily_stock_prices dsp
+set sma200=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 200) as daq), 2)
+where dsp.price_date > '2014-01-01' and (dsp.sma200 is null or dsp.snapshot_time is not null)
+SQL
+      end
+
       def update_average_volume_50day(begin_date)
         raise Exception.new("No begin_date given for update_average_volume_50day query") if begin_date.nil?
         <<SQL
@@ -190,6 +290,7 @@ SQL
 update daily_stock_prices dsp set previous_close=(select close from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_close is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
 SQL
       end
+
 
       def update_ema13_first_sma(begin_date)
         <<SQL

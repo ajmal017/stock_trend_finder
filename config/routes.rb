@@ -11,6 +11,8 @@ StockTrendFinder::Application.routes.draw do
     get 'active_stocks'
     get 'hammers'
     get 'ema13_breaks'
+    get 'sma50_breaks'
+    get 'sma200_breaks'
     get 'candle_row'
     get 'pctgainloss'
   end

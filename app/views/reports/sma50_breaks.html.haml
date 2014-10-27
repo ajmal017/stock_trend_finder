@@ -1,0 +1,71 @@
+%h1 50DMA Breaks
+
+%h2 Bullish 50DMA Breaks
+
+-if @report_bull50sma.count > 0
+  %div Last Updated: #{@report_bull50sma.first['quote_time']}
+  %div Items: #{@report_bull50sma.count}
+
+
+.report-container
+  %table.table-bordered#active-stocks{ style: "width: 900px;"}
+    %thead
+      %th#index
+      %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
+      %th#last-trade{ style: "width: 100px;"} Last
+      %th#pct_change{ style: "width: 100px;"} %Chg
+      %th#pct_change_60day{ style: "width: 100px;" } %Chg 60-day
+      %th#volume{ style: "width: 100px;"} Volume (K)
+      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
+      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
+      %th#float{ style: "width: 100px;"} Float
+      %th#hide{ style: "width: 100px;"} Hide
+      %th#unscrape{ style: "width: 100px;"} Unscrape
+    -@report_bull50sma.each_with_index do |r, i|
+      %tr{ id: r['ticker_symbol'] }
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        %td{ class: set_css_class(r, :pct_change_60day) }= r['change_60days']
+        %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
+        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+
+%h2 Bearish 50DMA Breaks
+
+-if @report_bear50sma.count > 0
+  %div Last Updated: #{@report_bear50sma.first['quote_time']}
+  %div Items: #{@report_bear50sma.count}
+
+
+.report-container
+  %table.table-bordered#active-stocks{ style: "width: 900px;"}
+    %thead
+      %th#index
+      %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
+      %th#last-trade{ style: "width: 100px;"} Last
+      %th#pct_change{ style: "width: 100px;"} %Chg
+      %th#pct_change_60day{ style: "width: 100px;" } %Chg 60-day
+      %th#volume{ style: "width: 100px;"} Volume (K)
+      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
+      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
+      %th#float{ style: "width: 100px;"} Float
+      %th#hide{ style: "width: 100px;"} Hide
+      %th#unscrape{ style: "width: 100px;"} Unscrape
+    -@report_bear50sma.each_with_index do |r, i|
+      %tr{ id: r['ticker_symbol'] }
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        %td{ class: set_css_class(r, :pct_change_60day) }= r['change_60days']
+        %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
+        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

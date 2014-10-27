@@ -4,7 +4,7 @@ class ReportsController < ApplicationController
 
   def hide_symbol
     @symbol = params[:symbol]
-    Ticker.find_by(symbol: @symbol).hide_from_reports
+    Ticker.find_by(symbol: @symbol).hide_from_reports(30)
   end
 
   def unscrape_symbol
@@ -14,6 +14,16 @@ class ReportsController < ApplicationController
 
   def ema13_breaks
     @report = run_query(TDAmeritradeDataInterface.select_ema13_bullish_breaks)
+  end
+
+  def sma50_breaks
+    @report_bull50sma = run_query(TDAmeritradeDataInterface.select_sma50_bull_cross(DailyStockPrice.most_recent_date))
+    @report_bear50sma = run_query(TDAmeritradeDataInterface.select_sma50_bear_cross(DailyStockPrice.most_recent_date))
+  end
+
+  def sma200_breaks
+    @report_bull200sma = run_query(TDAmeritradeDataInterface.select_sma200_bull_cross(DailyStockPrice.most_recent_date))
+    @report_bear200sma = run_query(TDAmeritradeDataInterface.select_sma200_bear_cross(DailyStockPrice.most_recent_date))
   end
 
   def hammers
