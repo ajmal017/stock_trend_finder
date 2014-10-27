@@ -265,7 +265,7 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0,20,40 8-15 * * MON-FRI') do
+    scheduler.cron('0,20,45 8-15 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
       copy_realtime_quotes_to_daily_stock_prices
