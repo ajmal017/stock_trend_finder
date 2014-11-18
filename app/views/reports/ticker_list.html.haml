@@ -1,0 +1,27 @@
+%h1 Ticker List
+
+-if @report.count > 0
+  %div Items: #{@report.count}
+
+
+.report-container
+  %table.table-bordered#ticker_list{ style: "width: 700px;"}
+    %thead
+      %th#index
+      %th#ticker-id ID
+      %th#symbol{ style: "width: 100px;"} Ticker Symbol
+      %th#company-name{ style: "width: 100px;"} Company Name
+      %th#exchange{ style: "width: 100px;"} Exchange
+      %th#float{ style: "width: 100px;"} Float
+      %th#hide{ style: "width: 100px;"} Hide
+      %th#unscrape{ style: "width: 100px;"} Unscrape
+    -@report.each_with_index do |r, i|
+      %tr{ id: r['symbol'] }
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_id) }= r['id']
+        %td{ class: set_css_class(r, :symbol) }= r['symbol']
+        %td{ class: set_css_class(r, :company_name) }= r['company_name']
+        %td{ class: set_css_class(r, :exchange) }= r['exchange']
+        %td{ class: set_css_class(r, :float) }= r['float'].to_f.round(2)
+        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['symbol']), remote: true, method: :patch
+        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['symbol']), remote: true, method: :patch

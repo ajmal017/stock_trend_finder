@@ -5,6 +5,9 @@
   %div Last Updated: #{@report_winners.first['quote_time']}
   %div Items: #{@report_winners.count}
 
+.report_date_form
+  =report_date_form :candle_row
+
 .report-container
   %table.table-bordered.report#report-winners
     %thead

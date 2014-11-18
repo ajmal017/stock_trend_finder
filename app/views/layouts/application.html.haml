@@ -5,6 +5,10 @@
     = stylesheet_link_tag  "application", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
+    :javascript
+      $(function() {
+          $( "#report_date" ).datepicker();
+        });
   %body
     %nav.navbar.navbar-default{ role: "navigation" }
       .container
@@ -16,5 +20,6 @@
           %li.active= link_to "200DMA", reports_sma200_breaks_path
           %li.active= link_to "4-candle", reports_candle_row_path
           %li.active= link_to "10% g/l", reports_pctgainloss_path
+          %li.active= link_to "Tickers", reports_ticker_list_path
     .container
       = yield

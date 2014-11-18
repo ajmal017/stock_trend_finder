@@ -1,13 +1,14 @@
 require 'tdameritrade_data_interface/sql_query_strings'
 
 module TDAmeritradeDataInterface
-  NEW_TICKER_BEGIN_DATE=Date.new(2012,01,02)
+  NEW_TICKER_BEGIN_DATE=Date.new(2013,10,1)
 
   include SQLQueryStrings
 
   def self.import_quotes(opts={})
     begin_date = (opts.has_key? :begin_date) && (opts[:begin_date].is_a? Date) ? opts[:begin_date] : nil
-    end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date].strftime('%Y%m%d') : Date.today.strftime('%Y%m%d')
+    end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date] : Date.today
+    #end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date].strftime('%Y%m%d') : Date.today.strftime('%Y%m%d')
 
     cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
     log_file = File.join(Rails.root, 'downloads', 'import_quotes.log')
@@ -28,7 +29,7 @@ module TDAmeritradeDataInterface
 
         while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
           if last_dsp.present?
-            if last_dsp.price_date == begin_date
+            if last_dsp.price_date == end_date
               prices = [{already_processed: true}]
             else
               if begin_date.nil?
@@ -135,13 +136,13 @@ module TDAmeritradeDataInterface
         prices = Array.new
 
         while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
-          prices = c.get_daily_price_history(r[:ticker_symbol], begin_date, end_date)
-          if get_history_returned_error?(prices)
+          begin
+            prices = c.get_daily_price_history(r[:ticker_symbol], begin_date, end_date)
+            error_count = -1
+          rescue
             error_count += 1
             puts "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{prices.first[:error]}"
             log = log + "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{prices.first[:error]}\n"
-          else
-            error_count = -1
           end
         end
 
@@ -265,7 +266,7 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0,20,45 8-15 * * MON-FRI') do
+    scheduler.cron('0,20,40 8-15 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
       copy_realtime_quotes_to_daily_stock_prices

@@ -8,7 +8,7 @@ namespace :stock_trend_finder do
     #c.get_daily_price_history('AMC', '20140505')
 
 
-    $stf.update_floats(true)
+    $stf.import_quotes(end_date: Date.new(2014,10,27))
 
   end
 end

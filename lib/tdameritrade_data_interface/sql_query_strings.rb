@@ -75,7 +75,7 @@ order by volume_ratio desc
 SQL
       end
 
-      def select_4_green_candles
+      def select_4_green_candles(most_recent_date)
         <<SQL
 with last_4_days as (
 select ticker_symbol, price_date, high, low, close, (round(close/previous_close, 2)-1)*100 as pct_change, volume, average_volume_50day as average_volume, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float,
@@ -86,7 +86,7 @@ case
 end as candle_color
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
-price_date in (select distinct price_date from daily_stock_prices dsppd order by dsppd.price_date desc limit 4) and
+price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 4) and
 tix.scrape_data = true and
 volume * 1000 * close > 5000000
 order by dsp.price_date desc
@@ -102,7 +102,7 @@ order by ticker_symbol desc
 SQL
       end
 
-      def select_4_red_candles
+      def select_4_red_candles(most_recent_date)
         <<SQL
 with last_4_days as (
 select ticker_symbol, price_date, high, low, close, (round(close/previous_close, 2)-1)*100 as pct_change, volume, average_volume_50day as average_volume, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float,
@@ -113,7 +113,7 @@ case
 end as candle_color
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
-price_date in (select distinct price_date from daily_stock_prices dsppd order by dsppd.price_date desc limit 4) and
+price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 4) and
 tix.scrape_data = true and
 volume * 1000 * close > 5000000
 order by dsp.price_date desc
@@ -129,13 +129,13 @@ order by ticker_symbol desc
 SQL
       end
 
-      def select_10pct_gainers
+      def select_10pct_gainers(most_recent_date)
         <<SQL
 with last_5_days as (
 select ticker_symbol, price_date, high, low, close, round(close/previous_close, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
-price_date in (select distinct price_date from daily_stock_prices dsppd order by dsppd.price_date desc limit 5) and
+price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 5) and
 tix.scrape_data = true and
 volume * 1000 * close > 5000000
 order by dsp.price_date desc
@@ -150,13 +150,13 @@ order by ltd.close / (select low from last_5_days ltdpd where ltdpd.ticker_symbo
 SQL
       end
 
-      def select_10pct_losers
+      def select_10pct_losers(most_recent_date)
         <<SQL
 with last_5_days as (
 select ticker_symbol, price_date, high, low, close, round(close/previous_close, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
-price_date in (select distinct price_date from daily_stock_prices dsppd order by dsppd.price_date desc limit 5) and
+price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 5) and
 tix.scrape_data = true and
 volume * 1000 * close > 5000000
 order by dsp.price_date desc

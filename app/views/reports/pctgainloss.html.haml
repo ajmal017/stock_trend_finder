@@ -5,6 +5,9 @@
   %div Last Updated: #{@report_winners.first['quote_time']}
   %div Items: #{@report_winners.count}
 
+.report_date_form
+  =report_date_form :pctgainloss
+
 .report-container
   %table.table-bordered#active-stocks
     %thead

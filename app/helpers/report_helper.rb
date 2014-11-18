@@ -1,4 +1,13 @@
 module ReportHelper
+  def report_date_form(page)
+    s = form_tag "/reports/#{page}", method: :get, authenticity_token: false do
+      b = text_field_tag :report_date, @report_date.strftime('%m/%d/%Y')
+      b << submit_tag("Go")
+      b
+    end
+    s.html_safe
+  end
+
   def set_css_class(report, field)
     css_class = ""
     if report['pct_change'].to_f > 0

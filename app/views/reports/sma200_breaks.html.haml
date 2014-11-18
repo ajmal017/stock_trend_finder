@@ -6,6 +6,8 @@
   %div Last Updated: #{@report_bull200sma.first['quote_time']}
   %div Items: #{@report_bull200sma.count}
 
+.report_date_form
+  =report_date_form :sma200_breaks
 
 .report-container
   %table.table-bordered#active-stocks{ style: "width: 900px;"}
