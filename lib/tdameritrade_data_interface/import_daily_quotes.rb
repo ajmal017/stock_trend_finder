@@ -259,9 +259,13 @@ module TDAmeritradeDataInterface
     puts log if log && log != ""
   end
 
+  def self.reset_snapshot_flags
+    ActiveRecord::Base.connection.execute update_reset_snapshot_flags
+  end
+
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0,20,40 8-15 * * MON-FRI') do
+    scheduler.cron('0,20,40 10-15 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
       copy_realtime_quotes_to_daily_stock_prices

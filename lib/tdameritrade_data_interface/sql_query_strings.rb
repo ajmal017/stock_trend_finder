@@ -381,7 +381,7 @@ SQL
       def insert_daily_stock_prices_from_realtime_quotes
         <<SQL
 insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, open, high, low, close, volume, created_at, updated_at, snapshot_time)
-select ticker_id, ticker_symbol, date(quote_time), round(open, 2) as open, round(high, 2) as high, round(low, 2) as low, round(last_trade, 2) as last_trade, volume/1000, current_timestamp, current_timestamp, quote_time
+select ticker_id, ticker_symbol, date(quote_time), round(open, 2), round(high, 2), round(low, 2), round(last_trade, 2), volume/1000, current_timestamp, current_timestamp, quote_time
 from real_time_quotes rtq
 where ticker_symbol not in (select ticker_symbol from daily_stock_prices dsp where dsp.price_date=date(rtq.quote_time))
 SQL
@@ -392,9 +392,17 @@ SQL
 update daily_stock_prices as dsp
 set
 (open, high, low, close, volume, updated_at, snapshot_time,previous_close,average_volume_50day,ema13,candle_vs_ema13)=
-(round(rtq.open, 2) as open, round(rtq.high, 2) as high, round(rtq.low, 2) as low, round(rtq.last_trade, 2) as last_trade, rtq.volume/1000, current_timestamp, rtq.quote_time, null, null, null, null)
+(round(rtq.open, 2), round(rtq.high, 2), round(rtq.low, 2), round(rtq.last_trade, 2), rtq.volume/1000, current_timestamp, rtq.quote_time, null, null, null, null)
 from real_time_quotes rtq
 where dsp.ticker_symbol=rtq.ticker_symbol and dsp.price_date=date(rtq.quote_time)
+SQL
+      end
+
+      def update_reset_snapshot_flags
+        <<SQL
+update daily_stock_prices as dsp
+set snapshot_time=null
+where snapshot_time is not null
 SQL
       end
 

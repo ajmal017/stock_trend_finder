@@ -35,6 +35,11 @@ class Ticker < ActiveRecord::Base
     Ticker.find_by(symbol: symbol).float.to_s
   end
 
+  def self.add(symbol, company_name, exchange)
+    raise Exception.new("Invalid exchange") if ['nasdaq', 'nyse'].index(exchange).nil?
+    Ticker.create(symbol: symbol, company_name: company_name, exchange: exchange, scrape_data:true)
+  end
+
   def hide_from_reports(days=1)
     self.update!(hide_from_reports_until: Date.today + days)
   end
