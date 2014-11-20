@@ -132,7 +132,7 @@ SQL
       def select_10pct_gainers(most_recent_date)
         <<SQL
 with last_3_days as (
-select ticker_symbol, price_date, high, low, close, round((close/previous_close-1)*100, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
+select ticker_symbol, price_date, high, low, close, round((close/previous_close-1)*100, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, tix.float
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
 price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 3) and
@@ -154,7 +154,7 @@ SQL
         <<SQL
 
 with last_3_days as (
-select ticker_symbol, price_date, high, low, close, round((close/previous_close-1)*100, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
+select ticker_symbol, price_date, high, low, close, round((close/previous_close-1)*100, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, tix.float
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
 price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 3) and
@@ -256,6 +256,35 @@ change_60days
 SQL
       end
 
+      def select_52week_highs(most_recent_date)
+        <<SQL
+with ticker_list as (
+  select
+  ticker_symbol, high, close, volume,
+  round(close/previous_close, 2) as pct_change,
+  average_volume_50day as average_volume,
+  round(volume / average_volume_50day, 2) as volume_ratio,
+  float
+  from daily_stock_prices dsp inner join tickers tix on dsp.ticker_symbol=tix.symbol
+  where price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and tix.scrape_data and average_volume_50day>0
+)
+select
+ticker_symbol,
+close,
+pct_change,
+high,
+volume,
+average_volume,
+volume_ratio,
+float
+from ticker_list
+where
+high=(select max(high) as high_52week from (select high from daily_stock_prices dsp52 where ticker_symbol=ticker_list.ticker_symbol and price_date<='#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc limit 250) as high_52week_qry)
+order by
+volume_ratio desc
+SQL
+      end
+
       def update_sma50
         <<SQL
 update daily_stock_prices dsp
@@ -352,7 +381,7 @@ SQL
       def insert_daily_stock_prices_from_realtime_quotes
         <<SQL
 insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, open, high, low, close, volume, created_at, updated_at, snapshot_time)
-select ticker_id, ticker_symbol, date(quote_time), open, high, low, last_trade, volume/1000, current_timestamp, current_timestamp, quote_time
+select ticker_id, ticker_symbol, date(quote_time), round(open, 2) as open, round(high, 2) as high, round(low, 2) as low, round(last_trade, 2) as last_trade, volume/1000, current_timestamp, current_timestamp, quote_time
 from real_time_quotes rtq
 where ticker_symbol not in (select ticker_symbol from daily_stock_prices dsp where dsp.price_date=date(rtq.quote_time))
 SQL
@@ -363,7 +392,7 @@ SQL
 update daily_stock_prices as dsp
 set
 (open, high, low, close, volume, updated_at, snapshot_time,previous_close,average_volume_50day,ema13,candle_vs_ema13)=
-(rtq.open, rtq.high, rtq.low, rtq.last_trade, rtq.volume/1000, current_timestamp, rtq.quote_time, null, null, null, null)
+(round(rtq.open, 2) as open, round(rtq.high, 2) as high, round(rtq.low, 2) as low, round(rtq.last_trade, 2) as last_trade, rtq.volume/1000, current_timestamp, rtq.quote_time, null, null, null, null)
 from real_time_quotes rtq
 where dsp.ticker_symbol=rtq.ticker_symbol and dsp.price_date=date(rtq.quote_time)
 SQL

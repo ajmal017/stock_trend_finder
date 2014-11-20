@@ -15,6 +15,7 @@ StockTrendFinder::Application.routes.draw do
     get 'sma200_breaks'
     get 'candle_row'
     get 'pctgainloss'
+    get 'week52_highs'
     get 'ticker_list'
   end
   patch 'reports/hide/:symbol(.:format)', to: 'reports#hide_symbol', as: 'reports_hide_symbol'

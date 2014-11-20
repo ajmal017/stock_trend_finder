@@ -130,50 +130,45 @@ module TDAmeritradeDataInterface
     records_to_update.each.with_index(1) do |r, i|
       puts "Processing #{i} of #{count}: #{r[:ticker_symbol]}, #{r[:price_date]}"
 
-      begin
-        begin_date = end_date = r[:price_date]
-        error_count = 0
-        prices = Array.new
+      begin_date = end_date = r[:price_date]
+      error_count = 0
+      prices = Array.new
 
-        while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
-          begin
-            prices = c.get_daily_price_history(r[:ticker_symbol], begin_date, end_date)
-            error_count = -1
-          rescue
-            error_count += 1
-            puts "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{prices.first[:error]}"
-            log = log + "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{prices.first[:error]}\n"
+      while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+        begin
+          prices = c.get_daily_price_history(r[:ticker_symbol], begin_date, end_date)
+          error_count = -1
+
+          #next if get_history_returned_error?(prices)
+          p = prices.first
+          if p[:timestamp].to_date != r[:price_date]
+            puts "Error: price date does not match"
+            log = log + "Error processing #{r[:ticker_symbol]}: incorrect price date #{p[:timestamp]} vs #{r[:price_date]} in the record"
+            next
           end
+          new_attributes = {
+              open: p[:open],
+              high: p[:high],
+              low: p[:low],
+              close: p[:close].to_f.round(2),
+              volume: p[:volume]/10,
+              previous_close: nil,
+              previous_high: nil,
+              previous_low: nil,
+              average_volume_50day: nil,
+              ema13: nil,
+              candle_vs_ema13: nil,
+              snapshot_time: nil
+          }
+
+          r.update(new_attributes)
+
+        rescue => e
+          error_count += 1
+          puts "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{e.message}"
+          log = log + "Error processing #{r[:ticker_symbol]} - #{e.message}\n" if error_count == 3
+          #sleep 2
         end
-
-        next if get_history_returned_error?(prices)
-        p = prices.first
-        if p[:timestamp].to_date != r[:price_date]
-          puts "Error: price date does not match"
-          log = log + "Error processing #{r[:ticker_symbol]}: incorrect price date #{p[:timestamp]} vs #{r[:price_date]} in the record"
-          next
-        end
-        new_attributes = {
-            open: p[:open],
-            high: p[:high],
-            low: p[:low],
-            close: p[:close],
-            volume: p[:volume]/10,
-            previous_close: nil,
-            previous_high: nil,
-            previous_low: nil,
-            average_volume_50day: nil,
-            ema13: nil,
-            candle_vs_ema13: nil,
-            snapshot_time: nil
-        }
-
-        r.update(new_attributes)
-
-      rescue => e
-        puts "Error processing #{r[:ticker_symbol]} - #{e.message}"
-        log = log + "Error processing #{r[:ticker_symbol]} - #{e.message}\n"
-        next
       end
 
     end

@@ -27,6 +27,10 @@ class ReportsController < ApplicationController
     @report_bear200sma = run_query(TDAmeritradeDataInterface.select_sma200_bear_cross(@report_date))
   end
 
+  def week52_highs
+    @report = run_query(TDAmeritradeDataInterface.select_52week_highs(@report_date))
+  end
+
   def ticker_list
     @report = Ticker.watching.order(id: :desc)
   end
