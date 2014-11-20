@@ -131,43 +131,44 @@ SQL
 
       def select_10pct_gainers(most_recent_date)
         <<SQL
-with last_5_days as (
-select ticker_symbol, price_date, high, low, close, round(close/previous_close, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
+with last_3_days as (
+select ticker_symbol, price_date, high, low, close, round((close/previous_close-1)*100, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
-price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 5) and
+price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 3) and
 tix.scrape_data = true and
 volume * 1000 * close > 5000000
 order by dsp.price_date desc
 )
-select ticker_symbol, price_date, high, low, close, pct_change, volume, average_volume_50day, volume_ratio, float,
-(round(close / (select low from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1), 4)-1)*100 as pct_change_10day
-from last_5_days ltd
+select ticker_symbol, price_date, high, low, close, pct_change, volume, average_volume_50day as average_volume, volume_ratio, float,
+round((close / (select low from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1)-1)*100, 2) as pct_change_3day
+from last_3_days ltd
 where
-ltd.price_date = (select price_date from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date desc limit 1) and
-ltd.close / (select low from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) > 1.10
-order by ltd.close / (select low from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) desc
+ltd.price_date = (select price_date from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date desc limit 1) and
+ltd.close / (select low from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) > 1.10
+order by ltd.close / (select low from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) desc
 SQL
       end
 
       def select_10pct_losers(most_recent_date)
         <<SQL
-with last_5_days as (
-select ticker_symbol, price_date, high, low, close, round(close/previous_close, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
+
+with last_3_days as (
+select ticker_symbol, price_date, high, low, close, round((close/previous_close-1)*100, 2) as pct_change, volume, average_volume_50day, round(volume / dsp.average_volume_50day, 2) as volume_ratio, candle_vs_ema13, tix.float
 from daily_stock_prices dsp inner join tickers tix on dsp.ticker_id=tix.id
 where
-price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 5) and
+price_date in (select distinct price_date from daily_stock_prices dsppd where dsppd.price_date <= '#{most_recent_date.strftime('%Y-%m-%d')}' order by dsppd.price_date desc limit 3) and
 tix.scrape_data = true and
 volume * 1000 * close > 5000000
 order by dsp.price_date desc
 )
-select ticker_symbol, price_date, high, low, close, pct_change, volume, average_volume_50day, volume_ratio, float,
-(round(close / (select low from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1), 4)-1)*100 as pct_change_10day
-from last_5_days ltd
+select ticker_symbol, price_date, high, low, close, pct_change, volume, average_volume_50day as average_volume, volume_ratio, float,
+round((close / (select low from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1)-1)*100, 2) as pct_change_3day
+from last_3_days ltd
 where
-ltd.price_date = (select price_date from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date desc limit 1) and
-ltd.close / (select low from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) < 0.90
-order by ltd.close / (select low from last_5_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1)
+ltd.price_date = (select price_date from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date desc limit 1) and
+ltd.close / (select low from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) < 0.90
+order by ltd.close / (select low from last_3_days ltdpd where ltdpd.ticker_symbol=ltd.ticker_symbol order by price_date limit 1) desc
 SQL
       end
 
