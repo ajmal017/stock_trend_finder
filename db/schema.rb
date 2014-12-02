@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141012203722) do
+ActiveRecord::Schema.define(version: 20141201024505) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -211,6 +211,20 @@ ActiveRecord::Schema.define(version: 20141012203722) do
     t.integer  "price_gap_id"
     t.string   "action"
     t.decimal  "pct_value_end"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "stocktwits", force: true do |t|
+    t.integer  "stocktwit_id"
+    t.datetime "stocktwit_time"
+    t.string   "stocktwit_url"
+    t.string   "symbol"
+    t.string   "message"
+    t.string   "image_thumb_url"
+    t.string   "image_large_url"
+    t.string   "image_original_url"
+    t.boolean  "hide"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

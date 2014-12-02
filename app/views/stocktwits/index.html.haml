@@ -1,0 +1,19 @@
+.col-md-9
+  %h1 StockTwits Archive
+  #stocktwits-filter-indicator{ "data-symbol"=>"" }
+    &nbsp;
+
+  #stocktwits-content
+    %table.stocktwits
+      -@twits.each do |twit|
+        =render "twit", twit: twit
+
+
+  .last-twit-placeholder
+    =image_tag(asset_path("loading.gif"))
+
+
+.col-md-3.stocktwits-ticker-navigation
+  = render partial: 'ticker_navigation'
+
+=render "load_twits_script"

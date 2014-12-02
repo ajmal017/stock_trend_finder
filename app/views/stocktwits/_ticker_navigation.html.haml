@@ -1,0 +1,38 @@
+%h3 Tickers
+
+.stocktwits-ticker-nav-filter
+  = raw("#{link_to('Symbol', '#', id: 'stocktwits-ticker-nav-filter-symbol')} | #{link_to('Count', '#', id: 'stocktwits-ticker-nav-filter-count')} | #{link_to('Updated', '#', id:'stocktwits-ticker-nav-filter-updated')}")
+
+.stocktwits-ticker-nav-list#symbol
+  -@ticker_list_symbol.each do |ticker|
+    .stocktwits-ticker-nav-link
+      = format_ticker_nav_link(ticker).html_safe
+
+.stocktwits-ticker-nav-list#count
+  -@ticker_list_count.each do |ticker|
+    .stocktwits-ticker-nav-link
+      = format_ticker_nav_link(ticker).html_safe
+
+.stocktwits-ticker-nav-list#updated
+  -@ticker_list_updated.each do |ticker|
+    .stocktwits-ticker-nav-link
+      = format_ticker_nav_link(ticker).html_safe
+
+:coffee
+  $('#stocktwits-ticker-nav-filter-symbol').click () ->
+    $('.stocktwits-ticker-nav-list#symbol').show()
+    $('.stocktwits-ticker-nav-list#updated').hide()
+    $('.stocktwits-ticker-nav-list#count').hide()
+    false # see http://stackoverflow.com/questions/3106695/jquery-hide-method-only-hides-div-for-a-second-but-then-div-reappears-automatica for explanation
+
+  $('#stocktwits-ticker-nav-filter-count').click () ->
+    $('.stocktwits-ticker-nav-list#symbol').hide()
+    $('.stocktwits-ticker-nav-list#updated').hide()
+    $('.stocktwits-ticker-nav-list#count').show()
+    false # see http://stackoverflow.com/questions/3106695/jquery-hide-method-only-hides-div-for-a-second-but-then-div-reappears-automatica for explanation
+
+  $('#stocktwits-ticker-nav-filter-updated').click () ->
+    $('.stocktwits-ticker-nav-list#symbol').hide()
+    $('.stocktwits-ticker-nav-list#updated').show()
+    $('.stocktwits-ticker-nav-list#count').hide()
+    false # see http://stackoverflow.com/questions/3106695/jquery-hide-method-only-hides-div-for-a-second-but-then-div-reappears-automatica for explanation

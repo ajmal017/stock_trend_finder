@@ -1,0 +1,53 @@
+body.stocktwits {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+.stocktwits-ticker-navigation {
+  background-color: #ddcd5e;
+}
+
+table.stocktwits {
+  width: 739px;
+}
+
+td.stocktwit-message {
+  padding: 5px 0px;
+  border-bottom: 1px solid #CCCCCC;
+}
+
+.stocktwit-message-timestamp {
+  color: #999999;
+  font-size: 9pt;
+  padding-bottom: 4px;
+}
+
+td.stocktwit-thumb {
+  width: 175px;
+  padding: 5px 0px;
+  border-bottom: 1px solid #CCCCCC;
+}
+
+.last-twit-placeholder{
+  text-align:center;
+  display:none;
+}
+
+.stocktwits-ticker-nav-filter, .stocktwits-ticker-nav-list {
+  font-size: 9pt;
+  font-color: black;
+}
+
+.stocktwits-ticker-nav-list#symbol, .stocktwits-ticker-nav-list#count {
+  display: none;
+}
+
+.stocktwits-ticker-nav-link {
+  margin: 2px;
+}
+
+
+#stocktwits-filter-indictator {
+  font-size: 11pt;
+  color: #2E2F30;
+}

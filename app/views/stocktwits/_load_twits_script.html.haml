@@ -1,0 +1,65 @@
+:coffee
+  loading = false
+  nomore = false
+
+  $last_twit_id = () -> $('table.stocktwits tr').filter(':last').attr('id')
+  $symbol_filter = () -> $('#stocktwits-filter-indicator').attr('data-symbol')
+
+  load_next = (symbol, last_id) ->
+    loading = true
+    $('.last-twit-placeholder').show()
+    $.post '/stocktwits/load_twits' \
+      , { symbol: symbol, max: last_id } \
+      , (data) ->
+        if data.length > 0
+           console.log(data)
+           if $('table.stocktwits tr').filter(':last').length > 0
+             $('table.stocktwits tr').filter(':last').after(data)
+           else
+             $('#stocktwits-content table.stocktwits').append(data)
+        else
+          nomore = true
+        $('.last-twit-placeholder').hide()
+        loading = false
+
+  set_symbol_filter = (symbol) ->
+    $('#stocktwits-content table.stocktwits').empty()
+    $('#stocktwits-filter-indicator').attr('data-symbol', symbol)
+    $('#stocktwits-filter-indicator').text(symbol)
+    nomore = false
+    load_next($symbol_filter, null)
+
+  $('a.symbol-filter-link').click () ->
+    symbol = $(this).attr('data-symbol')
+    set_symbol_filter(symbol)
+    false
+
+
+  $(window).scroll () ->
+    if $(window).scrollTop() >= $('#stocktwits-content').height() - $(window).height() - 500
+      if !loading && !nomore
+        load_next($symbol_filter, $last_twit_id)
+
+-#{
+-#//alert('loading!');
+-#
+-#
+-#//    $.post(
+-#//            <%= raw "'/stocktwits/next?" + (!request.env['QUERY_STRING'].empty? ? request.env['QUERY_STRING'] + '&' : '' ) + "max='" %> + $('table.stocktwits tr').filter(':last').attr('id'),
+-#//            function(data){
+-#//                if (data != "") {
+-#//                    $('table.stocktwits tr').filter(':last').after(data);
+-#//                }
+-#//                $('.last-twit-placeholder').hide();
+-#//                loading = false;
+-#//            }
+-#//    );
+-#};
+-#
+-#$(window).scroll(function(){
+-#  if($(window).scrollTop() >= $(document).height() - $(window).height() - 500) {
+-#    if(!loading) {
+-#    load_next();
+-#    }
+-#}
+-#});

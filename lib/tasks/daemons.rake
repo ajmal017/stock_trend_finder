@@ -4,6 +4,7 @@ namespace :stock_trend_finder do
   task :run_daemons => :environment do
     $stf.run_realtime_quotes_daemon
     $stf.run_daily_quotes_daemon
+    $stf.run_stocktwits_sync_daemon
 
     while 1 do
       # infinite loop until Ctrl+C hit

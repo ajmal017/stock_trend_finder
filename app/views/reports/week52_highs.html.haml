@@ -4,6 +4,8 @@
   %div Last Updated: #{@report.first['quote_time']}
   %div Items: #{@report.count}
 
+.report_date_form
+  =report_date_form :week52_highs
 
 .report-container
   %table.table-bordered#week52_highs{ style: "width: 750px;"}

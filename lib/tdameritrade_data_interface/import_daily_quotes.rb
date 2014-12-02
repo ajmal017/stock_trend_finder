@@ -287,6 +287,17 @@ module TDAmeritradeDataInterface
     scheduler
   end
 
+  def self.run_stocktwits_sync_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0 0,7,12,16 * * *') do
+      puts "StockTwits data sync: #{Time.now}"
+      Stocktwit.sync_twits
+    end
+    puts "Beginning StockTwits sync daemon..."
+    puts "Current Time: #{Time.now}"
+    scheduler
+  end
+
 
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_previous_close(begin_date)

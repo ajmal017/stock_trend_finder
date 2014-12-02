@@ -301,6 +301,22 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
+      <library name="stocktwits-api-ruby (v[path], /Users/wkotzan/Development/gem-development/stocktwits-api-ruby) [path][gem]">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/lib" />
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/pkg" />
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/.idea" />
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/sandbox" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/lib" />
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/pkg" />
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/.idea" />
+          <root url="file://$MODULE_DIR$/../../gem-development/stocktwits-api-ruby/sandbox" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="tdameritrade_api (v0.0.1.3.alpha, /Users/wkotzan/Development/gem-development/tdameritrade_api) [path][gem]">
         <CLASSES>
           <root url="file://$MODULE_DIR$/../../gem-development/tdameritrade_api/lib" />
@@ -338,6 +354,7 @@
     <orderEntry type="library" scope="PROVIDED" name="execjs (v2.2.1, rbenv: 2.0.0-p247) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="haml (v4.0.5, rbenv: 2.0.0-p247) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="hike (v1.2.3, rbenv: 2.0.0-p247) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="htmlentities (v4.3.2, rbenv: 2.0.0-p247) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="httparty (v0.13.1, rbenv: 2.0.0-p247) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v0.6.11, rbenv: 2.0.0-p247) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="jbuilder (v1.5.3, rbenv: 2.0.0-p247) [gem]" level="application" />

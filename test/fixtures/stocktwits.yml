@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  stocktwit_id: 1
+  stocktwit_time: 2014-11-30 21:45:05
+  stocktwit_url: MyString
+  symbol: MyString
+  message: MyString
+  image_thumb_url: MyString
+  image_large_url: MyString
+  image_original_url: MyString
+  hide: false
+
+two:
+  stocktwit_id: 1
+  stocktwit_time: 2014-11-30 21:45:05
+  stocktwit_url: MyString
+  symbol: MyString
+  message: MyString
+  image_thumb_url: MyString
+  image_large_url: MyString
+  image_original_url: MyString
+  hide: false
