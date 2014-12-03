@@ -5,7 +5,7 @@ class StocktwitsController < ApplicationController
     @twits = Stocktwit.showing.limit(20)
     ticker_list = Stocktwit.ticker_list('symbol')
     @ticker_list_symbol = ticker_list.to_a
-    @ticker_list_count = @ticker_list_symbol.sort { |a,b| b['count'] <=> a['count'] }
+    @ticker_list_count = @ticker_list_symbol.sort { |a,b| b['count'].to_i <=> a['count'].to_i }
     @ticker_list_updated = @ticker_list_symbol.sort { |a,b| b['last_updated_date'] <=> a['last_updated_date'] }
   end
 
@@ -20,7 +20,11 @@ class StocktwitsController < ApplicationController
     else
       render "load_twits", layout: false
     end
+  end
 
+  def refresh
+    Stocktwit.sync_twits
+    redirect_to stocktwits_path
   end
 
 end

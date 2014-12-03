@@ -1,7 +1,8 @@
 StockTrendFinder::Application.routes.draw do
   resources :tickers
-  resources :stocktwits
+  resources :stocktwits, except: [:show]
   post 'stocktwits/load_twits' => "stocktwits#load_twits"
+  get 'stocktwits/refresh' => "stocktwits#refresh"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
