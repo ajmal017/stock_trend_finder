@@ -13,6 +13,7 @@ StockTrendFinder::Application.routes.draw do
   namespace :reports do
     get 'active_stocks'
     get 'hammers'
+    get 'gaps'
     get 'ema13_breaks'
     get 'sma50_breaks'
     get 'sma200_breaks'

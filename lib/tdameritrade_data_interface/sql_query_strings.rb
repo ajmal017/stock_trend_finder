@@ -28,7 +28,7 @@ where
 tix.scrape_data=true and
 (round(((last_trade / dsp.close) - 1) * 100, 2) < -4.5 or round(((last_trade / dsp.close) - 1) * 100, 2) > 4.5)and
 dsp.price_date = (select price_date from daily_stock_prices dspd where dspd.ticker_id=rtq.ticker_id and dspd.price_date < date_trunc('day', rtq.quote_time) order by price_date desc limit 1) and
-(last_trade * rtq.volume > 2000000) and
+(last_trade * rtq.volume > 2500000) and
 abs(round(((last_trade / dsp.close) - 1) * 100, 2)) > 1 and
 average_volume_50day is not null
 order by volume_ratio desc
@@ -184,6 +184,7 @@ round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_sy
 from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
 where
 t.scrape_data=true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 volume > 1000 and
 close < sma50 and
@@ -205,6 +206,7 @@ round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_sy
 from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
 where
 t.scrape_data=true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 volume > 1000 and
 close > sma50 and
@@ -226,6 +228,7 @@ round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_sy
 from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
 where
 t.scrape_data=true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 volume > 1000 and
 close < sma200 and
@@ -247,6 +250,7 @@ round((close / (select close from daily_stock_prices dsp60 where dsp60.ticker_sy
 from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
 where
 t.scrape_data=true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 volume > 1000 and
 close > sma200 and
@@ -281,7 +285,43 @@ from ticker_list
 where
 high=(select max(high) as high_52week from (select high from daily_stock_prices dsp52 where ticker_symbol=ticker_list.ticker_symbol and price_date<='#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc limit 250) as high_52week_qry)
 order by
-volume_ratio desc
+volume_ratio desc and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+scrape_data=true
+SQL
+      end
+
+      def select_bullish_gaps(most_recent_date)
+        <<SQL
+select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio,
+(select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
+round((close / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
+from daily_stock_prices d
+inner join tickers t on d.ticker_symbol=t.symbol
+where
+low > (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+t.scrape_data = true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+open / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) > 1.03
+order by gap_pct desc
+SQL
+      end
+
+      def select_bearish_gaps(most_recent_date)
+        <<SQL
+select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio,
+(select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
+round((close / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
+from daily_stock_prices d
+inner join tickers t on d.ticker_symbol=t.symbol
+where
+high < (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+t.scrape_data = true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+open / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) < 0.97
+order by gap_pct desc
 SQL
       end
 

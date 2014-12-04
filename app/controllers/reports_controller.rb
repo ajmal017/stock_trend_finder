@@ -5,12 +5,17 @@ class ReportsController < ApplicationController
 
   def hide_symbol
     @symbol = params[:symbol]
-    Ticker.find_by(symbol: @symbol).hide_from_reports(30)
+    Ticker.find_by(symbol: @symbol).hide_from_reports(20)
   end
 
   def unscrape_symbol
     @symbol = params[:symbol]
     Ticker.unscrape(@symbol)
+  end
+
+  def gaps
+    @report_bullgaps = run_query(TDAmeritradeDataInterface.select_bullish_gaps(@report_date))
+    @report_beargaps = run_query(TDAmeritradeDataInterface.select_bearish_gaps(@report_date))
   end
 
   def ema13_breaks
