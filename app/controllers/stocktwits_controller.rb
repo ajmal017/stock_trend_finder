@@ -7,6 +7,7 @@ class StocktwitsController < ApplicationController
     @ticker_list_symbol = ticker_list.to_a
     @ticker_list_count = @ticker_list_symbol.sort { |a,b| b['count'].to_i <=> a['count'].to_i }
     @ticker_list_updated = @ticker_list_symbol.sort { |a,b| b['last_updated_date'] <=> a['last_updated_date'] }
+    @ticker_list_watching = Stocktwit.watching_list
   end
 
   def load_twits
@@ -25,6 +26,11 @@ class StocktwitsController < ApplicationController
   def refresh
     Stocktwit.sync_twits
     redirect_to stocktwits_path
+  end
+
+  def toggle_watching
+    symbol = params[:symbol]
+    @result = Stocktwit.toggle_watching(symbol)
   end
 
 end

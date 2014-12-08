@@ -9,6 +9,21 @@ class Stocktwit < ActiveRecord::Base
     ActiveRecord::Base.connection.execute(ticker_list_sql(order_by))
   end
 
+  def self.watching_list
+    ActiveRecord::Base.connection.execute(watching_list_sql)
+  end
+
+  def self.watching?(symbol)
+    twit = Stocktwit.where(symbol: symbol).where("watching IS NOT NULL").order(stocktwit_time: :desc)
+    !twit.empty? && twit.first.watching
+  end
+
+  def self.toggle_watching(symbol)
+    twit = Stocktwit.where(symbol: symbol).order(stocktwit_time: :desc).last
+    twit.update(watching: !Stocktwit.watching?(symbol))
+    @result = twit.watching
+  end
+
   def self.sync_twits
     attempt = 1
     messages_synced = 0
@@ -65,6 +80,21 @@ private
     from stocktwits
     group by symbol
     order by #{order_by}
+SQL
+  end
+
+  def self.watching_list_sql
+    <<SQL
+with symbols as (
+select symbol from stocktwits group by symbol order by symbol
+)
+select
+s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', stocktwit_time) as last_updated
+from symbols s inner join stocktwits st on st.symbol=s.symbol
+where
+st.watching and
+st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1)
+order by stocktwit_time
 SQL
   end
 end

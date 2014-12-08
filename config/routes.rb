@@ -3,6 +3,7 @@ StockTrendFinder::Application.routes.draw do
   resources :stocktwits, except: [:show]
   post 'stocktwits/load_twits' => "stocktwits#load_twits"
   get 'stocktwits/refresh' => "stocktwits#refresh"
+  get 'stocktwits/toggle_watching' => "stocktwits#toggle_watching"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -14,7 +15,7 @@ StockTrendFinder::Application.routes.draw do
     get 'active_stocks'
     get 'hammers'
     get 'gaps'
-    get 'ema13_breaks'
+    #get 'ema13_breaks'  Obsolete for now. But keeping structure in place just in case I find a use for it.
     get 'sma50_breaks'
     get 'sma200_breaks'
     get 'candle_row'

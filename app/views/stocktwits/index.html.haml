@@ -2,6 +2,8 @@
   %h1 StockTwits Archive
   #stocktwits-filter-indicator{ "data-symbol"=>"" }
     &nbsp;
+  #stocktwits-watch-indicator{ "data-symbol"=>"" }
+    =link_to "Watch", "#", id: 'toggle-watching'
   #stocktwits-refresh-button
     =link_to "Refresh", stocktwits_refresh_path
 

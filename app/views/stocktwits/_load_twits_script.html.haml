@@ -34,6 +34,9 @@
     set_symbol_filter(symbol)
     false
 
+  $('a#toggle-watching').click () ->
+    $.get('/stocktwits/toggle_watching', {symbol: $symbol_filter})
+    false
 
   $(window).scroll () ->
     if $(window).scrollTop() >= $('#stocktwits-content').height() - $(window).height() - 500

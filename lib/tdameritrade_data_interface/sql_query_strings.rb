@@ -319,9 +319,10 @@ where
 high < (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 t.scrape_data = true and
+volume > 600 and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
-open / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) < 0.97
-order by gap_pct desc
+open / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) < 0.97
+order by gap_pct
 SQL
       end
 
