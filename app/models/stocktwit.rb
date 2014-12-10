@@ -89,12 +89,12 @@ with symbols as (
 select symbol from stocktwits group by symbol order by symbol
 )
 select
-s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', stocktwit_time) as last_updated
+s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', (select stocktwit_time from stocktwits st where st.symbol=s.symbol order by id desc limit 1)) as last_updated, (select count(sc.symbol) from stocktwits sc where sc.symbol=s.symbol) as count
 from symbols s inner join stocktwits st on st.symbol=s.symbol
 where
 st.watching and
 st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1)
-order by stocktwit_time
+order by last_updated
 SQL
   end
 end

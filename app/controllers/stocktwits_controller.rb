@@ -31,6 +31,14 @@ class StocktwitsController < ApplicationController
   def toggle_watching
     symbol = params[:symbol]
     @result = Stocktwit.toggle_watching(symbol)
+    render status: :ok
   end
+
+  def watching
+    symbol = params[:symbol]
+    @result = { watching: Stocktwit.watching?(symbol) }
+    render json: @result
+  end
+
 
 end

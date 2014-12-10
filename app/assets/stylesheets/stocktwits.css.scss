@@ -49,14 +49,18 @@ td.stocktwit-thumb {
 
 #stocktwits-filter-indicator {
   display: inline;
-  width: 125px;
-  font-size: 11pt;
+  font-size: 16pt;
+  font-weight: bold;
   color: #2E2F30;
 }
 
 #stocktwits-watch-indicator {
   display: inline;
   width: 200px;
-  font-size: 11pt;
+  font-size: 16pt;
   color: #2E2F30;
+  img {
+    width: 25px;
+    height: 25px;
+  }
 }

@@ -1,11 +1,11 @@
 .col-md-9
-  %h1 StockTwits Archive
+  %h1
+    StockTwits Archive
+    =link_to(image_tag(asset_path('icon-cloud-download.png')), stocktwits_refresh_path)
+  #stocktwits-watch-indicator{ "data-symbol"=>"" }
+    =link_to(image_tag(asset_path('icon-star-sm-yellow.png'), class: 'stocktwits-watch-indicator', style: "display: none;"), "#", id: 'toggle-watching')
   #stocktwits-filter-indicator{ "data-symbol"=>"" }
     &nbsp;
-  #stocktwits-watch-indicator{ "data-symbol"=>"" }
-    =link_to "Watch", "#", id: 'toggle-watching'
-  #stocktwits-refresh-button
-    =link_to "Refresh", stocktwits_refresh_path
 
   #stocktwits-content
     %table.stocktwits

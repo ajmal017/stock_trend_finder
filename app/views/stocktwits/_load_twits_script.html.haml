@@ -12,7 +12,6 @@
       , { symbol: symbol, max: last_id } \
       , (data) ->
         if data.length > 0
-           console.log(data)
            if $('table.stocktwits tr').filter(':last').length > 0
              $('table.stocktwits tr').filter(':last').after(data)
            else
@@ -29,13 +28,23 @@
     nomore = false
     load_next($symbol_filter, null)
 
+  set_watching_icon = () ->
+    $.getJSON '/stocktwits/watching.json', {symbol: $symbol_filter}, (data) ->
+      if data.watching
+        $('img.stocktwits-watch-indicator').attr('src', '/assets/icon-star-sm-yellow.png')
+      else
+        $('img.stocktwits-watch-indicator').attr('src', '/assets/icon-star-sm-grey.png')
+      $('img.stocktwits-watch-indicator').show()
+
   $('a.symbol-filter-link').click () ->
     symbol = $(this).attr('data-symbol')
     set_symbol_filter(symbol)
+    set_watching_icon()
     false
 
   $('a#toggle-watching').click () ->
-    $.get('/stocktwits/toggle_watching', {symbol: $symbol_filter})
+    console.log($.get('/stocktwits/toggle_watching', {symbol: $symbol_filter}))
+    set_watching_icon()
     false
 
   $(window).scroll () ->

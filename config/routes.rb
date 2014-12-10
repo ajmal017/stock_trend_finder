@@ -3,6 +3,7 @@ StockTrendFinder::Application.routes.draw do
   resources :stocktwits, except: [:show]
   post 'stocktwits/load_twits' => "stocktwits#load_twits"
   get 'stocktwits/refresh' => "stocktwits#refresh"
+  get 'stocktwits/watching' => "stocktwits#watching"
   get 'stocktwits/toggle_watching' => "stocktwits#toggle_watching"
 
   # The priority is based upon order of creation: first created -> highest priority.
