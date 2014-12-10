@@ -95,8 +95,8 @@ module TDAmeritradeDataInterface
     puts "Calculating Average Daily Volumes"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
-    puts "Calculating EMA13's"
-    populate_ema13
+    #puts "Calculating EMA13's"
+    #populate_ema13
 
     puts "Calculating SMA50's"
     populate_sma50
@@ -182,8 +182,8 @@ module TDAmeritradeDataInterface
     puts "Calculating Average Daily Volumes"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
-    puts "Calculating EMA13's"
-    populate_ema13
+    #puts "Calculating EMA13's"
+    #populate_ema13
 
     puts "Calculating SMA50's"
     populate_sma50
@@ -365,8 +365,8 @@ module TDAmeritradeDataInterface
       puts "Calculating Average Daily Volumes"
       populate_average_volume_50day(Date.today)
 
-      puts "Calculating EMA13's"
-      populate_ema13(Date.today)
+      #puts "Calculating EMA13's"
+      #populate_ema13(Date.today)
 
       puts "Calculating SMA50's"
       populate_sma50

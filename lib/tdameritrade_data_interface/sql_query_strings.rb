@@ -326,12 +326,11 @@ order by gap_pct
 SQL
       end
 
-      # Not yet implemented
       def select_big_range(most_recent_date)
         <<SQL
 select ticker_symbol, price_date, open, close as last_trade, high, low, previous_close, abs(high/low-1)*100 as range, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio
 from daily_stock_prices d inner join tickers t on d.ticker_symbol=t.symbol
-where price_date='2014-12-09' and
+where price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
 abs(high/low-1)*100 > 7 and
 volume > 1000 and
 close > 4
