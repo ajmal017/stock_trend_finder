@@ -3,7 +3,7 @@
 %h2 Bullish Gaps
 
 -if @report_bullgaps.count > 0
-  %div Last Updated: #{@report_bullgaps.first['price_date']}
+  %div Last Updated: #{@report_bullgaps.first['snapshot_time'] || @report_bullgaps.first['price_date']}
   %div Items: #{@report_bullgaps.count}
 
 .report_date_form

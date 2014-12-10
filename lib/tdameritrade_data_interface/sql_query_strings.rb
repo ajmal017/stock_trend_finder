@@ -28,7 +28,7 @@ where
 tix.scrape_data=true and
 (round(((last_trade / dsp.close) - 1) * 100, 2) < -4.5 or round(((last_trade / dsp.close) - 1) * 100, 2) > 4.5)and
 dsp.price_date = (select price_date from daily_stock_prices dspd where dspd.ticker_id=rtq.ticker_id and dspd.price_date < date_trunc('day', rtq.quote_time) order by price_date desc limit 1) and
-(last_trade * rtq.volume > 2500000) and
+(last_trade * rtq.volume > 5000000) and
 abs(round(((last_trade / dsp.close) - 1) * 100, 2)) > 1 and
 average_volume_50day is not null
 order by volume_ratio desc
@@ -293,12 +293,13 @@ SQL
 
       def select_bullish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio,
+select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
 (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
 round((close / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
+volume > 100 and
 low > (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 t.scrape_data = true and
@@ -310,7 +311,7 @@ SQL
 
       def select_bearish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio,
+select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
 (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
 round((close / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
 from daily_stock_prices d
@@ -319,7 +320,7 @@ where
 high < (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 t.scrape_data = true and
-volume > 600 and
+volume > 100 and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 open / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) < 0.97
 order by gap_pct
@@ -328,12 +329,13 @@ SQL
 
       def select_big_range(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, close as last_trade, high, low, previous_close, abs(high/low-1)*100 as range, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio
+select ticker_symbol, price_date, open, close as last_trade, high, low, previous_close, volume, round(abs(high/low-1)*100, 2) as range, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, round((close/previous_close-1)*100, 2) as pct_change, snapshot_time
 from daily_stock_prices d inner join tickers t on d.ticker_symbol=t.symbol
 where price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
-abs(high/low-1)*100 > 7 and
+abs(high/low-1)*100 > 5 and
 volume > 1000 and
-close > 4
+close > 4 and
+round(volume / average_volume_50day, 2) > 1
 order by range desc
 SQL
       end

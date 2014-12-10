@@ -46,6 +46,7 @@ module ReportHelper
         end
       when :float then css_class << "gold-bg " if (report['float'].to_f < 100) && (report['float'].to_f > 0)
       when :volume_ratio then css_class << "yellow-bg " if (report['volume_ratio'].to_f > 3)
+      when :range then css_class << "yellow-bg " if (report['range'].to_f > 7)
 
     end
 
