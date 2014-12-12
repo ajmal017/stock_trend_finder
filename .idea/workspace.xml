@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f0b90f8-f162-41b6-9a1f-d1c8b6630078" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/javascripts/application.js" afterPath="$PROJECT_DIR$/app/assets/javascripts/application.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/stocktwits/index.html.haml" afterPath="$PROJECT_DIR$/app/views/stocktwits/index.html.haml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/schema.rb" afterPath="$PROJECT_DIR$/db/schema.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/stocktwit.rb" afterPath="$PROJECT_DIR$/app/models/stocktwit.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" afterPath="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/ticker.rb" afterPath="$PROJECT_DIR$/app/models/ticker.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/reports/active_stocks.html.haml" afterPath="$PROJECT_DIR$/app/views/reports/active_stocks.html.haml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/reports_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/reports_controller.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" afterPath="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" />
     </list>
     <ignored path="stock_trend_finder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -21,7 +17,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/stock_trend_finder@routes.coverage" NAME="routes Coverage Results" MODIFIED="1417728329734" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="stock_trend_finder" />
-    <SUITE FILE_PATH="coverage/stock_trend_finder@Development__stock_trend_finder.coverage" NAME="Development: stock_trend_finder Coverage Results" MODIFIED="1418238703984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="stock_trend_finder" />
+    <SUITE FILE_PATH="coverage/stock_trend_finder@Development__stock_trend_finder.coverage" NAME="Development: stock_trend_finder Coverage Results" MODIFIED="1418332611654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="stock_trend_finder" />
     <SUITE FILE_PATH="coverage/stock_trend_finder@save_stream.coverage" NAME="save stream Coverage Results" MODIFIED="1408021204764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="stock_trend_finder" />
     <SUITE FILE_PATH="coverage/stock_trend_finder@run_script.coverage" NAME="run_script Coverage Results" MODIFIED="1409025391886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="stock_trend_finder" />
     <SUITE FILE_PATH="coverage/stock_trend_finder@run_stock_file.coverage" NAME="run_stock_file Coverage Results" MODIFIED="1417412969229" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="stock_trend_finder" />
@@ -64,18 +60,8 @@
       <file leaf-file-name="stocktwits.css.scss" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.22" vertical-offset="834" max-vertical-offset="1275">
-              <caret line="73" column="18" selection-start-line="73" selection-start-column="18" selection-end-line="73" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="reports_controller.rb" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/controllers/reports_controller.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5048077" vertical-offset="0" max-vertical-offset="1260">
-              <caret line="14" column="35" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state vertical-scroll-proportion="-2.52" vertical-offset="834" max-vertical-offset="1275">
+              <caret line="64" column="52" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
               <folding />
             </state>
           </provider>
@@ -123,11 +109,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sql_query_strings.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb">
+      <file leaf-file-name="active_stocks.html.haml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/views/reports/active_stocks.html.haml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4337" max-vertical-offset="7080">
-              <caret line="313" column="198" selection-start-line="313" selection-start-column="198" selection-end-line="313" selection-end-column="198" />
+            <state vertical-scroll-proportion="0.23746702" vertical-offset="0" max-vertical-offset="615">
+              <caret line="6" column="36" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="candle_row.html.haml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/reports/candle_row.html.haml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="1005">
+              <caret line="10" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -154,7 +150,6 @@
         <option value="$PROJECT_DIR$/app/views/reports/sma50_breaks.html.haml" />
         <option value="$PROJECT_DIR$/app/views/reports/sma200_breaks.html.haml" />
         <option value="$PROJECT_DIR$/app/views/reports/candle_row.html.haml" />
-        <option value="$PROJECT_DIR$/app/views/reports/active_stocks.html.haml" />
         <option value="$PROJECT_DIR$/db/migrate/20141120032652_add_year_high_to_daily_stock_prices.rb" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/app/views/reports/pctgainloss.html.haml" />
@@ -183,11 +178,9 @@
         <option value="$PROJECT_DIR$/app/helpers/report_helper.rb" />
         <option value="$PROJECT_DIR$/app/views/reports/big_range.html.haml" />
         <option value="$PROJECT_DIR$/config/routes.rb" />
-        <option value="$PROJECT_DIR$/app/controllers/reports_controller.rb" />
         <option value="$PROJECT_DIR$/app/views/reports/range.html.haml" />
         <option value="$PROJECT_DIR$/app/views/layouts/application.html.haml" />
         <option value="$PROJECT_DIR$/app/views/reports/gaps.html.haml" />
-        <option value="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" />
         <option value="$PROJECT_DIR$/app/assets/stylesheets/application.css.scss" />
         <option value="$PROJECT_DIR$/app/assets/javascripts/application.js" />
         <option value="$PROJECT_DIR$/db/migrate/20141210211648_add_user_to_stocktwits.rb" />
@@ -197,6 +190,9 @@
         <option value="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" />
         <option value="$PROJECT_DIR$/app/models/ticker.rb" />
         <option value="$PROJECT_DIR$/downloads/ipo_list.txt" />
+        <option value="$PROJECT_DIR$/app/controllers/reports_controller.rb" />
+        <option value="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" />
+        <option value="$PROJECT_DIR$/app/views/reports/active_stocks.html.haml" />
       </list>
     </option>
   </component>
@@ -287,7 +283,51 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="downloads" />
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tdameritrade_data_interface" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stock_trend_finder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stock_trend_finder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stock_trend_finder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stock_trend_finder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="reports" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -680,13 +720,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../gem-development/tdameritrade_api/lib/tdameritrade_api/client.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1125">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/environment.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="416">
@@ -838,13 +871,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/reports/active_stocks.html.haml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7519789" vertical-offset="195" max-vertical-offset="585">
-          <caret line="32" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/tasks/daemons.rake">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
@@ -957,34 +983,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4337" max-vertical-offset="7080">
-          <caret line="313" column="198" selection-start-line="313" selection-start-column="198" selection-end-line="313" selection-end-column="198" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.1" vertical-offset="0" max-vertical-offset="870">
-          <caret line="47" column="30" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
-          <folding>
-            <marker date="1418181042000" expanded="true" signature="239:738" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="400:738" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="430:634" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="778:999" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1033:1370" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1114:1370" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1416:1516" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1559:1668" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1699:1865" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1794:1865" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="1825:1865" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/reports/gaps.html.haml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3166227" vertical-offset="0" max-vertical-offset="1185">
@@ -1075,16 +1073,60 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.22" vertical-offset="834" max-vertical-offset="1275">
-          <caret line="73" column="18" selection-start-line="73" selection-start-column="18" selection-end-line="73" selection-end-column="18" />
+        <state vertical-scroll-proportion="-2.52" vertical-offset="834" max-vertical-offset="1275">
+          <caret line="64" column="52" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11166253" vertical-offset="120" max-vertical-offset="7020">
+          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/reports_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5048077" vertical-offset="0" max-vertical-offset="1260">
-          <caret line="14" column="35" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.64903843" vertical-offset="465" max-vertical-offset="1260">
+          <caret line="49" column="56" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-14.1" vertical-offset="0" max-vertical-offset="870">
+          <caret line="47" column="30" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
+          <folding>
+            <marker date="1418181042000" expanded="true" signature="239:738" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="400:738" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="430:634" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="778:999" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1033:1370" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1114:1370" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1416:1516" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1559:1668" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1699:1865" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1794:1865" placeholder="..." />
+            <marker date="1418181042000" expanded="true" signature="1825:1865" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/reports/candle_row.html.haml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="1005">
+          <caret line="10" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/reports/active_stocks.html.haml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23746702" vertical-offset="0" max-vertical-offset="615">
+          <caret line="6" column="36" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
           <folding />
         </state>
       </provider>

@@ -49,7 +49,7 @@ class ReportsController < ApplicationController
   end
 
   def active_stocks
-    @report = run_query(TDAmeritradeDataInterface.select_active_stocks)
+    @report = run_query(TDAmeritradeDataInterface.select_active_stocks(@report_date))
   end
 
   def candle_row

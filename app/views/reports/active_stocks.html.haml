@@ -1,9 +1,11 @@
 %h1 Active Stocks Report
 
 -if @report.count > 0
-  %div Last Updated: #{@report.first['quote_time']}
+  %div Last Updated: #{@report.first['snapshot_time']}
   %div Items: #{@report.count}
 
+.report_date_form
+  =report_date_form :active_stocks
 
 .report-container
   %table.table-bordered#active-stocks{ style: "width: 700px;"}
@@ -23,7 +25,7 @@
       %tr{ id: r['ticker_symbol'] }
         %td= i+1
         %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :last_trade) }= r['close']
         %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
         %td{ class: set_css_class(r, :volume) }= r['volume']
         %td{ class: set_css_class(r, :average_volume) }= r['average_volume']

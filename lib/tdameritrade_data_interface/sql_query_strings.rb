@@ -6,31 +6,27 @@ module TDAmeritradeDataInterface
 
     module ClassMethods
 
-      def select_active_stocks
+      def select_active_stocks(most_recent_date)
         <<SQL
 select
-  rtq.ticker_symbol,
-  last_trade,
-  round(((last_trade / dsp.close) - 1) * 100, 2) as pct_change,
-  dsp.close as prev_close,
-  round(rtq.volume / 1000) as volume,
-  dsp.average_volume_50day as average_volume,
-  round(round(rtq.volume / 1000) / dsp.average_volume_50day, 2) as volume_ratio,
-  quote_time,
-  dsp.price_date as last_price_date,
-  tix.float as float
+  ticker_symbol,
+  close,
+  round(((close / previous_close) - 1) * 100, 2) as pct_change,
+  previous_close,
+  volume,
+  average_volume_50day as average_volume,
+  round(volume / average_volume_50day, 2) as volume_ratio,
+  price_date,
+  float,
+  snapshot_time
 
-from real_time_quotes as rtq inner join
-daily_stock_prices dsp on dsp.ticker_id=rtq.ticker_id inner join
-tickers tix on tix.id=rtq.ticker_id
+from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
 where
-(tix.hide_from_reports_until is null or tix.hide_from_reports_until <= current_date) and
-tix.scrape_data=true and
-(round(((last_trade / dsp.close) - 1) * 100, 2) < -4.5 or round(((last_trade / dsp.close) - 1) * 100, 2) > 4.5)and
-dsp.price_date = (select price_date from daily_stock_prices dspd where dspd.ticker_id=rtq.ticker_id and dspd.price_date < date_trunc('day', rtq.quote_time) order by price_date desc limit 1) and
-(last_trade * rtq.volume > 5000000) and
-abs(round(((last_trade / dsp.close) - 1) * 100, 2)) > 1 and
-average_volume_50day is not null
+t.scrape_data=true and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+abs((round(((close / previous_close) - 1) * 100, 2))) > 4 and
+price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+(close * volume > 5000)
 order by volume_ratio desc
 limit 50
 SQL
