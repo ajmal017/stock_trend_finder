@@ -27,7 +27,7 @@ class Stocktwit < ActiveRecord::Base
   def self.sync_twits
     messages_synced = 0
 
-    ['greenspud', 'traderstewie', 'TraderRL23', 'stt2318'].each do |stocktwits_user_name|
+    ['greenspud', 'traderstewie', 'TraderRL23', 'stt2318', 'starbreakouts'].each do |stocktwits_user_name|
       attempt = 1
       while attempt < 3
         since_id = Stocktwit.where(stocktwits_user_name: stocktwits_user_name).maximum(:stocktwit_id) || FIRST_TWIT_ID
@@ -95,11 +95,12 @@ with symbols as (
 select symbol from stocktwits group by symbol order by symbol
 )
 select
-s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', (select stocktwit_time from stocktwits st where st.symbol=s.symbol order by id desc limit 1)) as last_updated, (select count(sc.symbol) from stocktwits sc where sc.symbol=s.symbol) as count
+s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', (select stocktwit_time from stocktwits st where st.symbol=s.symbol and st.stocktwits_user_name='greenspud' order by id desc limit 1)) as last_updated, (select count(sc.symbol) from stocktwits sc where sc.symbol=s.symbol) as count
 from symbols s inner join stocktwits st on st.symbol=s.symbol
 where
 st.watching and
-st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1)
+st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1) and
+stocktwits_user_name='greenspud'
 order by last_updated
 SQL
   end

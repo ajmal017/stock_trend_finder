@@ -17,6 +17,10 @@ class ReportsController < ApplicationController
     @report = run_query(TDAmeritradeDataInterface.select_big_range(@report_date))
   end
 
+  def ipo_list
+    @report = run_query(TDAmeritradeDataInterface.select_ipo_list)
+  end
+
   def gaps
     @report_bullgaps = run_query(TDAmeritradeDataInterface.select_bullish_gaps(@report_date))
     @report_beargaps = run_query(TDAmeritradeDataInterface.select_bearish_gaps(@report_date))

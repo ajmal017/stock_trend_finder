@@ -336,6 +336,16 @@ order by range desc
 SQL
       end
 
+      def select_ipo_list
+        <<SQL
+select ticker_symbol, min(price_date) as first_price_date, current_date - date_trunc('day', min(price_date)) as days
+from daily_stock_prices d
+group by ticker_symbol
+having min(price_date) > '2014-01-01'
+order by first_price_date desc
+SQL
+      end
+
       def update_sma50
         <<SQL
 update daily_stock_prices dsp
