@@ -3,10 +3,10 @@ require 'stocktwits_api'
 class Stocktwit < ActiveRecord::Base
   FIRST_TWIT_ID=18772403
 
-  scope :showing, -> { where(hide: false, stocktwits_user_name: 'greenspud').order(id: :desc) }
+  scope :showing, -> (user_id='greenspud') { where(hide: false, stocktwits_user_name: user_id).order(id: :desc) }
 
-  def self.ticker_list(order_by='symbol')
-    ActiveRecord::Base.connection.execute(ticker_list_sql(order_by, 'greenspud'))
+  def self.ticker_list(order_by='symbol', user_id='greenspud')
+    ActiveRecord::Base.connection.execute(ticker_list_sql(order_by, user_id))
   end
 
   def self.watching_list
@@ -27,7 +27,7 @@ class Stocktwit < ActiveRecord::Base
   def self.sync_twits
     messages_synced = 0
 
-    ['greenspud', 'traderstewie', 'TraderRL23', 'stt2318', 'starbreakouts'].each do |stocktwits_user_name|
+    ['greenspud', 'traderstewie', 'TraderRL23', 'stt2318', 'starbreakouts', 'chartingManDan', 'Mastertrader_Consultant'].each do |stocktwits_user_name|
       attempt = 1
       while attempt < 3
         since_id = Stocktwit.where(stocktwits_user_name: stocktwits_user_name).maximum(:stocktwit_id) || FIRST_TWIT_ID

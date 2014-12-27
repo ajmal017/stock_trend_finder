@@ -4,12 +4,13 @@
 
   $last_twit_id = () -> $('table.stocktwits tr').filter(':last').attr('id')
   $symbol_filter = () -> $('#stocktwits-filter-indicator').attr('data-symbol')
+  $user_id_filter = () -> $('#user-dropdown-button').text().trim()
 
   load_next = (symbol, last_id) ->
     loading = true
     $('.last-twit-placeholder').show()
     $.post '/stocktwits/load_twits' \
-      , { symbol: symbol, max: last_id } \
+      , { user_id: $user_id_filter, symbol: symbol, max: last_id } \
       , (data) ->
         if data.length > 0
            if $('table.stocktwits tr').filter(':last').length > 0

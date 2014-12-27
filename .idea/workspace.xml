@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f0b90f8-f162-41b6-9a1f-d1c8b6630078" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/layouts/application.html.haml" afterPath="$PROJECT_DIR$/app/views/layouts/application.html.haml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/reports_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/reports_controller.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/routes.rb" afterPath="$PROJECT_DIR$/config/routes.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" afterPath="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml" afterPath="$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/views/stocktwits/index.html.haml" afterPath="$PROJECT_DIR$/app/views/stocktwits/index.html.haml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/stocktwit.rb" afterPath="$PROJECT_DIR$/app/models/stocktwit.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" afterPath="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" afterPath="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" />
     </list>
     <ignored path="stock_trend_finder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,89 +40,63 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html.haml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/stocktwits/index.html.haml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.875" vertical-offset="0" max-vertical-offset="600">
-              <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="stocktwit.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/stocktwit.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.8076925" vertical-offset="1120" max-vertical-offset="1695">
-              <caret line="83" column="72" selection-start-line="83" selection-start-column="19" selection-end-line="83" selection-end-column="72" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1695">
+              <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="daemons.rake" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/tasks/daemons.rake">
+      <file leaf-file-name="_twit.html.haml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_twit.html.haml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
-              <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+            <state vertical-scroll-proportion="-4.375" vertical-offset="0" max-vertical-offset="195">
+              <caret line="7" column="54" selection-start-line="7" selection-start-column="54" selection-end-line="7" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="import_daily_quotes.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/import_daily_quotes.rb">
+      <file leaf-file-name="stocktwits_helper.rb" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/helpers/stocktwits_helper.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4500">
-              <caret line="119" column="11" selection-start-line="119" selection-start-column="11" selection-end-line="119" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.6327543" vertical-offset="0" max-vertical-offset="450">
+              <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="stocktwits_controller.rb" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/controllers/stocktwits_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
+              <caret line="11" column="37" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_load_twits_script.html.haml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.72" vertical-offset="54" max-vertical-offset="885">
+              <caret line="16" column="36" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
               <folding>
-                <element signature="e#7447#9227#0" expanded="false" />
-                <element signature="e#10385#10533#0" expanded="false" />
-                <element signature="e#10537#10686#0" expanded="false" />
-                <element signature="e#10690#11233#0" expanded="false" />
-                <element signature="e#11466#11693#0" expanded="false" />
-                <element signature="e#12356#12612#0" expanded="false" />
+                <marker date="1419702042000" expanded="true" signature="306:831" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="493:831" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="523:727" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="871:1092" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="1126:1463" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="1207:1463" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="1509:1609" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="1652:1761" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="1792:1958" placeholder="..." />
+                <marker date="1419702042000" expanded="true" signature="1887:1958" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ticker_list.html.haml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/reports/ticker_list.html.haml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="480">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ipo_list.html.haml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/reports/ipo_list.html.haml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.875" vertical-offset="0" max-vertical-offset="420">
-              <caret line="19" column="78" selection-start-line="19" selection-start-column="78" selection-end-line="19" selection-end-column="78" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="reports_controller.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controllers/reports_controller.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1320">
-              <caret line="20" column="65" selection-start-line="20" selection-start-column="65" selection-end-line="20" selection-end-column="65" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sql_query_strings.rb" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4111406" vertical-offset="4945" max-vertical-offset="7170">
-              <caret line="340" column="116" selection-start-line="340" selection-start-column="116" selection-end-line="340" selection-end-column="116" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -131,16 +106,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="1290">
               <caret line="19" column="33" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="application.html.haml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/layouts/application.html.haml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.125" vertical-offset="15" max-vertical-offset="510">
-              <caret line="14" column="31" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -175,7 +140,6 @@
         <option value="$PROJECT_DIR$/lib/tasks/daemons.rake" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/ticker_navigation.html.haml" />
         <option value="$PROJECT_DIR$/app/assets/stylesheets/theme.css.scss" />
-        <option value="$PROJECT_DIR$/app/views/stocktwits/_twit.html.haml" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/next.js" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/next.haml" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/next.js.erb" />
@@ -185,11 +149,9 @@
         <option value="$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.js.coffee" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.js.coffee.haml" />
         <option value="$PROJECT_DIR$/app/views/layouts/stocktwits.html.haml" />
-        <option value="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/_ticker_navigation.html.haml" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/toggle_watching.js" />
         <option value="$PROJECT_DIR$/app/views/stocktwits/toggle_watching.js.erb" />
-        <option value="$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml" />
         <option value="$PROJECT_DIR$/lib/tdameritrade_data_interface/import_daily_quotes.rb" />
         <option value="$PROJECT_DIR$/app/helpers/report_helper.rb" />
         <option value="$PROJECT_DIR$/app/views/reports/big_range.html.haml" />
@@ -198,18 +160,21 @@
         <option value="$PROJECT_DIR$/app/assets/stylesheets/application.css.scss" />
         <option value="$PROJECT_DIR$/app/assets/javascripts/application.js" />
         <option value="$PROJECT_DIR$/db/migrate/20141210211648_add_user_to_stocktwits.rb" />
-        <option value="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" />
-        <option value="$PROJECT_DIR$/app/views/stocktwits/index.html.haml" />
-        <option value="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" />
         <option value="$PROJECT_DIR$/app/models/ticker.rb" />
         <option value="$PROJECT_DIR$/downloads/ipo_list.txt" />
         <option value="$PROJECT_DIR$/app/views/reports/active_stocks.html.haml" />
-        <option value="$PROJECT_DIR$/app/models/stocktwit.rb" />
         <option value="$PROJECT_DIR$/app/controllers/reports_controller.rb" />
         <option value="$PROJECT_DIR$/config/routes.rb" />
         <option value="$PROJECT_DIR$/app/views/layouts/application.html.haml" />
         <option value="$PROJECT_DIR$/app/views/reports/ipo_list.html.haml" />
         <option value="$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb" />
+        <option value="$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss" />
+        <option value="$PROJECT_DIR$/app/views/stocktwits/index.html.haml" />
+        <option value="$PROJECT_DIR$/app/models/stocktwit.rb" />
+        <option value="$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml" />
+        <option value="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" />
+        <option value="$PROJECT_DIR$/app/views/stocktwits/_twit.html.haml" />
+        <option value="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" />
       </list>
     </option>
   </component>
@@ -376,6 +341,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="stocktwits" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stock_trend_finder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="stock_trend_finder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="layouts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -393,10 +380,6 @@
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -409,6 +392,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="helpers" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -879,6 +866,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -886,6 +874,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="6.25" vertical-offset="150" max-vertical-offset="930">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -893,6 +882,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3125" vertical-offset="0" max-vertical-offset="384">
           <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -922,20 +912,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3515625" vertical-offset="0" max-vertical-offset="384">
           <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/helpers/stocktwits_helper.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31578946" vertical-offset="0" max-vertical-offset="380">
-          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_twit.html.haml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.12195122" vertical-offset="0" max-vertical-offset="369">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1023,14 +999,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/stocktwits_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="750">
-          <caret line="5" column="32" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/application.css.scss">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.25" vertical-offset="0" max-vertical-offset="405">
@@ -1071,34 +1039,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.52" vertical-offset="834" max-vertical-offset="1275">
-          <caret line="64" column="52" selection-start-line="64" selection-start-column="3" selection-end-line="64" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.1" vertical-offset="0" max-vertical-offset="870">
-          <caret line="47" column="30" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
-          <folding>
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1418181042000" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/reports/candle_row.html.haml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.25" vertical-offset="0" max-vertical-offset="1005">
@@ -1115,14 +1055,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/index.html.haml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.875" vertical-offset="0" max-vertical-offset="600">
-          <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/tasks/daemons.rake">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="285">
@@ -1131,33 +1063,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/import_daily_quotes.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4500">
-          <caret line="119" column="11" selection-start-line="119" selection-start-column="11" selection-end-line="119" selection-end-column="11" />
-          <folding>
-            <element signature="e#7447#9227#0" expanded="false" />
-            <element signature="e#10385#10533#0" expanded="false" />
-            <element signature="e#10537#10686#0" expanded="false" />
-            <element signature="e#10690#11233#0" expanded="false" />
-            <element signature="e#11466#11693#0" expanded="false" />
-            <element signature="e#12356#12612#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/reports/ticker_list.html.haml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/reports_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1320">
-          <caret line="20" column="65" selection-start-line="20" selection-start-column="65" selection-end-line="20" selection-end-column="65" />
           <folding />
         </state>
       </provider>
@@ -1186,18 +1095,100 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/stocktwit.rb">
+    <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.8076925" vertical-offset="1120" max-vertical-offset="1695">
-          <caret line="83" column="72" selection-start-line="83" selection-start-column="19" selection-end-line="83" selection-end-column="72" />
+        <state vertical-scroll-proportion="1.5649867" vertical-offset="4555" max-vertical-offset="7170">
+          <caret line="343" column="18" selection-start-line="343" selection-start-column="18" selection-end-line="343" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/sql_query_strings.rb">
+    <entry file="file://$PROJECT_DIR$/app/controllers/reports_controller.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4111406" vertical-offset="4945" max-vertical-offset="7170">
-          <caret line="340" column="116" selection-start-line="340" selection-start-column="116" selection-end-line="340" selection-end-column="116" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="1320">
+          <caret line="20" column="65" selection-start-line="20" selection-start-column="65" selection-end-line="20" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/tdameritrade_data_interface/import_daily_quotes.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4500">
+          <caret line="119" column="11" selection-start-line="119" selection-start-column="11" selection-end-line="119" selection-end-column="11" />
+          <folding>
+            <element signature="e#7447#9227#0" expanded="false" />
+            <element signature="e#10385#10533#0" expanded="false" />
+            <element signature="e#10537#10686#0" expanded="false" />
+            <element signature="e#10690#11233#0" expanded="false" />
+            <element signature="e#11466#11693#0" expanded="false" />
+            <element signature="e#12356#12612#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_load_twits_script.html.haml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.72" vertical-offset="54" max-vertical-offset="885">
+          <caret line="16" column="36" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
+          <folding>
+            <marker date="1419702042000" expanded="true" signature="306:831" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="493:831" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="523:727" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="871:1092" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="1126:1463" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="1207:1463" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="1509:1609" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="1652:1761" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="1792:1958" placeholder="..." />
+            <marker date="1419702042000" expanded="true" signature="1887:1958" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/stocktwits_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
+          <caret line="11" column="37" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/index.html.haml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6728232" vertical-offset="0" max-vertical-offset="645">
+          <caret line="17" column="47" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/stocktwits.css.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5927711" vertical-offset="819" max-vertical-offset="1260">
+          <caret line="71" column="13" selection-start-line="71" selection-start-column="3" selection-end-line="71" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/stocktwit.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1695">
+          <caret line="32" column="18" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/stocktwits/_twit.html.haml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.375" vertical-offset="0" max-vertical-offset="195">
+          <caret line="7" column="54" selection-start-line="7" selection-start-column="54" selection-end-line="7" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helpers/stocktwits_helper.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6327543" vertical-offset="0" max-vertical-offset="450">
+          <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
           <folding />
         </state>
       </provider>
