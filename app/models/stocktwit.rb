@@ -3,6 +3,8 @@ require 'stocktwits_api'
 class Stocktwit < ActiveRecord::Base
   FIRST_TWIT_ID=18772403
 
+  enum call_result: { no_call: 0, correct: 1, incorrect: 2, partial: 3 }
+
   scope :showing, -> (user_id='greenspud') { where(hide: false, stocktwits_user_name: user_id).order(id: :desc) }
 
   def self.ticker_list(order_by='symbol', user_id='greenspud')

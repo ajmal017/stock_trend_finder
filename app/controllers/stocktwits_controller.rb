@@ -41,6 +41,16 @@ class StocktwitsController < ApplicationController
     render json: @result
   end
 
+  def call_result
+    return if params[:call_result].nil? || params[:id].nil?
+    @twit = Stocktwit.find(params[:id])
+    if @twit.update(call_result: params[:call_result])
+      render 'call_result_ok'
+    else
+      render 'call_result_error'
+    end
+  end
+
 private
   def user_id
     @user_id = params[:user_id] || 'greenspud'

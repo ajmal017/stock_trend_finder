@@ -1,6 +1,8 @@
 StockTrendFinder::Application.routes.draw do
   resources :tickers
   resources :stocktwits, except: [:show]
+  # Stocktwits AJAX calls
+  post 'stocktwits/call_result' => 'stocktwits#call_result'
   post 'stocktwits/load_twits' => "stocktwits#load_twits"
   get 'stocktwits/refresh' => "stocktwits#refresh"
   get 'stocktwits/watching' => "stocktwits#watching"

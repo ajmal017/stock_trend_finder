@@ -42,6 +42,30 @@ td.stocktwit-thumb {
   display: none;
 }
 
+.message-call-result-buttons {
+  margin-top: 10px;
+  img {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.message-call-result-correct {
+  background-color: #a1eda2;
+}
+
+.message-call-result-incorrect {
+  background-color: #fcbdbd;
+}
+
+.message-call-result-partial {
+  background-color: #fcfbb1;
+}
+
+.message-call-result-no-call {
+  background-color: #e1eee8;
+}
+
 .stocktwits-ticker-nav-link {
   margin: 2px;
 }

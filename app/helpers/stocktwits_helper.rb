@@ -11,6 +11,21 @@ module StocktwitsHelper
     "#{link_to(ticker['symbol'], "#", :class=>"symbol-filter-link", "data-symbol"=>ticker['symbol'])} (#{ticker['count']}) - #{last_updated}"
   end
 
+  def message_call_result_class(call)
+    case call
+      when 'correct'
+        "message-call-result-correct"
+      when 'incorrect'
+        "message-call-result-incorrect"
+      when 'no_call'
+        "message-call-result-no-call"
+      when 'partial'
+        "message-call-result-partial"
+      else
+        ""
+    end
+  end
+
 private
   def convert_links(s)
     m = s.match /\bhttp:\/\/.*\b/

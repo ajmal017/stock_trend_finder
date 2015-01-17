@@ -11,4 +11,5 @@ namespace :stock_trend_finder do
       sleep 200
     end
   end
+
 end
