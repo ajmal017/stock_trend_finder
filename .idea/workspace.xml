@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f0b90f8-f162-41b6-9a1f-d1c8b6630078" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/schema.rb" afterPath="$PROJECT_DIR$/db/schema.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/stocktwit.rb" afterPath="$PROJECT_DIR$/app/models/stocktwit.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" afterPath="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" afterPath="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="stock_trend_finder.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,8 +58,8 @@
       <file leaf-file-name="stocktwit.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/models/stocktwit.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.73170733" vertical-offset="75" max-vertical-offset="2160">
-              <caret line="23" column="25" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.44715446" vertical-offset="1335" max-vertical-offset="2190">
+              <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -198,8 +193,8 @@
         <option value="$PROJECT_DIR$/app/controllers/stocktwits_controller.rb" />
         <option value="$PROJECT_DIR$/db/migrate/20150118031152_create_stocktwit_watch_tickers.rb" />
         <option value="$PROJECT_DIR$/app/helpers/stocktwits_helper.rb" />
-        <option value="$PROJECT_DIR$/app/models/stocktwit.rb" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/app/models/stocktwit.rb" />
       </list>
     </option>
   </component>
@@ -1074,8 +1069,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/models/stocktwit.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73170733" vertical-offset="75" max-vertical-offset="2160">
-          <caret line="23" column="25" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.44715446" vertical-offset="1335" max-vertical-offset="2190">
+          <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
           <folding />
         </state>
       </provider>

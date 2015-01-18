@@ -97,7 +97,9 @@ private
     <<SQL
     select ticker_symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(ticker_symbol) as count
     from stocktwit_tickers tx inner join stocktwits st on tx.stocktwit_id=st.id
-    where stocktwits_user_name='#{user_id}'
+    where
+    stocktwits_user_name='#{user_id}' and
+    st.hide=false
     group by ticker_symbol
     order by #{order_by}
 SQL
