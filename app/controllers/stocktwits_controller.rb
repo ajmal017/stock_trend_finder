@@ -42,13 +42,19 @@ class StocktwitsController < ApplicationController
   end
 
   def call_result
-    return if params[:call_result].nil? || params[:id].nil?
+    head :bad_request  if params[:call_result].nil? || params[:id].nil?
     @twit = Stocktwit.find(params[:id])
     if @twit.update(call_result: params[:call_result])
       render 'call_result_ok'
     else
       render 'call_result_error'
     end
+  end
+
+  def hide
+    head :bad_request if params[:id].nil?
+    @twit = Stocktwit.find(params[:id])
+    @twit.update(hide: true)
   end
 
 private

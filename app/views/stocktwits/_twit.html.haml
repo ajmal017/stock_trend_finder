@@ -1,7 +1,7 @@
 %tr{ id: twit.id }
   %td.stocktwit-message{ class: message_call_result_class(twit.call_result) }
     .stocktwit-message-timestamp
-      ="#{twit.stocktwit_time}"
+      ="#{twit.stocktwit_time} - #{twit.id}"
     .stocktwit-message-text
       =format_stocktwits_message(twit.message)
     -if twit.call_result.nil?
