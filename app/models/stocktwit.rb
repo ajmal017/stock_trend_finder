@@ -3,11 +3,13 @@ require 'stocktwits_api'
 class Stocktwit < ActiveRecord::Base
   FIRST_TWIT_ID=18772403
 
+  has_many :stocktwit_tickers # Keeping this separate from the Tickers table because there may be tickers encountered on ST not in the table
+
   enum call_result: { no_call: 0, correct: 1, incorrect: 2, partial: 3 }
 
   scope :showing, -> (user_id='greenspud') { where(hide: false, stocktwits_user_name: user_id).order(id: :desc) }
 
-  def self.ticker_list(order_by='symbol', user_id='greenspud')
+  def self.ticker_list(order_by='ticker_symbol', user_id='greenspud')
     ActiveRecord::Base.connection.execute(ticker_list_sql(order_by, user_id))
   end
 
@@ -16,14 +18,21 @@ class Stocktwit < ActiveRecord::Base
   end
 
   def self.watching?(symbol)
-    twit = Stocktwit.where(symbol: symbol).where("watching IS NOT NULL").order(stocktwit_time: :desc)
-    !twit.empty? && twit.first.watching
+    StocktwitWatchTicker.find_by(ticker_symbol: symbol).present? && StocktwitWatchTicker.find_by(ticker_symbol: symbol).watching?
   end
 
   def self.toggle_watching(symbol)
-    twit = Stocktwit.where(symbol: symbol).order(stocktwit_time: :desc).last
-    twit.update(watching: !Stocktwit.watching?(symbol))
-    @result = twit.watching
+    swt = StocktwitWatchTicker.find_by(ticker_symbol: symbol)
+    if swt.present?
+      swt.update(watching: !swt.watching)
+    else
+      swt = StocktwitWatchTicker.create(ticker_symbol: symbol, watching: true)
+    end
+    @result = swt.watching
+
+    # twit = Stocktwit.where(symbol: symbol).order(stocktwit_time: :desc).last
+    # twit.update(watching: !Stocktwit.watching?(symbol))
+    # @result = twit.watching
   end
 
   def self.sync_twits
@@ -50,12 +59,12 @@ class Stocktwit < ActiveRecord::Base
           messages = r['messages'].reverse
 
           messages.each do |m|
-            m['symbols'].each do |s|
-              Stocktwit.create(
+            if m['symbols'] # Not interested in twits that don't talk about a specific ticker
+              twit = Stocktwit.create(
                   stocktwit_id: m['id'],
                   stocktwit_time: DateTime.parse(m['created_at']),
                   stocktwit_url: m['entities'] ? m['entities']['chart']['url'] : nil,
-                  symbol: s['symbol'],
+                  symbol: m['symbols'].first['symbol'],
                   message: m['body'],
                   image_thumb_url: m['entities'] ? m['entities']['chart']['thumb'] : nil,
                   image_large_url: m['entities'] ? m['entities']['chart']['large'] : nil,
@@ -63,7 +72,10 @@ class Stocktwit < ActiveRecord::Base
                   hide: false,
                   stocktwits_user_name: stocktwits_user_name
               )
-            end if m['symbols']
+              m['symbols'].each do |s|
+                twit.stocktwit_tickers.create(ticker_symbol: s['symbol'])
+              end
+            end
             messages_synced += 1
           end
 
@@ -83,27 +95,44 @@ private
 
   def self.ticker_list_sql(order_by, user_id)
     <<SQL
-    select symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(symbol) as count
-    from stocktwits
+    select ticker_symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(ticker_symbol) as count
+    from stocktwit_tickers tx inner join stocktwits st on tx.stocktwit_id=st.id
     where stocktwits_user_name='#{user_id}'
-    group by symbol
+    group by ticker_symbol
     order by #{order_by}
 SQL
+
+    # Here's the old SQL, going to keep it here for reference temporarily
+    # select symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(symbol) as count
+    # from stocktwits
+    # where stocktwits_user_name='#{user_id}'
+    # group by symbol
+    # order by #{order_by}
+
   end
 
   def self.watching_list_sql
     <<SQL
-with symbols as (
-select symbol from stocktwits group by symbol order by symbol
-)
-select
-s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', (select stocktwit_time from stocktwits st where st.symbol=s.symbol and st.stocktwits_user_name='greenspud' order by id desc limit 1)) as last_updated, (select count(sc.symbol) from stocktwits sc where sc.symbol=s.symbol) as count
-from symbols s inner join stocktwits st on st.symbol=s.symbol
-where
-st.watching and
-st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1) and
-stocktwits_user_name='greenspud'
-order by last_updated
+    select swt.ticker_symbol, swt.watching, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, count(st.ticker_symbol)
+    from stocktwit_watch_tickers swt inner join stocktwit_tickers st on swt.ticker_symbol=st.ticker_symbol
+    inner join stocktwits s on s.id=st.stocktwit_id
+    group by swt.ticker_symbol, swt.watching
+    order by last_updated
 SQL
+
+# Leaving the old SQL here temporarily for reference
+#     <<SQL
+# with symbols as (
+# select symbol from stocktwits group by symbol order by symbol
+# )
+# select
+# s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', (select stocktwit_time from stocktwits st where st.symbol=s.symbol and st.stocktwits_user_name='greenspud' order by id desc limit 1)) as last_updated, (select count(sc.symbol) from stocktwits sc where sc.symbol=s.symbol) as count
+# from symbols s inner join stocktwits st on st.symbol=s.symbol
+# where
+# st.watching and
+# st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1) and
+# stocktwits_user_name='greenspud'
+# order by last_updated
+# SQL
   end
 end

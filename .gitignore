@@ -7,6 +7,7 @@
 # Ignore bundler config.
 .DS_Store
 .idea/
+.idea/workspace.xml
 /.idea/*
 /.bundle
 

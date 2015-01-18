@@ -8,7 +8,7 @@ module StocktwitsHelper
 
   def format_ticker_nav_link(ticker)
     last_updated = ticker['last_updated'] == '00:00:00' ? 'Today' : ticker['last_updated']
-    "#{link_to(ticker['symbol'], "#", :class=>"symbol-filter-link", "data-symbol"=>ticker['symbol'])} (#{ticker['count']}) - #{last_updated}"
+    "#{link_to(ticker['ticker_symbol'], "#", :class=>"symbol-filter-link", "data-symbol"=>ticker['ticker_symbol'])} (#{ticker['count']}) - #{last_updated}"
   end
 
   def message_call_result_class(call)

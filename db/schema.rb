@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150117172441) do
+ActiveRecord::Schema.define(version: 20150118031152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,6 +214,24 @@ ActiveRecord::Schema.define(version: 20150117172441) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "stocktwit_tickers", force: true do |t|
+    t.integer  "stocktwit_id"
+    t.string   "ticker_symbol"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stocktwit_tickers", ["ticker_symbol"], name: "index_ticker_symbols_on_stocktwit_tickers", using: :btree
+
+  create_table "stocktwit_watch_tickers", force: true do |t|
+    t.string   "ticker_symbol"
+    t.boolean  "watching"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stocktwit_watch_tickers", ["ticker_symbol"], name: "index_stocktwit_watch_tickers_on_ticker_symbol", unique: true, using: :btree
 
   create_table "stocktwits", force: true do |t|
     t.integer  "stocktwit_id"

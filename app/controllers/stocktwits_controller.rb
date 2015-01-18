@@ -4,7 +4,7 @@ class StocktwitsController < ApplicationController
 
   def index
     @twits = Stocktwit.showing(@user_id).limit(20)
-    ticker_list = Stocktwit.ticker_list('symbol', @user_id)
+    ticker_list = Stocktwit.ticker_list('ticker_symbol', @user_id)
     @ticker_list_symbol = ticker_list.to_a
     @ticker_list_count = @ticker_list_symbol.sort { |a,b| b['count'].to_i <=> a['count'].to_i }
     @ticker_list_updated = @ticker_list_symbol.sort { |a,b| b['last_updated_date'] <=> a['last_updated_date'] }
