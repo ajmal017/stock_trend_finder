@@ -5,6 +5,8 @@ body.stocktwits {
 
 .stocktwits-ticker-navigation {
   background-color: #ddcd5e;
+  height: 900px;
+  overflow: scroll;
 }
 
 table.stocktwits {
@@ -38,7 +40,7 @@ td.stocktwit-thumb {
   font-color: black;
 }
 
-.stocktwits-ticker-nav-list#symbol, .stocktwits-ticker-nav-list#count {
+.stocktwits-ticker-nav-list#symbol, .stocktwits-ticker-nav-list#count, .stocktwits-ticker-nav-list#watching {
   display: none;
 }
 
