@@ -259,6 +259,59 @@ module TDAmeritradeDataInterface
     puts log if log && log != ""
   end
 
+  def self.import_afterhours_quotes(import_date=Date.today)
+    log_file = File.join(Rails.root, 'downloads', 'import_ah_quotes.log')
+
+    c = TDAmeritradeApi::Client.new
+    c.login
+    log = ""
+
+    AfterHoursPrice.reset_cache
+
+    ticker_watch_list = RealTimeQuote.pluck(:ticker_symbol)
+    ticker_watch_list.each_with_index do |symbol, i|
+      puts "Processing #{i+1} of #{ticker_watch_list.count}: #{symbol}"
+
+      error_count = 0
+      prices = Array.new
+
+      while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+      begin
+        prices = c.get_price_history symbol, intervaltype: :minute, intervalduration: 5, extended: true, startdate: import_date, enddate: import_date
+
+        ahp = AfterHoursPrice.new
+        ahp.price_date = import_date
+        ahp.ticker_symbol = symbol
+        prices = prices.select { |r| (r[:timestamp].hour >= 16) && !((r[:timestamp].hour == 16) && (r[:timestamp].min <= 5)) }
+        ahp.ah_high = prices.inject(0) { |max, r| r[:high] >= max ? r[:high] : max }
+        ahp.ah_low =  prices.inject(nil) { |min, r| (min.nil?) || (r[:low] <= min) ? r[:low] : min }
+        ahp.ah_volume = (prices.inject(0) { |sum, r| sum + r[:volume] } / 10).round(2)
+        ahp.ah_vwap = (((prices.map { |r| (r[:high] + r[:low]) / 2 * r[:volume] }).inject(0) { |sum, wap| sum + wap }) / ahp.ah_volume).round(2)
+        ahp.save!
+
+        error_count = -1
+        rescue => e
+          error_count += 1
+          puts "Error processing #{symbol} - (attempt ##{error_count}) #{e.message}"
+          log = log + "Error processing #{symbol} - #{e.message}\n" if error_count == 3
+          #sleep 2
+        end
+      end
+
+    end
+
+    of = open(log_file, "w")
+    of.write(log)
+    of.close
+
+    log_problem_tickers=""
+    log.lines.each do |line|
+      log_problem_tickers+="#{/Error processing (.*?) -/.match(line)[1]}," if /\b#{/Error processing (.*?) -/.match(line)[1]}\b/.match(log_problem_tickers).nil?
+    end
+    log_problem_tickers.slice!(log_problem_tickers.length-1) if log_problem_tickers.last==","
+    puts "Summary report of problem tickers: #{log_problem_tickers}"
+  end
+
   def self.reset_snapshot_flags
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
   end

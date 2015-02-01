@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150118031152) do
+ActiveRecord::Schema.define(version: 20150201003934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "after_hours_prices", force: true do |t|
+    t.date     "price_date"
+    t.string   "ticker_symbol"
+    t.decimal  "ah_high"
+    t.decimal  "ah_low"
+    t.decimal  "ah_volume"
+    t.decimal  "ah_vwap"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "daily_stock_prices", force: true do |t|
     t.integer  "ticker_id"
