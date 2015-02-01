@@ -289,38 +289,68 @@ SQL
 
       def select_bullish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
-(select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
-round((close / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
+select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_high,
+round((close / previous_high-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
 volume > 100 and
-low > (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
+low > previous_high and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 t.scrape_data = true and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
-open / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) > 1.03
+open / previous_high > 1.03
 order by gap_pct desc
 SQL
+
+#         <<SQL
+# select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
+# (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
+# round((close / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
+# from daily_stock_prices d
+# inner join tickers t on d.ticker_symbol=t.symbol
+# where
+# volume > 100 and
+# low > (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
+# price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+# t.scrape_data = true and
+# (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+# open / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) > 1.03
+# order by gap_pct desc
+# SQL
       end
 
       def select_bearish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
-(select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
-round((close / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
+select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_low,
+round((close / previous_low-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
-high < (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
+high < previous_low and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 t.scrape_data = true and
 volume > 100 and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
-open / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) < 0.97
+open / previous_low < 0.97
 order by gap_pct
 SQL
+
+#        <<SQL
+# select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
+# (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
+# round((close / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
+# from daily_stock_prices d
+# inner join tickers t on d.ticker_symbol=t.symbol
+# where
+# high < (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
+# price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
+# t.scrape_data = true and
+# volume > 100 and
+# (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+# open / (select low from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) < 0.97
+# order by gap_pct
+#SQL
       end
 
       def select_big_range(most_recent_date)
@@ -382,7 +412,19 @@ update daily_stock_prices dsp set previous_close=(select close from daily_stock_
 SQL
       end
 
+      def update_previous_high(begin_date=Date.new(2014,1,1))
+        <<SQL
+update daily_stock_prices dsp set previous_high=(select high from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_high is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
+SQL
+      end
 
+      def update_previous_low(begin_date=Date.new(2014,1,1))
+        <<SQL
+update daily_stock_prices dsp set previous_low=(select low from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_low is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
+SQL
+      end
+      
+      
       def update_ema13_first_sma(begin_date)
         <<SQL
 

@@ -67,6 +67,13 @@ class ReportsController < ApplicationController
     @report_losers = run_query(TDAmeritradeDataInterface.select_10pct_losers(@report_date))
   end
 
+  def after_hours_volume
+    #Just some pseudocode for developing an after-hours daemon
+
+    #g2 = c.get_price_history 'GOOGL', intervaltype: :minute, intervalduration: 15, extended: true, startdate: Date.today, enddate: Date.today
+    #(g2.select { |r| r[:timestamp].hour > 16 }).inject(0) { |sum, r| sum + r[:volume] }
+  end
+
 private
   def run_query(qry)
     ActiveRecord::Base.connection.execute qry

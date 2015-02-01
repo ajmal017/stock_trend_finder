@@ -265,7 +265,7 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0,20,40 10-15 * * MON-FRI') do
+    scheduler.cron('5,25,45 9-15 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
       copy_realtime_quotes_to_daily_stock_prices
@@ -301,6 +301,14 @@ module TDAmeritradeDataInterface
 
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_previous_close(begin_date)
+  end
+
+  def self.populate_previous_high(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_previous_high(begin_date)
+  end
+
+  def self.populate_previous_low(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_previous_low(begin_date)
   end
 
   def self.populate_average_volume_50day(begin_date=Date.today)
@@ -359,19 +367,25 @@ module TDAmeritradeDataInterface
       ActiveRecord::Base.connection.execute insert_daily_stock_prices_from_realtime_quotes
       ActiveRecord::Base.connection.execute update_daily_stock_prices_from_realtime_quotes
 
-      puts "Updating Previous Close Cache"
+      puts "Updating Previous Close Cache - #{Time.now}"
       populate_previous_close(Date.today)
 
-      puts "Calculating Average Daily Volumes"
+      puts "Updating Previous High Cache - #{Time.now}"
+      populate_previous_high(Date.today)
+
+      puts "Updating Previous Low Cache - #{Time.now}"
+      populate_previous_low(Date.today)
+
+      puts "Calculating Average Daily Volumes - #{Time.now}"
       populate_average_volume_50day(Date.today)
 
       #puts "Calculating EMA13's"
       #populate_ema13(Date.today)
 
-      puts "Calculating SMA50's"
+      puts "Calculating SMA50's - #{Time.now}"
       populate_sma50
 
-      puts "Calculating SMA200's"
+      puts "Calculating SMA200's - #{Time.now}"
       populate_sma200
     end
   end
