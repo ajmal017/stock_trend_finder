@@ -347,31 +347,36 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
   end
 
+  def self.realtime_quote_daemon_block
+    puts "Real Time Quote Import: #{Time.now}"
+    if is_market_day? Date.today
+      import_realtime_quotes
+      copy_realtime_quotes_to_daily_stock_prices
+      puts "Done #{Time.now}\n\n"
+    else
+      puts "Market closed today, no real time quote download necessary"
+    end
+  end
+
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('15,30,45 10-15 * * MON-FRI') do
-      puts "Real Time Quote Import: #{Time.now}"
-      import_realtime_quotes
-      copy_realtime_quotes_to_daily_stock_prices
-      puts "Done #{Time.now}\n\n"
-    end
-    scheduler = Rufus::Scheduler.new
-    scheduler.cron('39 9 * * MON-FRI') do
-      puts "Real Time Quote Import: #{Time.now}"
-      import_realtime_quotes
-      copy_realtime_quotes_to_daily_stock_prices
-      puts "Done #{Time.now}\n\n"
-    end
+    scheduler.cron('9,30,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
+    scheduler2 = Rufus::Scheduler.new
+    scheduler2.cron('39,55 9 * * MON-FRI') { realtime_quote_daemon_block }
     puts "Beginning realtime quote import daemon..."
     puts "Current Time: #{Time.now}"
-    scheduler
+    [scheduler, scheduler2]
   end
 
   def self.run_daily_quotes_daemon
     scheduler = Rufus::Scheduler.new
     scheduler.cron('10 16 * * MON-FRI') do
       puts "Daily Quote Import: #{Time.now}"
-      update_daily_stock_prices_from_real_time_snapshot
+      if is_market_day? Date.today
+        update_daily_stock_prices_from_real_time_snapshot
+      else
+        puts "Market closed today, no real time quote download necessary"
+      end
     end
     puts "Beginning daily quotes update daemon..."
     puts "Current Time: #{Time.now}"

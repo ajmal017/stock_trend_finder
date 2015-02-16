@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150201003934) do
+ActiveRecord::Schema.define(version: 20150216035919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,21 @@ ActiveRecord::Schema.define(version: 20150201003934) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "notes"
+  end
+
+  create_table "premarket_prices", force: true do |t|
+    t.integer  "ticker_id"
+    t.string   "ticker_symbol"
+    t.date     "price_date"
+    t.string   "latest_print_time"
+    t.decimal  "last_trade"
+    t.decimal  "high"
+    t.decimal  "low"
+    t.decimal  "close"
+    t.decimal  "volume"
+    t.decimal  "average_volume"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "price_dates", force: true do |t|
