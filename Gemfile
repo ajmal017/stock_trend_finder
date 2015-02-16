@@ -35,7 +35,7 @@ gem "dalli"
 gem 'httparty', '~> 0.13'
 gem 'htmlentities', '~> 4.3'
 
-gem "tdameritrade_api", "~> 0.0.1.3.alpha", :path=>'~/Development/gem-development/tdameritrade_api'
+gem "tdameritrade_api",  :path=>'~/Development/gem-development/tdameritrade_api'
 gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/gem-development/stocktwits-api-ruby'
 gem "bindata"
 

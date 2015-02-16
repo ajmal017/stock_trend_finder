@@ -376,6 +376,13 @@ order by first_price_date desc
 SQL
       end
 
+      def insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
+        <<SQL
+insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, created_at, previous_close, previous_high, previous_low)
+select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, previous_close, previous_high, previous_low from daily_stock_prices where price_date=(select max(price_date) from daily_stock_prices)
+SQL
+      end
+
       def update_sma50
         <<SQL
 update daily_stock_prices dsp

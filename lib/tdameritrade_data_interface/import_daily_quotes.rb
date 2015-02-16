@@ -1,4 +1,5 @@
 require 'tdameritrade_data_interface/sql_query_strings'
+require 'tdameritrade_data_interface/util'
 
 module TDAmeritradeDataInterface
   NEW_TICKER_BEGIN_DATE=Date.new(2013,10,1)
@@ -89,19 +90,19 @@ module TDAmeritradeDataInterface
 
     puts log
 
-    puts "Updating Previous Close Cache"
+    puts "Updating Previous Close Cache - #{Time.now}"
     populate_previous_close
 
-    puts "Calculating Average Daily Volumes"
+    puts "Calculating Average Daily Volumes - #{Time.now}"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
     #puts "Calculating EMA13's"
     #populate_ema13
 
-    puts "Calculating SMA50's"
+    puts "Calculating SMA50's - #{Time.now}"
     populate_sma50
 
-    puts "Calculating SMA200's"
+    puts "Calculating SMA200's - #{Time.now}"
     populate_sma200
 
     of = open(log_file, "w")
@@ -176,19 +177,25 @@ module TDAmeritradeDataInterface
 
     puts log
 
-    puts "Updating Previous Close Cache"
+    puts "Updating Previous Close Cache - #{Time.now}"
     populate_previous_close
 
-    puts "Calculating Average Daily Volumes"
+    puts "Calculating Average Daily Volumes - #{Time.now}"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
     #puts "Calculating EMA13's"
     #populate_ema13
 
-    puts "Calculating SMA50's"
+    puts "Updating Previous High Cache - #{Time.now}"
+    populate_previous_high(Date.today)
+
+    puts "Updating Previous Low Cache - #{Time.now}"
+    populate_previous_low(Date.today)
+
+    puts "Calculating SMA50's - #{Time.now}"
     populate_sma50
 
-    puts "Calculating SMA200's"
+    puts "Calculating SMA200's - #{Time.now}"
     populate_sma200
 
     of = open(log_file, "w")
@@ -208,7 +215,17 @@ module TDAmeritradeDataInterface
     cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
 
     c = TDAmeritradeApi::Client.new
-    c.login
+    attempt = 0
+    while attempt < 2
+      begin
+        c.login
+        break
+      rescue Exception => e
+        puts "Error downloading real time quotes, attempt #{attempt}: #{e.message}"
+        attempt += 1
+      end
+    end
+
     log = ""
     #c.session_id = "128459556EEA989391FBAAA5E2BF8EB4.cOr5v8xckaAXQxWmG7bn2g"
 
@@ -259,6 +276,20 @@ module TDAmeritradeDataInterface
     puts log if log && log != ""
   end
 
+  def self.prepopulate_daily_stock_prices(prepopulate_date)
+    DailyStockPrice.transaction do
+      if is_market_day?(prepopulate_date)
+        puts "Prepopulating Previous Close, Previous High, Previous Low - #{Time.now}"
+        ActiveRecord::Base.connection.execute insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
+
+        puts "Calculating Average Daily Volumes - #{Time.now}"
+        populate_average_volume_50day(Date.today)
+      else
+        puts "Market closed today, no prepopulation necessary"
+      end
+    end
+  end
+
   def self.import_afterhours_quotes(import_date=Date.today)
     log_file = File.join(Rails.root, 'downloads', 'import_ah_quotes.log')
 
@@ -277,7 +308,7 @@ module TDAmeritradeDataInterface
 
       while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
       begin
-        prices = c.get_price_history symbol, intervaltype: :minute, intervalduration: 5, extended: true, startdate: import_date, enddate: import_date
+        prices = c.get_price_history(symbol, intervaltype: :minute, intervalduration: 5, extended: true, startdate: import_date, enddate: import_date).first[:bars]
 
         ahp = AfterHoursPrice.new
         ahp.price_date = import_date
@@ -318,7 +349,14 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('5,25,45 9-15 * * MON-FRI') do
+    scheduler.cron('15,30,45 10-15 * * MON-FRI') do
+      puts "Real Time Quote Import: #{Time.now}"
+      import_realtime_quotes
+      copy_realtime_quotes_to_daily_stock_prices
+      puts "Done #{Time.now}\n\n"
+    end
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('39 9 * * MON-FRI') do
       puts "Real Time Quote Import: #{Time.now}"
       import_realtime_quotes
       copy_realtime_quotes_to_daily_stock_prices
@@ -336,6 +374,17 @@ module TDAmeritradeDataInterface
       update_daily_stock_prices_from_real_time_snapshot
     end
     puts "Beginning daily quotes update daemon..."
+    puts "Current Time: #{Time.now}"
+    scheduler
+  end
+
+  def self.run_prepopulate_daily_stock_quotes_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('8 0 * * MON-FRI') do
+      puts "Prepopulating daily_stock_quotes table: #{Time.now}"
+      prepopulate_daily_stock_prices(Date.today)
+    end
+    puts "Beginning daily_stock_prices prepopulate daemon..."
     puts "Current Time: #{Time.now}"
     scheduler
   end
@@ -442,6 +491,7 @@ module TDAmeritradeDataInterface
       populate_sma200
     end
   end
+
 
   private
   def self.get_history_returned_error?(return_value)

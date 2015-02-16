@@ -45,6 +45,7 @@ class Ticker < ActiveRecord::Base
   end
 
   def self.add_nasdaq_ticker_list
+    log = ''
     File.open(File.join(Rails.root, 'downloads', 'ipo_list.txt'), 'r').each_line do |line|
       company_name,symbol,market,price,shares,offer,ipo_date = line.split("\t")
       case market
@@ -57,9 +58,21 @@ class Ticker < ActiveRecord::Base
       shares = Float(shares.delete(',')) / 1000
 
       puts "Creating: #{symbol}, #{company_name}, #{market}, #{shares}"
-      Ticker.create(symbol: symbol, company_name: company_name, exchange: market, float: shares, scrape_data:true)
+      log = log + "Creating: #{symbol}, #{company_name}, #{market}, #{shares}\n"
+      t = Ticker.find_by(symbol: symbol)
+      if t
+        puts "Ticker #{symbol} already exists. Resetting scrape flag. Scrape currently #{t.scrape_data}"
+        log = log + "Ticker #{symbol} already exists. Resetting scrape flag. Scrape currently #{t.scrape_data}\n"
+        t.company_name = company_name
+        t.float = shares
+        t.exchange = market
+        t.scrape_data = true
+        t.save!
+      else
+        Ticker.create(symbol: symbol, company_name: company_name, exchange: market, float: shares, scrape_data:true)
+      end
 
-
+      puts log
     end
 
 # SAMPLE OF INPUT (tab delimited):

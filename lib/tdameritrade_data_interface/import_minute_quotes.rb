@@ -72,7 +72,7 @@ SQL
         while attempts_remaining > 0
           begin
             attempts_remaining -= 1
-            prices = c.get_price_history(ticker.symbol, intervaltype: :minute, intervalduration: 5, periodtype: :day, period: 10, extended:true)
+            prices = c.get_price_history(ticker.symbol, intervaltype: :minute, intervalduration: 5, periodtype: :day, period: 10, extended:true).first[:bars]
           rescue => e
             puts "Error processing #{ticker.symbol} (attempt ##{3-attempts_remaining}) - #{e.message}"
             log = log + "Error processing #{ticker.symbol} - (attempt ##{3-attempts_remaining}) - #{e.message}\n"
@@ -158,7 +158,7 @@ SQL
         while attempts_remaining > 0
           begin
             attempts_remaining -= 1
-            prices = c.get_price_history(ticker.symbol, intervaltype: :minute, intervalduration: 15, periodtype: :day, period: 10, extended: true)
+            prices = c.get_price_history(ticker.symbol, intervaltype: :minute, intervalduration: 15, periodtype: :day, period: 10, extended: true).first[:bars]
           rescue => e
             puts "Error processing #{ticker.symbol} (attempt ##{3-attempts_remaining}) - #{e.message}"
             log = log + "Error processing #{ticker.symbol} - (attempt ##{3-attempts_remaining}) - #{e.message}\n"

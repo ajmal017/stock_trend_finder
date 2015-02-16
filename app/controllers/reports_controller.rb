@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
 
   def hide_symbol
     @symbol = params[:symbol]
-    Ticker.find_by(symbol: @symbol).hide_from_reports(20)
+    Ticker.find_by(symbol: @symbol).hide_from_reports(3)
   end
 
   def unscrape_symbol
@@ -67,11 +67,13 @@ class ReportsController < ApplicationController
     @report_losers = run_query(TDAmeritradeDataInterface.select_10pct_losers(@report_date))
   end
 
-  def after_hours_volume
+  def premarket_volume
     #Just some pseudocode for developing an after-hours daemon
 
     #g2 = c.get_price_history 'GOOGL', intervaltype: :minute, intervalduration: 15, extended: true, startdate: Date.today, enddate: Date.today
     #(g2.select { |r| r[:timestamp].hour > 16 }).inject(0) { |sum, r| sum + r[:volume] }
+
+    #c.get_price_history('FSLR', intervaltype: :minute, intervalduration: 5, startdate: Date.today, enddate: Date.today, extended:true)
   end
 
 private

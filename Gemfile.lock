@@ -6,7 +6,7 @@ PATH
 PATH
   remote: ~/Development/gem-development/tdameritrade_api
   specs:
-    tdameritrade_api (0.0.1.3.alpha)
+    tdameritrade_api (1.0.20150215)
 
 GEM
   remote: https://rubygems.org/
@@ -183,6 +183,6 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   sdoc
   stocktwits-api-ruby (~> 0.0.1.1.alpha)!
-  tdameritrade_api (~> 0.0.1.3.alpha)!
+  tdameritrade_api!
   turbolinks
   uglifier (>= 1.3.0)
