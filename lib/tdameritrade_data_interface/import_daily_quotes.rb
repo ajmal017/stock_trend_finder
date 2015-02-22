@@ -93,6 +93,12 @@ module TDAmeritradeDataInterface
     puts "Updating Previous Close Cache - #{Time.now}"
     populate_previous_close
 
+    puts "Updating Previous High Cache - #{Time.now}"
+    populate_previous_high(Date.today)
+
+    puts "Updating Previous Low Cache - #{Time.now}"
+    populate_previous_low(Date.today)
+
     puts "Calculating Average Daily Volumes - #{Time.now}"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
@@ -290,6 +296,95 @@ module TDAmeritradeDataInterface
     end
   end
 
+  def self.import_premarket_quotes(opts={})
+    date = opts[:date]
+    if !date.is_a? Date
+      puts "Invalid date submitted to import_premarket quotes"
+      return
+    end
+
+    log_file = File.join(Rails.root, 'downloads', 'import_premarket_quotes.log')
+
+    c = TDAmeritradeApi::Client.new
+    c.login
+    log = ""
+
+    #alltickers = DailyStockPrice.where(price_date: date).pluck(:ticker_symbol) && Ticker.watching.pluck(:symbol)
+    alltickers = Ticker.watching.pluck(:symbol)
+
+
+    i = 1
+    alltickers.each_slice(100) do |tickers|
+      begin
+        error_count=0
+        while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+          begin
+            quote_bunch = c.get_price_history(tickers, intervaltype: :minute, intervalduration: 5, startdate: date, enddate: date, extended: true)
+            error_count = -1 if quote_bunch
+          rescue Exception => e
+            error_count += 1
+            puts "Error processing - #{e.message} - attempt (#{error_count})"
+            log = log + "Error processing - #{e.message} - attempt (#{error_count})\n"
+            sleep 10
+          end
+        end
+        quote_bunch.each do |quotes|
+          next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
+          ticker_symbol = quotes[:symbol].to_s
+          prices = quotes[:bars].select { |bar| bar[:timestamp] < Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 09:30:00')) }
+
+          if prices.empty?
+            puts "#{date} Skipping #{i}: #{ticker_symbol} - no PM prints"
+          else
+            puts "#{date} Processing #{i}: #{ticker_symbol}"
+
+            latest_bar = prices.inject { |latest, bar| bar[:timestamp] > latest[:timestamp] && bar[:timestamp] < Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 09:30:00')) ? bar : latest }
+            fields = {
+                ticker_symbol: ticker_symbol,
+                price_date: date,
+                latest_print_time: latest_bar[:timestamp],
+                last_trade: latest_bar[:close].round(2),
+                high: latest_bar[:high].round(2),
+                low: latest_bar[:low].round(2),
+                volume: (prices.inject(0) { |volume_sum, bar| bar[:timestamp] <= latest_bar[:timestamp] ? volume_sum + bar[:volume] : volume_sum } / 10).round(2)
+            }
+
+            pm = PremarketPrice.where(ticker_symbol: ticker_symbol, price_date: date).first
+            if pm.present?
+              pm.update_attributes(fields)
+            else
+              PremarketPrice.create(fields)
+            end
+          end
+          i += 1
+        end
+
+      rescue => e
+        puts "Error processing - #{e.message}"
+        log = log + "Error processing - #{e.message}\n"
+        next
+      end
+
+    end
+    puts log
+
+    of = open(log_file, "w")
+    of.write(log)
+    of.close
+
+    puts "Updating Premarket Previous Close Cache - #{Time.now}"
+    populate_premarket_previous_close NEW_TICKER_BEGIN_DATE
+
+    puts "Updating Premarket Previous High Cache - #{Time.now}"
+    populate_premarket_previous_high NEW_TICKER_BEGIN_DATE
+
+    puts "Updating Premarket Previous Low Cache - #{Time.now}"
+    populate_premarket_previous_low NEW_TICKER_BEGIN_DATE
+
+    puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
+    populate_premarket_average_volume_50day(NEW_TICKER_BEGIN_DATE)
+  end
+
   def self.import_afterhours_quotes(import_date=Date.today)
     log_file = File.join(Rails.root, 'downloads', 'import_ah_quotes.log')
 
@@ -360,11 +455,10 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('9,30,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
+    scheduler.cron('15,30,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
     scheduler2 = Rufus::Scheduler.new
     scheduler2.cron('39,55 9 * * MON-FRI') { realtime_quote_daemon_block }
-    puts "Beginning realtime quote import daemon..."
-    puts "Current Time: #{Time.now}"
+    puts "#{Time.now} Beginning realtime quote import daemon..."
     [scheduler, scheduler2]
   end
 
@@ -378,8 +472,7 @@ module TDAmeritradeDataInterface
         puts "Market closed today, no real time quote download necessary"
       end
     end
-    puts "Beginning daily quotes update daemon..."
-    puts "Current Time: #{Time.now}"
+    puts "#{Time.now} Beginning daily quotes update daemon..."
     scheduler
   end
 
@@ -389,10 +482,22 @@ module TDAmeritradeDataInterface
       puts "Prepopulating daily_stock_quotes table: #{Time.now}"
       prepopulate_daily_stock_prices(Date.today)
     end
-    puts "Beginning daily_stock_prices prepopulate daemon..."
-    puts "Current Time: #{Time.now}"
+    puts "#{Time.now} Beginning daily_stock_prices prepopulate daemon..."
     scheduler
   end
+
+  def self.run_premarket_quotes_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('15,30,45,59 8 * * MON-FRI') do
+      puts "Premarket Quote Import: #{Time.now}"
+      if is_market_day? Date.today
+        import_premarket_quotes(date: Date.today)
+      else
+        puts "Market closed today, no real time quote download necessary"
+      end
+    end
+    puts "#{Time.now} Beginning premarket quotes update daemon..."
+    scheduler  end
 
   def self.run_stocktwits_sync_daemon
     scheduler = Rufus::Scheduler.new
@@ -400,11 +505,9 @@ module TDAmeritradeDataInterface
       puts "StockTwits data sync: #{Time.now}"
       Stocktwit.sync_twits
     end
-    puts "Beginning StockTwits sync daemon..."
-    puts "Current Time: #{Time.now}"
+    puts "#{Time.now} Beginning StockTwits sync daemon..."
     scheduler
   end
-
 
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_previous_close(begin_date)
@@ -467,6 +570,22 @@ module TDAmeritradeDataInterface
       log = log + "#{e.message}\n"
     end
 
+  end
+
+  def self.populate_premarket_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_premarket_prices_previous_close(begin_date)
+  end
+
+  def self.populate_premarket_previous_high(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_premarket_prices_previous_high(begin_date)
+  end
+
+  def self.populate_premarket_previous_low(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_premarket_prices_previous_low(begin_date)
+  end
+
+  def self.populate_premarket_average_volume_50day(begin_date=Date.today)
+    ActiveRecord::Base.connection.execute update_premarket_prices_average_volume_50day(begin_date)
   end
 
   def self.copy_realtime_quotes_to_daily_stock_prices

@@ -44,7 +44,12 @@ module ReportHelper
         if report['gap_pct'].to_f.abs > 10
           css_class << "bold "
         end
-      when :float then css_class << "gold-bg " if (report['float'].to_f < 100) && (report['float'].to_f > 0)
+      when :float then
+        if (report['float'.to_f < 15] && (report['float'].to_f) > 0)
+          css_class << 'darkred-bg '
+        elsif (report['float'].to_f < 100) && (report['float'].to_f > 0)
+          css_class << "gold-bg "
+        end
       when :volume_ratio then css_class << "yellow-bg " if (report['volume_ratio'].to_f > 3)
       when :range then css_class << "yellow-bg " if (report['range'].to_f > 7)
 

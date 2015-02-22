@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150216035919) do
+ActiveRecord::Schema.define(version: 20150217001252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,16 +151,21 @@ ActiveRecord::Schema.define(version: 20150216035919) do
     t.integer  "ticker_id"
     t.string   "ticker_symbol"
     t.date     "price_date"
-    t.string   "latest_print_time"
+    t.datetime "latest_print_time"
     t.decimal  "last_trade"
     t.decimal  "high"
     t.decimal  "low"
     t.decimal  "close"
+    t.decimal  "previous_high"
+    t.decimal  "previous_low"
+    t.decimal  "previous_close"
     t.decimal  "volume"
-    t.decimal  "average_volume"
+    t.decimal  "average_volume_50day"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
 
   create_table "price_dates", force: true do |t|
     t.date     "price_date"

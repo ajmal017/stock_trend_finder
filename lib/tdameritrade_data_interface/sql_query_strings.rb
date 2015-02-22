@@ -376,10 +376,64 @@ order by first_price_date desc
 SQL
       end
 
+      def select_premarket_by_percent(report_date)
+        <<SQL
+select
+  ticker_symbol,
+  last_trade,
+  round(((last_trade / previous_close) - 1) * 100, 2) as pct_change,
+  previous_close,
+  volume,
+  average_volume_50day as average_volume,
+  '---' as volume_ratio,
+  price_date,
+  p.updated_at
+from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
+where
+t.scrape_data and
+last_trade is not null and
+volume > 1 and
+previous_close is not null and
+average_volume_50day = 0 and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+price_date = '#{report_date.strftime('%Y-%m-%d')}'
+order by pct_change desc
+limit 50
+SQL
+      end
+
+      def select_premarket_by_volume(report_date)
+        <<SQL
+select
+  ticker_symbol,
+  last_trade,
+  round(((last_trade / previous_close) - 1) * 100, 2) as pct_change,
+  previous_close,
+  volume,
+  average_volume_50day as average_volume,
+  round(volume / average_volume_50day, 2) as volume_ratio,
+  price_date,
+  p.updated_at
+from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
+where
+t.scrape_data and
+last_trade is not null and
+volume is not null and
+previous_close is not null and
+average_volume_50day is not null and
+average_volume_50day > 0 and
+(round(((last_trade / previous_close) - 1) * 100, 2) > 2 or round(((last_trade / previous_close) - 1) * 100, 2) < -2) and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+price_date = '#{report_date.strftime('%Y-%m-%d')}'
+order by volume_ratio desc
+limit 50
+SQL
+      end
+
       def insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
         <<SQL
 insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, created_at, previous_close, previous_high, previous_low)
-select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, previous_close, previous_high, previous_low from daily_stock_prices where price_date=(select max(price_date) from daily_stock_prices)
+select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, close, high, low from daily_stock_prices where price_date=(select max(price_date) from daily_stock_prices)
 SQL
       end
 
@@ -430,8 +484,41 @@ SQL
 update daily_stock_prices dsp set previous_low=(select low from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_low is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
 SQL
       end
-      
-      
+
+
+      def update_premarket_prices_average_volume_50day(begin_date)
+        raise Exception.new("No begin_date given for update_average_volume_50day query") if begin_date.nil?
+        <<SQL
+update premarket_prices dsp_upd set
+average_volume_50day=(
+select round(avg(volume)) from (select id, price_date, ticker_symbol, volume from premarket_prices
+where ticker_symbol=dsp_upd.ticker_symbol and price_date<dsp_upd.price_date
+order by price_date desc
+limit 50) as sel_vol_range
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and average_volume_50day is null
+SQL
+      end
+
+      def update_premarket_prices_previous_close(begin_date=Date.new(2014,1,1))
+        <<SQL
+update premarket_prices pp set previous_close=(select close from daily_stock_prices dspp where dspp.price_date < pp.price_date and dspp.ticker_symbol=pp.ticker_symbol order by dspp.price_date desc limit 1) where pp.previous_close is null and pp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+      def update_premarket_prices_previous_high(begin_date=Date.new(2014,1,1))
+        <<SQL
+update premarket_prices dsp set previous_high=(select high from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_high is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+      def update_premarket_prices_previous_low(begin_date=Date.new(2014,1,1))
+        <<SQL
+update premarket_prices dsp set previous_low=(select low from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_low is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+
       def update_ema13_first_sma(begin_date)
         <<SQL
 

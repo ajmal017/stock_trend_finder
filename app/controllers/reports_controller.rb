@@ -67,13 +67,9 @@ class ReportsController < ApplicationController
     @report_losers = run_query(TDAmeritradeDataInterface.select_10pct_losers(@report_date))
   end
 
-  def premarket_volume
-    #Just some pseudocode for developing an after-hours daemon
-
-    #g2 = c.get_price_history 'GOOGL', intervaltype: :minute, intervalduration: 15, extended: true, startdate: Date.today, enddate: Date.today
-    #(g2.select { |r| r[:timestamp].hour > 16 }).inject(0) { |sum, r| sum + r[:volume] }
-
-    #c.get_price_history('FSLR', intervaltype: :minute, intervalduration: 5, startdate: Date.today, enddate: Date.today, extended:true)
+  def premarket
+    @report_volume = run_query(TDAmeritradeDataInterface.select_premarket_by_volume(@report_date))
+    @report_percent = run_query(TDAmeritradeDataInterface.select_premarket_by_percent(@report_date))
   end
 
 private

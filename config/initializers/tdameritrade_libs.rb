@@ -8,6 +8,7 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'sql_query_strings.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_daily_quotes.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_minute_quotes.rb')
+  load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'util.rb')
 end
 
 def tda_login!

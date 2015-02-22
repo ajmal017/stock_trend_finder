@@ -4,11 +4,14 @@ class CreatePremarketPrices < ActiveRecord::Migration
       t.integer :ticker_id
       t.string :ticker_symbol
       t.date :price_date
-      t.string :latest_print_time
+      t.datetime :latest_print_time
       t.decimal :last_trade
       t.decimal :high
       t.decimal :low
       t.decimal :close
+      t.decimal :previous_high
+      t.decimal :previous_low
+      t.decimal :previous_close
       t.decimal :volume
       t.decimal :average_volume
 
