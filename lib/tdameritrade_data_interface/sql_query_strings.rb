@@ -422,7 +422,61 @@ volume is not null and
 previous_close is not null and
 average_volume_50day is not null and
 average_volume_50day > 0 and
-(round(((last_trade / previous_close) - 1) * 100, 2) > 2 or round(((last_trade / previous_close) - 1) * 100, 2) < -2) and
+(((last_trade / previous_close) - 1) * 100 < -2 or ((last_trade / previous_close) - 1) * 100 > 2) and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+price_date = '#{report_date.strftime('%Y-%m-%d')}'
+order by volume_ratio desc
+limit 50
+SQL
+      end
+
+      def select_afterhours_by_percent(report_date)
+        <<SQL
+select
+  ticker_symbol,
+  last_trade,
+  round(((last_trade / intraday_close) - 1) * 100, 2) as pct_change,
+  intraday_close,
+  volume,
+  average_volume_50day as average_volume,
+  '---' as volume_ratio,
+  price_date,
+  p.updated_at
+from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
+where
+t.scrape_data and
+last_trade is not null and
+volume > 1 and
+intraday_close is not null and
+average_volume_50day = 0 and
+(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
+price_date = '#{report_date.strftime('%Y-%m-%d')}'
+order by pct_change desc
+limit 50
+SQL
+      end
+
+      def select_afterhours_by_volume(report_date)
+        <<SQL
+select
+  ticker_symbol,
+  last_trade,
+  round(((last_trade / intraday_close) - 1) * 100, 2) as pct_change,
+  intraday_close,
+  volume,
+  average_volume_50day as average_volume,
+  round(volume / average_volume_50day, 2) as volume_ratio,
+  price_date,
+  p.updated_at
+from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
+where
+t.scrape_data and
+last_trade is not null and
+volume is not null and
+intraday_close is not null and
+average_volume_50day is not null and
+average_volume_50day > 0 and
+(((last_trade / intraday_close) - 1) * 100 < -2 or ((last_trade / intraday_close) - 1) * 100 > 2) and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{report_date.strftime('%Y-%m-%d')}'
 order by volume_ratio desc
@@ -488,16 +542,40 @@ SQL
 
       def update_premarket_prices_average_volume_50day(begin_date)
         raise Exception.new("No begin_date given for update_average_volume_50day query") if begin_date.nil?
+
         <<SQL
 update premarket_prices dsp_upd set
 average_volume_50day=(
-select round(avg(volume)) from (select id, price_date, ticker_symbol, volume from premarket_prices
-where ticker_symbol=dsp_upd.ticker_symbol and price_date<dsp_upd.price_date
-order by price_date desc
-limit 50) as sel_vol_range
+
+with price_dates as (
+select distinct price_date from daily_stock_prices order by price_date desc
+)
+select round(avg(volume)) from (
+select id, pd.price_date, pp.ticker_symbol, coalesce(pp.volume, 0) as volume from price_dates pd left join
+(
+select id, ticker_symbol, price_date, volume from premarket_prices
+where (ticker_symbol=dsp_upd.ticker_symbol or ticker_symbol is null)
+) as pp on pd.price_date=pp.price_date
+where pd.price_date<dsp_upd.price_date
+order by pd.price_date desc
+limit 50
+) as sel_vol_range
 )
 where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and average_volume_50day is null
 SQL
+
+# This old query doesn't adjust the average for days where we don't have any premarket quotes, so
+# many days of "0" volume were not getting counted
+#         <<SQL
+# update premarket_prices dsp_upd set
+# average_volume_50day=(
+# select round(avg(volume)) from (select id, price_date, ticker_symbol, volume from premarket_prices
+# where ticker_symbol=dsp_upd.ticker_symbol and price_date<dsp_upd.price_date
+# order by price_date desc
+# limit 50) as sel_vol_range
+# )
+# where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and average_volume_50day is null
+# SQL
       end
 
       def update_premarket_prices_previous_close(begin_date=Date.new(2014,1,1))
@@ -518,6 +596,48 @@ update premarket_prices dsp set previous_low=(select low from daily_stock_prices
 SQL
       end
 
+      def update_afterhours_prices_average_volume_50day(begin_date)
+        raise Exception.new("No begin_date given for update_average_volume_50day query") if begin_date.nil?
+
+        <<SQL
+update after_hours_prices ahp_upd set
+average_volume_50day=(
+
+with price_dates as (
+select distinct price_date from daily_stock_prices order by price_date desc
+)
+select round(avg(volume)) from (
+select id, pd.price_date, pp.ticker_symbol, coalesce(pp.volume, 0) as volume from price_dates pd left join
+(
+select id, ticker_symbol, price_date, volume from after_hours_prices
+where (ticker_symbol=ahp_upd.ticker_symbol or ticker_symbol is null)
+) as pp on pd.price_date=pp.price_date
+where pd.price_date<ahp_upd.price_date
+order by pd.price_date desc
+limit 50
+) as sel_vol_range
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and average_volume_50day is null
+SQL
+      end
+
+      def update_afterhours_prices_intraday_close(begin_date=Date.new(2014,1,1))
+        <<SQL
+update after_hours_prices ahp set intraday_close=(select close from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_close is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
+SQL
+      end
+
+      def update_afterhours_prices_intraday_high(begin_date=Date.new(2014,1,1))
+        <<SQL
+update after_hours_prices ahp set intraday_high=(select high from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_high is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
+SQL
+      end
+
+      def update_afterhours_prices_intraday_low(begin_date=Date.new(2014,1,1))
+        <<SQL
+update after_hours_prices ahp set intraday_low=(select low from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_low is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
+SQL
+      end
 
       def update_ema13_first_sma(begin_date)
         <<SQL

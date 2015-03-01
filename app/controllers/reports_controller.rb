@@ -70,6 +70,17 @@ class ReportsController < ApplicationController
   def premarket
     @report_volume = run_query(TDAmeritradeDataInterface.select_premarket_by_volume(@report_date))
     @report_percent = run_query(TDAmeritradeDataInterface.select_premarket_by_percent(@report_date))
+
+    @report_volume_up = @report_volume.select { |r| r['pct_change'].to_f >= 0 }
+    @report_volume_down = @report_volume.select { |r| r['pct_change'].to_f < 0 }
+  end
+
+  def afterhours
+    @report_volume = run_query(TDAmeritradeDataInterface.select_afterhours_by_volume(@report_date))
+    @report_percent = run_query(TDAmeritradeDataInterface.select_afterhours_by_percent(@report_date))
+
+    @report_volume_up = @report_volume.select { |r| r['pct_change'].to_f >= 0 }
+    @report_volume_down = @report_volume.select { |r| r['pct_change'].to_f < 0 }
   end
 
 private

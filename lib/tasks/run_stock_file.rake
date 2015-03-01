@@ -8,11 +8,11 @@ namespace :stock_trend_finder do
     #c.get_daily_price_history('AMC', '20140505')
 
 
-    (Date.new(2014,1,2)..Date.new(2014,3,31)).each do |date|
+    (Date.new(2014,2,10)..Date.new(2015,2,27)).each do |date|
       error_count=0
       while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
         begin
-          $stf.import_premarket_quotes(date: date) if $stf.is_market_day?(date)
+          $stf.import_afterhours_quotes(date: date) if $stf.is_market_day?(date)
           error_count = -1
         rescue Exception => e
           error_count += 1
@@ -22,17 +22,17 @@ namespace :stock_trend_finder do
       end
 
     end
-    puts "Updating Premarket Previous Close Cache - #{Time.now}"
-    $stf.populate_premarket_previous_close Date.today
-
-    puts "Updating Premarket Previous High Cache - #{Time.now}"
-    $stf.populate_premarket_previous_high Date.today
-
-    puts "Updating Premarket Previous Low Cache - #{Time.now}"
-    $stf.populate_premarket_previous_low Date.today
-
-    puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
-    $stf.populate_premarket_average_volume_50day Date.today
+    # puts "Updating Premarket Previous Close Cache - #{Time.now}"
+    # $stf.populate_premarket_previous_close Date.today
+    #
+    # puts "Updating Premarket Previous High Cache - #{Time.now}"
+    # $stf.populate_premarket_previous_high Date.today
+    #
+    # puts "Updating Premarket Previous Low Cache - #{Time.now}"
+    # $stf.populate_premarket_previous_low Date.today
+    #
+    # puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
+    # $stf.populate_premarket_average_volume_50day Date.today
 
 
   end

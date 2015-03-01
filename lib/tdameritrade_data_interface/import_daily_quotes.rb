@@ -333,7 +333,7 @@ module TDAmeritradeDataInterface
           ticker_symbol = quotes[:symbol].to_s
           prices = quotes[:bars].select { |bar| bar[:timestamp] < Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 09:30:00')) }
 
-          if prices.empty?
+          if prices.empty? || prices[:last_trade]==0
             puts "#{date} Skipping #{i}: #{ticker_symbol} - no PM prints"
           else
             puts "#{date} Processing #{i}: #{ticker_symbol}"
@@ -383,60 +383,100 @@ module TDAmeritradeDataInterface
 
     puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
     populate_premarket_average_volume_50day(NEW_TICKER_BEGIN_DATE)
+
+    puts "Done"
   end
 
-  def self.import_afterhours_quotes(import_date=Date.today)
-    log_file = File.join(Rails.root, 'downloads', 'import_ah_quotes.log')
+  def self.import_afterhours_quotes(opts={})
+    date = opts[:date]
+    if !date.is_a? Date
+      puts "Invalid date submitted to import_premarket quotes"
+      return
+    end
+
+    log_file = File.join(Rails.root, 'downloads', 'import_afterhours_quotes.log')
 
     c = TDAmeritradeApi::Client.new
     c.login
     log = ""
 
-    AfterHoursPrice.reset_cache
+    #alltickers = DailyStockPrice.where(price_date: date).pluck(:ticker_symbol) && Ticker.watching.pluck(:symbol)
+    alltickers = Ticker.watching.pluck(:symbol)
 
-    ticker_watch_list = RealTimeQuote.pluck(:ticker_symbol)
-    ticker_watch_list.each_with_index do |symbol, i|
-      puts "Processing #{i+1} of #{ticker_watch_list.count}: #{symbol}"
-
-      error_count = 0
-      prices = Array.new
-
-      while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+    i = 1
+    alltickers.each_slice(100) do |tickers|
       begin
-        prices = c.get_price_history(symbol, intervaltype: :minute, intervalduration: 5, extended: true, startdate: import_date, enddate: import_date).first[:bars]
-
-        ahp = AfterHoursPrice.new
-        ahp.price_date = import_date
-        ahp.ticker_symbol = symbol
-        prices = prices.select { |r| (r[:timestamp].hour >= 16) && !((r[:timestamp].hour == 16) && (r[:timestamp].min <= 5)) }
-        ahp.ah_high = prices.inject(0) { |max, r| r[:high] >= max ? r[:high] : max }
-        ahp.ah_low =  prices.inject(nil) { |min, r| (min.nil?) || (r[:low] <= min) ? r[:low] : min }
-        ahp.ah_volume = (prices.inject(0) { |sum, r| sum + r[:volume] } / 10).round(2)
-        ahp.ah_vwap = (((prices.map { |r| (r[:high] + r[:low]) / 2 * r[:volume] }).inject(0) { |sum, wap| sum + wap }) / ahp.ah_volume).round(2)
-        ahp.save!
-
-        error_count = -1
-        rescue => e
-          error_count += 1
-          puts "Error processing #{symbol} - (attempt ##{error_count}) #{e.message}"
-          log = log + "Error processing #{symbol} - #{e.message}\n" if error_count == 3
-          #sleep 2
+        error_count=0
+        while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+          begin
+            quote_bunch = c.get_price_history(tickers, intervaltype: :minute, intervalduration: 5, startdate: date, enddate: date, extended: true)
+            error_count = -1 if quote_bunch
+          rescue Exception => e
+            error_count += 1
+            puts "Error processing - #{e.message} - attempt (#{error_count})"
+            log = log + "Error processing - #{e.message} - attempt (#{error_count})\n"
+            sleep 10
+          end
         end
+        quote_bunch.each do |quotes|
+          next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
+          ticker_symbol = quotes[:symbol].to_s
+          prices = quotes[:bars].select { |bar| bar[:timestamp] > Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:10:00')) }
+
+          if prices.empty?
+            puts "#{date} Skipping #{i}: #{ticker_symbol} - no AH prints"
+          else
+            puts "#{date} Processing #{i}: #{ticker_symbol}"
+
+            latest_bar = prices.inject { |latest, bar| bar[:timestamp] > latest[:timestamp] && bar[:timestamp] > Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:10:00')) ? bar : latest }
+            fields = {
+                ticker_symbol: ticker_symbol,
+                price_date: date,
+                latest_print_time: latest_bar[:timestamp],
+                last_trade: latest_bar[:close].round(2),
+                high: latest_bar[:high].round(2),
+                low: latest_bar[:low].round(2),
+                volume: (prices.inject(0) { |volume_sum, bar| bar[:timestamp] <= latest_bar[:timestamp] ? volume_sum + bar[:volume] : volume_sum } / 10).round(2)
+            }
+
+            ah = AfterHoursPrice.where(ticker_symbol: ticker_symbol, price_date: date).first
+            if ah.present?
+              ah.update_attributes(fields)
+            else
+              AfterHoursPrice.create(fields)
+            end
+          end
+          i += 1
+        end
+
+      rescue => e
+        puts "Error processing - #{e.message}"
+        log = log + "Error processing - #{e.message}\n"
+        next
       end
 
     end
+    puts log
 
     of = open(log_file, "w")
     of.write(log)
     of.close
 
-    log_problem_tickers=""
-    log.lines.each do |line|
-      log_problem_tickers+="#{/Error processing (.*?) -/.match(line)[1]}," if /\b#{/Error processing (.*?) -/.match(line)[1]}\b/.match(log_problem_tickers).nil?
-    end
-    log_problem_tickers.slice!(log_problem_tickers.length-1) if log_problem_tickers.last==","
-    puts "Summary report of problem tickers: #{log_problem_tickers}"
+    puts "Updating After Hours Previous Close Cache - #{Time.now}"
+    populate_afterhours_previous_close NEW_TICKER_BEGIN_DATE
+
+    puts "Updating After Hours  Previous High Cache - #{Time.now}"
+    populate_afterhours_previous_high NEW_TICKER_BEGIN_DATE
+
+    puts "Updating Premarket Previous Low Cache - #{Time.now}"
+    populate_afterhours_previous_low NEW_TICKER_BEGIN_DATE
+
+    puts "Calculating After Hours  Average Daily Volumes - #{Time.now}"
+    populate_afterhours_average_volume_50day(NEW_TICKER_BEGIN_DATE)
+
+    puts "Done"
   end
+
 
   def self.reset_snapshot_flags
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
@@ -497,7 +537,8 @@ module TDAmeritradeDataInterface
       end
     end
     puts "#{Time.now} Beginning premarket quotes update daemon..."
-    scheduler  end
+    scheduler
+  end
 
   def self.run_stocktwits_sync_daemon
     scheduler = Rufus::Scheduler.new
@@ -588,6 +629,22 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_premarket_prices_average_volume_50day(begin_date)
   end
 
+  def self.populate_afterhours_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_previous_close(begin_date)
+  end
+
+  def self.populate_afterhours_previous_high(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_previous_high(begin_date)
+  end
+
+  def self.populate_afterhours_previous_low(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_previous_low(begin_date)
+  end
+
+  def self.populate_afterhours_average_volume_50day(begin_date=Date.today)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_average_volume_50day(begin_date)
+  end
+
   def self.copy_realtime_quotes_to_daily_stock_prices
     DailyStockPrice.transaction do
       ActiveRecord::Base.connection.execute insert_daily_stock_prices_from_realtime_quotes
@@ -613,6 +670,8 @@ module TDAmeritradeDataInterface
 
       puts "Calculating SMA200's - #{Time.now}"
       populate_sma200
+
+      puts "Done"
     end
   end
 

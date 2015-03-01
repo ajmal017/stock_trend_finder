@@ -1,4 +1,4 @@
-%h1 Premarket
+%h1 Afterhours
 
 %h2 Gapping Up, By Average Volume
 
@@ -7,7 +7,7 @@
   %div Items: #{@report_volume_up.count}
 
 .report_date_form
-  =report_date_form :premarket
+  =report_date_form :afterhours
 
 .report-container
   %table.table-bordered#premarket_volume_up{ style: "width: 700px;"}
@@ -33,7 +33,7 @@
         %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
         %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
 
-%h2 Gaps, No Premarket Volume History
+%h2 Gaps, No Afterhours Volume History
 
 -if @report_percent.count > 0
   %div Last Updated: #{@report_volume.first['updated_at']}
