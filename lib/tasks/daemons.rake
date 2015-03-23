@@ -5,6 +5,7 @@ namespace :stock_trend_finder do
     $stf.run_realtime_quotes_daemon
     $stf.run_daily_quotes_daemon
     $stf.run_premarket_quotes_daemon
+    $stf.run_afterhours_quotes_daemon
     $stf.run_prepopulate_daily_stock_quotes_daemon
     $stf.run_stocktwits_sync_daemon
 

@@ -294,10 +294,11 @@ round((close / previous_high-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
+t.scrape_data = true and
+close > 1 and
 volume > 100 and
 low > previous_high and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
-t.scrape_data = true and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 open / previous_high > 1.03
 order by gap_pct desc
@@ -418,6 +419,7 @@ from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
 last_trade is not null and
+last_trade > 1 and
 volume is not null and
 previous_close is not null and
 average_volume_50day is not null and
@@ -446,6 +448,7 @@ from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
 last_trade is not null and
+last_trade > 1 and
 volume > 1 and
 intraday_close is not null and
 average_volume_50day = 0 and
@@ -623,19 +626,19 @@ SQL
 
       def update_afterhours_prices_intraday_close(begin_date=Date.new(2014,1,1))
         <<SQL
-update after_hours_prices ahp set intraday_close=(select close from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_close is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
+update after_hours_prices ahp set intraday_close=(select close from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_close is null and ahp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
 SQL
       end
 
       def update_afterhours_prices_intraday_high(begin_date=Date.new(2014,1,1))
         <<SQL
-update after_hours_prices ahp set intraday_high=(select high from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_high is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
+update after_hours_prices ahp set intraday_high=(select high from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_high is null and ahp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
 SQL
       end
 
       def update_afterhours_prices_intraday_low(begin_date=Date.new(2014,1,1))
         <<SQL
-update after_hours_prices ahp set intraday_low=(select low from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_low is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
+update after_hours_prices ahp set intraday_low=(select low from daily_stock_prices dspp where dspp.price_date = ahp.price_date and dspp.ticker_symbol=ahp.ticker_symbol) where ahp.intraday_low is null and ahp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}';
 SQL
       end
 

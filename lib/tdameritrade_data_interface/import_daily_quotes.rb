@@ -290,6 +290,8 @@ module TDAmeritradeDataInterface
 
         puts "Calculating Average Daily Volumes - #{Time.now}"
         populate_average_volume_50day(Date.today)
+
+        puts "Done - #{Time.now}"
       else
         puts "Market closed today, no prepopulation necessary"
       end
@@ -333,7 +335,7 @@ module TDAmeritradeDataInterface
           ticker_symbol = quotes[:symbol].to_s
           prices = quotes[:bars].select { |bar| bar[:timestamp] < Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 09:30:00')) }
 
-          if prices.empty? || prices[:last_trade]==0
+          if prices.empty? || prices.first[:close]==0
             puts "#{date} Skipping #{i}: #{ticker_symbol} - no PM prints"
           else
             puts "#{date} Processing #{i}: #{ticker_symbol}"
@@ -463,13 +465,13 @@ module TDAmeritradeDataInterface
     of.close
 
     puts "Updating After Hours Previous Close Cache - #{Time.now}"
-    populate_afterhours_previous_close NEW_TICKER_BEGIN_DATE
+    populate_afterhours_intraday_close NEW_TICKER_BEGIN_DATE
 
     puts "Updating After Hours  Previous High Cache - #{Time.now}"
-    populate_afterhours_previous_high NEW_TICKER_BEGIN_DATE
+    populate_afterhours_intraday_high NEW_TICKER_BEGIN_DATE
 
     puts "Updating Premarket Previous Low Cache - #{Time.now}"
-    populate_afterhours_previous_low NEW_TICKER_BEGIN_DATE
+    populate_afterhours_intraday_low NEW_TICKER_BEGIN_DATE
 
     puts "Calculating After Hours  Average Daily Volumes - #{Time.now}"
     populate_afterhours_average_volume_50day(NEW_TICKER_BEGIN_DATE)
@@ -485,8 +487,10 @@ module TDAmeritradeDataInterface
   def self.realtime_quote_daemon_block
     puts "Real Time Quote Import: #{Time.now}"
     if is_market_day? Date.today
-      import_realtime_quotes
-      copy_realtime_quotes_to_daily_stock_prices
+      ActiveRecord::Base.connection_pool.with_connection do
+        import_realtime_quotes
+        copy_realtime_quotes_to_daily_stock_prices
+      end
       puts "Done #{Time.now}\n\n"
     else
       puts "Market closed today, no real time quote download necessary"
@@ -507,7 +511,9 @@ module TDAmeritradeDataInterface
     scheduler.cron('10 16 * * MON-FRI') do
       puts "Daily Quote Import: #{Time.now}"
       if is_market_day? Date.today
-        update_daily_stock_prices_from_real_time_snapshot
+        ActiveRecord::Base.connection_pool.with_connection do
+          update_daily_stock_prices_from_real_time_snapshot
+        end
       else
         puts "Market closed today, no real time quote download necessary"
       end
@@ -518,9 +524,11 @@ module TDAmeritradeDataInterface
 
   def self.run_prepopulate_daily_stock_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('8 0 * * MON-FRI') do
+    scheduler.cron('44 7 * * MON-FRI') do
       puts "Prepopulating daily_stock_quotes table: #{Time.now}"
-      prepopulate_daily_stock_prices(Date.today)
+      ActiveRecord::Base.connection_pool.with_connection do
+        prepopulate_daily_stock_prices(Date.today)
+      end
     end
     puts "#{Time.now} Beginning daily_stock_prices prepopulate daemon..."
     scheduler
@@ -531,7 +539,9 @@ module TDAmeritradeDataInterface
     scheduler.cron('15,30,45,59 8 * * MON-FRI') do
       puts "Premarket Quote Import: #{Time.now}"
       if is_market_day? Date.today
-        import_premarket_quotes(date: Date.today)
+        ActiveRecord::Base.connection_pool.with_connection do
+          import_premarket_quotes(date: Date.today)
+        end
       else
         puts "Market closed today, no real time quote download necessary"
       end
@@ -540,11 +550,29 @@ module TDAmeritradeDataInterface
     scheduler
   end
 
+  def self.run_afterhours_quotes_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0 17,18,19,21 * * MON-FRI') do
+      puts "Afterhours Quote Import: #{Time.now}"
+      if is_market_day? Date.today
+        ActiveRecord::Base.connection_pool.with_connection do
+          import_afterhours_quotes(date: Date.today)
+        end
+      else
+        puts "Market closed today, no real time quote download necessary"
+      end
+    end
+    puts "#{Time.now} Beginning afterhours quotes update daemon..."
+    scheduler
+  end
+
   def self.run_stocktwits_sync_daemon
     scheduler = Rufus::Scheduler.new
     scheduler.cron('0 0,7,12,16 * * *') do
       puts "StockTwits data sync: #{Time.now}"
-      Stocktwit.sync_twits
+      ActiveRecord::Base.connection_pool.with_connection do
+        Stocktwit.sync_twits
+      end
     end
     puts "#{Time.now} Beginning StockTwits sync daemon..."
     scheduler
@@ -629,16 +657,16 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_premarket_prices_average_volume_50day(begin_date)
   end
 
-  def self.populate_afterhours_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
-    ActiveRecord::Base.connection.execute update_afterhours_prices_previous_close(begin_date)
+  def self.populate_afterhours_intraday_close(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_intraday_close(begin_date)
   end
 
-  def self.populate_afterhours_previous_high(begin_date=NEW_TICKER_BEGIN_DATE)
-    ActiveRecord::Base.connection.execute update_afterhours_prices_previous_high(begin_date)
+  def self.populate_afterhours_intraday_high(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_intraday_high(begin_date)
   end
 
-  def self.populate_afterhours_previous_low(begin_date=NEW_TICKER_BEGIN_DATE)
-    ActiveRecord::Base.connection.execute update_afterhours_prices_previous_low(begin_date)
+  def self.populate_afterhours_intraday_low(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_afterhours_prices_intraday_low(begin_date)
   end
 
   def self.populate_afterhours_average_volume_50day(begin_date=Date.today)
