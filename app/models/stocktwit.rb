@@ -4,6 +4,7 @@ class Stocktwit < ActiveRecord::Base
   FIRST_TWIT_ID=18772403
 
   has_many :stocktwit_tickers # Keeping this separate from the Tickers table because there may be tickers encountered on ST not in the table
+  has_many :stocktwit_hashtags
 
   enum call_result: { no_call: 0, correct: 1, incorrect: 2, partial: 3 }
 
@@ -89,6 +90,20 @@ class Stocktwit < ActiveRecord::Base
     end
 
     puts "Synced #{messages_synced} messages"
+  end
+
+  def self.import_blog_watchlist
+    # this is pseudocode - still working on it
+
+    # blog = open 'http://www.greenspudtrades.com/2015/03/05/watchlist-for-3515/'
+    # bt = blog.read
+    #
+  end
+
+  def parse_hashtags!
+    message.scan(/#\S*/).each do |hashtag|
+      stocktwit_hashtags.create(tag: hashtag)
+    end
   end
 
 private
