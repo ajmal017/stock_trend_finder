@@ -9,6 +9,12 @@ body.stocktwits {
   overflow: scroll;
 }
 
+.stocktwits-setup-navigation {
+  background-color: #ddaba2;
+  height: 900px;
+  overflow: scroll;
+}
+
 table.stocktwits {
   width: 739px;
 }
@@ -35,7 +41,7 @@ td.stocktwit-thumb {
   display:none;
 }
 
-.stocktwits-ticker-nav-filter, .stocktwits-ticker-nav-list {
+.stocktwits-ticker-nav-filter, .stocktwits-ticker-nav-list, .stocktwits-setup-nav-list {
   font-size: 9pt;
   font-color: black;
 }

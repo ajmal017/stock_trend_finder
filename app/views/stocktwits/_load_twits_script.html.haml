@@ -4,13 +4,22 @@
 
   $last_twit_id = () -> $('table.stocktwits tr').filter(':last').attr('id')
   $symbol_filter = () -> $('#stocktwits-filter-indicator').attr('data-symbol')
+  $setup_filter = () -> $('#stocktwits-filter-indicator').attr('data-setup')
   $user_id_filter = () -> $('#user-dropdown-button').text().trim()
 
-  load_next = (symbol, last_id) ->
+  load_next = (symbol_or_setup, last_id) ->
     loading = true
+
+    console.log symbol_or_setup
+    console.log symbol_or_setup[0] == '#'
+    if symbol_or_setup[0] == '#'
+      postdata = { user_id: $user_id_filter, setup: symbol_or_setup, max: last_id }
+    else
+      postdata = { user_id: $user_id_filter, symbol: symbol_or_setup, max: last_id }
+
     $('.last-twit-placeholder').show()
     $.post '/stocktwits/load_twits' \
-      , { user_id: $user_id_filter, symbol: symbol, max: last_id } \
+      , postdata \
       , (data) ->
         if data.length > 0
            if $('table.stocktwits tr').filter(':last').length > 0
@@ -27,7 +36,14 @@
     $('#stocktwits-filter-indicator').attr('data-symbol', symbol)
     $('#stocktwits-filter-indicator').text(symbol)
     nomore = false
-    load_next($symbol_filter, null)
+    load_next($symbol_filter(), null)
+
+  set_setup_filter = (setup) ->
+    $('#stocktwits-content table.stocktwits').empty()
+    $('#stocktwits-filter-indicator').attr('data-setup', setup)
+    $('#stocktwits-filter-indicator').text(setup)
+    nomore = false
+    load_next($setup_filter(), null)
 
   set_watching_icon = () ->
     $.getJSON '/stocktwits/watching.json', {symbol: $symbol_filter}, (data) ->
@@ -40,6 +56,11 @@
   $('a.symbol-filter-link').click () ->
     symbol = $(this).attr('data-symbol')
     set_symbol_filter(symbol)
+    set_watching_icon()
+    false
+
+  $('a.setup-filter-link').click () ->
+    set_setup_filter($(this).attr('data-setup'))
     set_watching_icon()
     false
 

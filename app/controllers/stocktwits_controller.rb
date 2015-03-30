@@ -9,12 +9,15 @@ class StocktwitsController < ApplicationController
     @ticker_list_count = @ticker_list_symbol.sort { |a,b| b['count'].to_i <=> a['count'].to_i }
     @ticker_list_updated = @ticker_list_symbol.sort { |a,b| b['last_updated_date'] <=> a['last_updated_date'] }
     @ticker_list_watching = Stocktwit.watching_list
+
+    @setup_list = Stocktwit.setup_list
   end
 
   def load_twits
     @twits = Stocktwit.showing(@user_id)
     @twits = @twits.where("id < ?", params[:max]) if params[:max].present?
     @twits = @twits.where(symbol: params[:symbol]) if params[:symbol].present?
+    @twits = @twits.joins(:stocktwit_hashtags).where(stocktwit_hashtags: {tag: params[:setup]}).order(stocktwit_time: :desc) if params[:setup].present?
     @twits = @twits.limit(20)
 
     if @twits.length == 0

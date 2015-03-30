@@ -11,6 +11,10 @@ module StocktwitsHelper
     "#{link_to(ticker['ticker_symbol'], "#", :class=>"symbol-filter-link", "data-symbol"=>ticker['ticker_symbol'])} (#{ticker['count']}) - #{last_updated}"
   end
 
+  def format_setup_nav_link(setup)
+    "#{link_to(setup[0], "#", :class=>"setup-filter-link", "data-setup"=>setup[0])} (#{setup[1]})"
+  end
+
   def message_call_result_class(call)
     case call
       when 'correct'

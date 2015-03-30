@@ -32,7 +32,10 @@
     =image_tag(asset_path("loading.gif"))
 
 
-.col-md-3.stocktwits-ticker-navigation
-  = render partial: 'ticker_navigation'
+.col-md-3
+  .stocktwits-ticker-navigation
+    = render partial: 'ticker_navigation'
+  .stocktwits-setup-navigation
+    = render partial: 'setup_navigation'
 
 =render "load_twits_script"

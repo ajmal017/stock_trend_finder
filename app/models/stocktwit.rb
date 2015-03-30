@@ -14,6 +14,10 @@ class Stocktwit < ActiveRecord::Base
     ActiveRecord::Base.connection.execute(ticker_list_sql(order_by, user_id))
   end
 
+  def self.setup_list
+    StocktwitHashtag.group(:tag).count(:tag).sort { |tag_a, tag_b| tag_b[1] <=> tag_a[1] }
+  end
+
   def self.watching_list
     ActiveRecord::Base.connection.execute(watching_list_sql)
   end
@@ -76,6 +80,7 @@ class Stocktwit < ActiveRecord::Base
               m['symbols'].each do |s|
                 twit.stocktwit_tickers.create(ticker_symbol: s['symbol'])
               end
+              twit.parse_hashtags! if stocktwits_user_name == 'greenspud'
             end
             messages_synced += 1
           end
@@ -101,8 +106,9 @@ class Stocktwit < ActiveRecord::Base
   end
 
   def parse_hashtags!
-    message.scan(/#\S*/).each do |hashtag|
-      stocktwit_hashtags.create(tag: hashtag)
+    message.scan(/(?:\s)(#\S*)/).each do |hashtag|
+      hashtag = hashtag.first
+      stocktwit_hashtags.create(tag: hashtag) if stocktwit_hashtags.find_by(tag: hashtag).nil?
     end
   end
 
@@ -118,14 +124,6 @@ private
     group by ticker_symbol
     order by #{order_by}
 SQL
-
-    # Here's the old SQL, going to keep it here for reference temporarily
-    # select symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(symbol) as count
-    # from stocktwits
-    # where stocktwits_user_name='#{user_id}'
-    # group by symbol
-    # order by #{order_by}
-
   end
 
   def self.watching_list_sql
@@ -136,20 +134,5 @@ SQL
     group by swt.ticker_symbol, swt.watching
     order by last_updated
 SQL
-
-# Leaving the old SQL here temporarily for reference
-#     <<SQL
-# with symbols as (
-# select symbol from stocktwits group by symbol order by symbol
-# )
-# select
-# s.symbol, st.watching, st.stocktwit_time, st.updated_at, current_date - date_trunc('day', (select stocktwit_time from stocktwits st where st.symbol=s.symbol and st.stocktwits_user_name='greenspud' order by id desc limit 1)) as last_updated, (select count(sc.symbol) from stocktwits sc where sc.symbol=s.symbol) as count
-# from symbols s inner join stocktwits st on st.symbol=s.symbol
-# where
-# st.watching and
-# st.stocktwit_time = (select stocktwit_time from stocktwits su where su.symbol=s.symbol and su.watching is not null order by stocktwit_time desc limit 1) and
-# stocktwits_user_name='greenspud'
-# order by last_updated
-# SQL
   end
 end

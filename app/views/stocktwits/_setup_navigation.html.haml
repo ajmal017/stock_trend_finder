@@ -1,0 +1,6 @@
+%h3 Setups
+
+.stocktwits-setup-nav-list#count
+  -@setup_list.each do |setup|
+    .stocktwits-setup-nav-link
+      = format_setup_nav_link(setup).html_safe
