@@ -5,6 +5,7 @@
   $last_twit_id = () -> $('table.stocktwits tr').filter(':last').attr('id')
   $symbol_filter = () -> $('#stocktwits-filter-indicator').attr('data-symbol')
   $setup_filter = () -> $('#stocktwits-filter-indicator').attr('data-setup')
+  $setup_or_symbol_filter = () -> $('#stocktwits-filter-indicator').text()
   $user_id_filter = () -> $('#user-dropdown-button').text().trim()
 
   load_next = (symbol_or_setup, last_id) ->
@@ -72,4 +73,4 @@
   $(window).scroll () ->
     if $(window).scrollTop() >= $('#stocktwits-content').height() - $(window).height() - 500
       if !loading && !nomore
-        load_next($symbol_filter, $last_twit_id)
+        load_next($setup_or_symbol_filter, $last_twit_id)

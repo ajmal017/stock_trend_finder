@@ -467,13 +467,13 @@ module TDAmeritradeDataInterface
     puts "Updating After Hours Previous Close Cache - #{Time.now}"
     populate_afterhours_intraday_close NEW_TICKER_BEGIN_DATE
 
-    puts "Updating After Hours  Previous High Cache - #{Time.now}"
+    puts "Updating After Hours Previous High Cache - #{Time.now}"
     populate_afterhours_intraday_high NEW_TICKER_BEGIN_DATE
 
-    puts "Updating Premarket Previous Low Cache - #{Time.now}"
+    puts "Updating After Hours Previous Low Cache - #{Time.now}"
     populate_afterhours_intraday_low NEW_TICKER_BEGIN_DATE
 
-    puts "Calculating After Hours  Average Daily Volumes - #{Time.now}"
+    puts "Calculating After Hours Average Daily Volumes - #{Time.now}"
     populate_afterhours_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
     puts "Done"
