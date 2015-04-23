@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.0'
+gem 'rails', '4.2'
 gem 'haml', '~> 4.0'
 gem 'pg'
 
@@ -39,9 +39,23 @@ gem "tdameritrade_api",  :path=>'~/Development/gem-development/tdameritrade_api'
 gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/gem-development/stocktwits-api-ruby'
 gem "bindata"
 
+# Don't put these in the development-only group because certain
+# financial data crawling functions make use of these gems.
+gem 'nokogiri', '~>1.6'
+gem 'capybara', '~>2.1'
+gem 'poltergeist', '~>1.5'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
+end
+
+group :development do
+#  gem 'linecache19', '>= 0.5.13', :git => 'https://github.com/robmathews/linecache19-0.5.13.git'
+#  gem 'ruby-debug-base19x', '>= 0.11.30.pre10'
+  #gem 'ruby-debug-ide', '~> 0.4.29'
+  #   gem 'ruby-debug-base19x'
+  # gem 'ruby-debug-ide'
 end
 
 # Use ActiveModel has_secure_password
@@ -55,8 +69,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
-gem 'nokogiri', '~>1.6'
-
-gem 'capybara', '~>2.1'
-gem 'poltergeist', '~>1.5'

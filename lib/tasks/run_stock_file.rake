@@ -8,7 +8,7 @@ namespace :stock_trend_finder do
     #c.get_daily_price_history('AMC', '20140505')
 
 
-    (Date.new(2015,3,3)..Date.new(2015,3,3)).each do |date|
+    (Date.new(2015,4,23)..Date.new(2015,4,23)).each do |date|
       error_count=0
       while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
         begin

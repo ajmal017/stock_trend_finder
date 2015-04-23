@@ -289,7 +289,7 @@ SQL
 
       def select_bullish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_high,
+select ticker_symbol, price_date, open, high, low, close as last_trade, round(volume, 0), round(average_volume_50day, 0) as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_high,
 round((close / previous_high-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
@@ -384,8 +384,8 @@ select
   last_trade,
   round(((last_trade / previous_close) - 1) * 100, 2) as pct_change,
   previous_close,
-  volume,
-  average_volume_50day as average_volume,
+  round(volume, 0) as volume,
+  round(average_volume_50day, 0) as average_volume,
   '---' as volume_ratio,
   price_date,
   p.updated_at
@@ -410,8 +410,8 @@ select
   last_trade,
   round(((last_trade / previous_close) - 1) * 100, 2) as pct_change,
   previous_close,
-  volume,
-  average_volume_50day as average_volume,
+  round(volume, 0) as volume,
+  round(average_volume_50day, 0) as average_volume,
   round(volume / average_volume_50day, 2) as volume_ratio,
   price_date,
   p.updated_at
