@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150423175237) do
+ActiveRecord::Schema.define(version: 20150427123125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,17 +19,17 @@ ActiveRecord::Schema.define(version: 20150423175237) do
   create_table "after_hours_prices", force: :cascade do |t|
     t.date     "price_date"
     t.string   "ticker_symbol",        limit: 255
-    t.decimal  "high"
-    t.decimal  "low"
-    t.decimal  "volume"
+    t.decimal  "high",                             precision: 15, scale: 2
+    t.decimal  "low",                              precision: 15, scale: 2
+    t.decimal  "volume",                           precision: 15, scale: 3
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "last_trade"
+    t.decimal  "last_trade",                       precision: 15, scale: 2
     t.datetime "latest_print_time"
-    t.decimal  "intraday_high"
-    t.decimal  "intraday_low"
-    t.decimal  "intraday_close"
-    t.decimal  "average_volume_50day"
+    t.decimal  "intraday_high",                    precision: 15, scale: 2
+    t.decimal  "intraday_low",                     precision: 15, scale: 2
+    t.decimal  "intraday_close",                   precision: 15, scale: 2
+    t.decimal  "average_volume_50day",             precision: 15, scale: 3
   end
 
   add_index "after_hours_prices", ["ticker_symbol", "price_date"], name: "index_after_hours_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
