@@ -8,6 +8,10 @@ module ReportHelper
     s.html_safe
   end
 
+  def set_vix_contango_style(contango_percent)
+    "background-color: red" if contango_percent < 1
+  end
+
   def set_css_class(report, field)
     css_class = ""
     if report['pct_change'].to_f > 0

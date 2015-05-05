@@ -1,9 +1,11 @@
 %h1 Premarket
 
+=render partial: 'vix_contango'
+
 %h2 Gapping Up, By Average Volume
 
 -if @report_volume_up.count > 0
-  %div Last Updated: #{@report_volume_up.first['updated_at']}
+  %div Last Updated: #{@report_volume_up.first['updated_at'].in_time_zone("US/Eastern")}
   %div Items: #{@report_volume_up.count}
 
 .report_date_form

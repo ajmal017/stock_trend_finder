@@ -2,6 +2,7 @@ require 'tdameritrade_data_interface/tdameritrade_data_interface'
 
 class ReportsController < ApplicationController
   before_filter :set_report_date
+  before_filter :set_vix_contango_reading
 
   def hide_symbol
     @symbol = params[:symbol]
@@ -94,5 +95,9 @@ private
     rescue
       @report_date = DailyStockPrice.most_recent_date
     end
+  end
+
+  def set_vix_contango_reading
+    @vix = VIXFuturesHistory.last
   end
 end
