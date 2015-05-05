@@ -14,6 +14,11 @@ PATH
       nokogiri (~> 1.6)
       rake
 
+PATH
+  remote: ~/Development/gem-development/ystock
+  specs:
+    ystock (0.4.9)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -208,3 +213,4 @@ DEPENDENCIES
   tdameritrade_api!
   turbolinks
   uglifier (>= 1.3.0)
+  ystock (~> 0.4.9)!

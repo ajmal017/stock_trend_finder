@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427123125) do
+ActiveRecord::Schema.define(version: 20150505214824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -338,5 +338,13 @@ ActiveRecord::Schema.define(version: 20150427123125) do
   end
 
   add_index "trade_positions", ["gap_up_id", "position"], name: "index_trade_positions_on_gap_up_id_and_position", using: :btree
+
+  create_table "vix_futures_histories", force: :cascade do |t|
+    t.datetime "snapshot_time"
+    t.decimal  "contango_percent", precision: 5, scale: 2
+    t.text     "futures_curve"
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+  end
 
 end

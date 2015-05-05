@@ -578,6 +578,18 @@ module TDAmeritradeDataInterface
     scheduler
   end
 
+  def self.run_import_vix_futures_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0 10,11,14,17 * * MON-FRI') do
+      puts "VIX Futures data sync: #{Time.now}"
+      ActiveRecord::Base.connection_pool.with_connection do
+        VIXFuturesHistory.import_vix_futures if is_market_day?(Date.today)
+      end
+    end
+    puts "#{Time.now} Beginning VIX Futures History daemon..."
+    scheduler
+  end
+
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_previous_close(begin_date)
   end
