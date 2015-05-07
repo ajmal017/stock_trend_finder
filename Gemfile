@@ -38,7 +38,7 @@ gem 'htmlentities', '~> 4.3'
 gem "tdameritrade_api",  :path=>'~/Development/gem-development/tdameritrade_api'
 gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/gem-development/stocktwits-api-ruby'
 gem "bindata"
-gem 'ystock', '~> 0.4.9', :path=>'~/Development/gem-development/ystock'
+gem 'ystock', '~> 0.4.10'
 
 # Don't put these in the development-only group because certain
 # financial data crawling functions make use of these gems.

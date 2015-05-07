@@ -9,7 +9,7 @@ class VIXFuturesHistory < ActiveRecord::Base
     f = f.drop(f.index(starting_month)).take(8) # take the first 10 symbols beginning with the starting month
 
     futures_curve = f.inject({}) do |futures_curve, symbol|
-      quote = Ystock::Yahoo.get_quote(symbol)
+      quote = Ystock.get_quote(symbol)
       if quote.is_a?(Hash) && quote.has_key?(:price)
         futures_curve[symbol] = quote[:price].to_f
         futures_curve

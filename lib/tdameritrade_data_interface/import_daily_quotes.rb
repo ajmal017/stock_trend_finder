@@ -585,6 +585,7 @@ module TDAmeritradeDataInterface
       ActiveRecord::Base.connection_pool.with_connection do
         VIXFuturesHistory.import_vix_futures if is_market_day?(Date.today)
       end
+      puts "Done"
     end
     puts "#{Time.now} Beginning VIX Futures History daemon..."
     scheduler
