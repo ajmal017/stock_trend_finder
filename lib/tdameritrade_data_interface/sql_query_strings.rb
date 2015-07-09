@@ -289,7 +289,7 @@ SQL
 
       def select_bullish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, round(volume, 0), round(average_volume_50day, 0) as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_high,
+select ticker_symbol, price_date, open, high, low, close as last_trade, round(volume, 0) as volume, round(average_volume_50day, 0) as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_high,
 round((close / previous_high-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
@@ -476,6 +476,7 @@ where
 t.scrape_data and
 last_trade is not null and
 volume is not null and
+last_trade > 1 and
 intraday_close is not null and
 average_volume_50day is not null and
 average_volume_50day > 0 and
@@ -489,8 +490,8 @@ SQL
 
       def insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
         <<SQL
-insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, created_at, previous_close, previous_high, previous_low)
-select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, close, high, low from daily_stock_prices where price_date=(select max(price_date) from daily_stock_prices)
+insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, created_at, previous_close, previous_high, previous_low, snapshot_time)
+select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, close, high, low, '#{Time.now.to_s}' from daily_stock_prices where price_date=(select max(price_date) from daily_stock_prices) and ticker_symbol not in (select ticker_symbol from daily_stock_prices where price_date='#{prepopulate_date.strftime('%Y-%m-%d')}')
 SQL
       end
 

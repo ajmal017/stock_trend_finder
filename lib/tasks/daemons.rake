@@ -9,6 +9,7 @@ namespace :stock_trend_finder do
     $stf.run_prepopulate_daily_stock_quotes_daemon
     $stf.run_stocktwits_sync_daemon
     $stf.run_import_vix_futures_daemon
+    $stf.run_db_maintenance_daemon
 
     while 1 do
       # infinite loop until Ctrl+C hit

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150505214824) do
+ActiveRecord::Schema.define(version: 20150709020856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,24 +37,24 @@ ActiveRecord::Schema.define(version: 20150505214824) do
   create_table "daily_stock_prices", force: :cascade do |t|
     t.integer  "ticker_id"
     t.date     "price_date"
-    t.decimal  "open"
-    t.decimal  "high"
-    t.decimal  "low"
-    t.decimal  "close"
-    t.decimal  "volume",                           precision: 15
+    t.decimal  "open",                             precision: 15, scale: 2
+    t.decimal  "high",                             precision: 15, scale: 2
+    t.decimal  "low",                              precision: 15, scale: 2
+    t.decimal  "close",                            precision: 15, scale: 2
+    t.decimal  "volume",                           precision: 15, scale: 3
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ticker_symbol",        limit: 255
-    t.decimal  "previous_close"
-    t.decimal  "previous_high"
-    t.decimal  "previous_low"
-    t.boolean  "exclude",                                         default: false
-    t.decimal  "average_volume_50day"
+    t.decimal  "previous_close",                   precision: 15, scale: 2
+    t.decimal  "previous_high",                    precision: 15, scale: 2
+    t.decimal  "previous_low",                     precision: 15, scale: 2
+    t.boolean  "exclude",                                                   default: false
+    t.decimal  "average_volume_50day",             precision: 15, scale: 3
     t.decimal  "ema13"
     t.string   "candle_vs_ema13",      limit: 255
     t.datetime "snapshot_time"
-    t.decimal  "sma50"
-    t.decimal  "sma200"
+    t.decimal  "sma50",                            precision: 15, scale: 3
+    t.decimal  "sma200",                           precision: 15, scale: 3
   end
 
   add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree
@@ -341,10 +341,12 @@ ActiveRecord::Schema.define(version: 20150505214824) do
 
   create_table "vix_futures_histories", force: :cascade do |t|
     t.datetime "snapshot_time"
-    t.decimal  "contango_percent", precision: 5, scale: 2
+    t.decimal  "contango_percent",    precision: 5, scale: 2
     t.text     "futures_curve"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.decimal  "VIX",                 precision: 6, scale: 2
+    t.string   "screenshot_filename"
   end
 
 end

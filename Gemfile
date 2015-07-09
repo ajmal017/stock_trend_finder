@@ -51,7 +51,9 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-group :development do
+group :development, :test do
+  gem 'pry', '~> 0.10'
+  gem 'pry-rails', '~> 0.3'
 #  gem 'linecache19', '>= 0.5.13', :git => 'https://github.com/robmathews/linecache19-0.5.13.git'
 #  gem 'ruby-debug-base19x', '>= 0.11.30.pre10'
   #gem 'ruby-debug-ide', '~> 0.4.29'

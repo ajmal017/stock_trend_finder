@@ -1,4 +1,5 @@
 require File.join(Rails.root, 'lib/tdameritrade_data_interface/tdameritrade_data_interface')
+require File.join(Rails.root, 'lib/tdameritrade_data_interface/db_maintenance')
 
 # This method is here to initially load the libraries at the command line, and
 # it uses the 'load' method vs 'require' so that I can make minor changes to the libs without

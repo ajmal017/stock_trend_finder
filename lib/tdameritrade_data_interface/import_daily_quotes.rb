@@ -193,10 +193,10 @@ module TDAmeritradeDataInterface
     #populate_ema13
 
     puts "Updating Previous High Cache - #{Time.now}"
-    populate_previous_high(Date.today)
+    populate_previous_high
 
     puts "Updating Previous Low Cache - #{Time.now}"
-    populate_previous_low(Date.today)
+    populate_previous_low
 
     puts "Calculating SMA50's - #{Time.now}"
     populate_sma50
@@ -484,6 +484,23 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
   end
 
+  def self.catch_up(date)
+    unless date.is_a? Date
+      puts "Enter an input date"
+      return
+    end
+
+    prepopulate_daily_stock_prices(date)
+    update_daily_stock_prices_from_real_time_snapshot
+    import_premarket_quotes(date: date)
+    import_afterhours_quotes(date: date)
+    VIXFuturesHistory.import_vix_futures(true)
+    Stocktwit.sync_twits
+
+    ActiveRecord::Base.connection.execute "VACUUM FULL"
+    ActiveRecord::Base.connection.execute "VACUUM ANALYZE"
+  end
+
   def self.realtime_quote_daemon_block
     puts "Real Time Quote Import: #{Time.now}"
     if is_market_day? Date.today
@@ -583,13 +600,37 @@ module TDAmeritradeDataInterface
     scheduler.cron('0 10,11,14,17 * * MON-FRI') do
       puts "VIX Futures data sync: #{Time.now}"
       ActiveRecord::Base.connection_pool.with_connection do
-        VIXFuturesHistory.import_vix_futures if is_market_day?(Date.today)
+        VIXFuturesHistory.import_vix_futures(true) if is_market_day?(Date.today)
       end
       puts "Done"
     end
     puts "#{Time.now} Beginning VIX Futures History daemon..."
     scheduler
   end
+
+  def self.run_db_maintenance_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0 1 * * SUN-FRI') do
+      puts "Running DB VACUUM: #{Time.now}"
+      ActiveRecord::Base.connection_pool.with_connection do
+        ActiveRecord::Base.connection.execute "VACUUM FULL"
+        ActiveRecord::Base.connection.execute "VACUUM ANALYZE"
+      end
+      puts "Done"
+    end
+
+    scheduler_rts = Rufus::Scheduler.new
+    scheduler_rts.cron('0 1 * * SAT') do
+      puts "Resetting Realtime Snapshot Flags #{Time.now}"
+      ActiveRecord::Base.connection_pool.with_connection do
+        $stf.reset_snapshot_flags
+      end
+      puts "Done"
+    end
+    puts "#{Time.now} Beginning DB Maintenance daemon..."
+    scheduler
+  end
+
 
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_previous_close(begin_date)
