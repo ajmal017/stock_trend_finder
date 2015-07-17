@@ -6,7 +6,7 @@ class VIXFuturesHistory < ActiveRecord::Base
 
   serialize :futures_curve
 
-  def self.import_vix_futures(screenshot=false)
+  def self.import_vix_futures(screenshot=true)
     starting_month = TDAmeritradeDataInterface.next_vix_futures_symbol
     f = FUTURES_SYMBOLS * 2
     f = f.drop(f.index(starting_month)).take(8) # take the first 10 symbols beginning with the starting month
@@ -21,6 +21,8 @@ class VIXFuturesHistory < ActiveRecord::Base
 
     each_future = futures_curve.to_a
     contango = ((each_future[1][1] / each_future[0][1]) - 1) * 100
+    #binding.pry
+    #days_to_expiration = TDAmeritradeDataInterface.market_days_between(Date.today, )
 
     vix = import_vix
 
