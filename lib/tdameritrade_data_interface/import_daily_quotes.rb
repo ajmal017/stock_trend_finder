@@ -144,19 +144,20 @@ module TDAmeritradeDataInterface
 
       records_to_update.select { |dsp| dsp[:price_date]==price_date }.map { |dsp| dsp[:ticker_symbol] }.each_slice(100) do |tickers|
         begin
-          error_count=0
-          while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
+          quote_bunch=[]
+          3.times.each do |error_count|
             begin
               quote_bunch = c.get_price_history(tickers, intervaltype: :daily, intervalduration: 1, startdate: price_date, enddate: price_date)
-              error_count = -1 if quote_bunch
+              break
             rescue Exception => e
-              error_count += 1
-              puts "Error processing - #{e.message} - attempt (#{error_count})"
-              log = log + "Error processing - #{e.message} - attempt (#{error_count})\n"
+              #binding.pry
+              puts "Error processing - #{e.message} - attempt (#{error_count + 1})"
+              log = log + "Error processing - #{e.message} - attempt (#{error_count + 1})\n"
               sleep 10
             end
           end
-          next if error_count > 3 || quote_bunch.nil?
+
+          next if quote_bunch.empty?
           quote_bunch.each do |quotes|
             next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
             ticker_symbol = quotes[:symbol].to_s
@@ -190,53 +191,9 @@ module TDAmeritradeDataInterface
             i += 1
           end
 
+        end
       end
-    end
 
-    # records_to_update.each.with_index(1) do |r, i|
-    #   puts "Processing #{i} of #{count}: #{r[:ticker_symbol]}, #{r[:price_date]}"
-    #
-    #   begin_date = end_date = r[:price_date]
-    #   error_count = 0
-    #   prices = Array.new
-    #
-    #   while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
-    #     begin
-    #       prices = c.get_daily_price_history(r[:ticker_symbol], begin_date, end_date)
-    #       error_count = -1
-    #
-    #       #next if get_history_returned_error?(prices)
-    #       p = prices.first
-    #       if p[:timestamp].to_date != r[:price_date]
-    #         puts "Error: price date does not match"
-    #         log = log + "Error processing #{r[:ticker_symbol]}: incorrect price date #{p[:timestamp]} vs #{r[:price_date]} in the record"
-    #         next
-    #       end
-    #       new_attributes = {
-    #           open: p[:open],
-    #           high: p[:high],
-    #           low: p[:low],
-    #           close: p[:close].to_f.round(2),
-    #           volume: p[:volume]/10,
-    #           previous_close: nil,
-    #           previous_high: nil,
-    #           previous_low: nil,
-    #           average_volume_50day: nil,
-    #           ema13: nil,
-    #           candle_vs_ema13: nil,
-    #           snapshot_time: nil
-    #       }
-    #
-    #       r.update(new_attributes)
-    #
-    #     rescue => e
-    #       error_count += 1
-    #       puts "Error processing #{r[:ticker_symbol]} - (attempt ##{error_count}) #{e.message}"
-    #       log = log + "Error processing #{r[:ticker_symbol]} - #{e.message}\n" if error_count == 3
-    #       #sleep 2
-    #     end
-    #   end
-    #
     end
 
 
@@ -364,6 +321,7 @@ module TDAmeritradeDataInterface
       return
     end
 
+    puts "#{Time.now}: Downloading premarket quotes for #{date}"
     log_file = File.join(Rails.root, 'downloads', 'import_premarket_quotes.log')
 
     c = TDAmeritradeApi::Client.new
@@ -421,6 +379,7 @@ module TDAmeritradeDataInterface
         end
 
       rescue => e
+        binding.pry
         puts "Error processing - #{e.message}"
         log = log + "Error processing - #{e.message}\n"
         next
@@ -550,7 +509,8 @@ module TDAmeritradeDataInterface
     end
 
     prepopulate_daily_stock_prices(date)
-    update_daily_stock_prices_from_real_time_snapshot
+
+    #update_daily_stock_prices_from_real_time_snapshot
     import_premarket_quotes(date: date)
     import_afterhours_quotes(date: date)
     VIXFuturesHistory.import_vix_futures(true)
