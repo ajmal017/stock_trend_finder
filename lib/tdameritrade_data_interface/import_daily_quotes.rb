@@ -142,6 +142,8 @@ module TDAmeritradeDataInterface
     price_dates_to_update.each do |price_date|
       puts "Updating records from #{price_date}"
 
+      total_count = records_to_update.count
+      counter = 1
       records_to_update.select { |dsp| dsp[:price_date]==price_date }.map { |dsp| dsp[:ticker_symbol] }.each_slice(100) do |tickers|
         begin
           quote_bunch=[]
@@ -164,9 +166,12 @@ module TDAmeritradeDataInterface
             prices = quotes[:bars]
 
             p = prices.first
+            puts "Processing #{counter} of #{total_count}: #{p[:symbol]}"; counter += 1
+
+
             if p[:timestamp].to_date != price_date
               puts "Error: price date does not match"
-              log = log + "Error processing #{quotes[:symbol]}: incorrect price date #{p[:timestamp]} vs #{price_date} in the record"
+              log = log + "Error processing #{p[:symbol]}: incorrect price date #{p[:timestamp]} vs #{price_date} in the record"
               next
             end
             new_attributes = {
@@ -379,7 +384,6 @@ module TDAmeritradeDataInterface
         end
 
       rescue => e
-        binding.pry
         puts "Error processing - #{e.message}"
         log = log + "Error processing - #{e.message}\n"
         next
@@ -510,7 +514,7 @@ module TDAmeritradeDataInterface
 
     prepopulate_daily_stock_prices(date)
 
-    #update_daily_stock_prices_from_real_time_snapshot
+    update_daily_stock_prices_from_real_time_snapshot
     import_premarket_quotes(date: date)
     import_afterhours_quotes(date: date)
     VIXFuturesHistory.import_vix_futures(true)

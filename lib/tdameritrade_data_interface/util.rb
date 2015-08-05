@@ -17,12 +17,11 @@ module TDAmeritradeDataInterface
     f=File.join(Dir.pwd, 'downloads', 'market_days.csv')
     File.open(f) do |f|
       f.any? do |line|
-        line_date = Date.parse(line.strip)
+        line_date = Date.strptime(line.strip, '%m/%d/%y')
         if line_date > begin_day && line_date <= end_day
           days_between += 1
-        else
-          return days_between if days_between > 0
         end
+        return days_between if line_date > end_day
       end
     end
     days_between

@@ -21,7 +21,7 @@ class VIXFuturesHistory < ActiveRecord::Base
 
     each_future = futures_curve.to_a
     contango = ((each_future[1][1] / each_future[0][1]) - 1) * 100
-    #binding.pry
+    # binding.pry
     #days_to_expiration = TDAmeritradeDataInterface.market_days_between(Date.today, )
 
     vix = import_vix

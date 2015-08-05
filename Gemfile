@@ -45,7 +45,6 @@ gem 'ystock', '~> 0.4.10'
 gem 'nokogiri', '~>1.6'
 gem 'capybara', '~>2.1'
 gem 'poltergeist', '~>1.5'
-gem 'http'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

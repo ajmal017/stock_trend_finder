@@ -12,6 +12,11 @@
     - estimated % VIX1, %VIX2
     - rollyield
     - contango roll
+    - sensitivity analysis; assuming VX2 stays the same, a change in VX1 to X would = X points in XIV
+        i.e. VX1 beta, VX2 beta
+        
+* Download the historical VIX futures data from CBOT and put it into the database
+    
     
 * Download system refactor ideas
     - PrepopulateDatabase module

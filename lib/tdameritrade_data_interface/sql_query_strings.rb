@@ -491,7 +491,11 @@ SQL
       def insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
         <<SQL
 insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, created_at, previous_close, previous_high, previous_low, snapshot_time)
-select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, close, high, low, '#{Time.now.to_s}' from daily_stock_prices where price_date=(select max(price_date) from daily_stock_prices) and ticker_symbol not in (select ticker_symbol from daily_stock_prices where price_date='#{prepopulate_date.strftime('%Y-%m-%d')}')
+select ticker_id, ticker_symbol, '#{prepopulate_date.strftime('%Y-%m-%d')}', current_timestamp, close, high, low, '#{Time.now.to_s}'
+from daily_stock_prices
+where price_date=(select max(price_date) from daily_stock_prices) and
+ticker_symbol not in (select ticker_symbol from daily_stock_prices where price_date='#{prepopulate_date.strftime('%Y-%m-%d')}') and
+ticker_symbol in (select symbol from tickers where scrape_data=true)
 SQL
       end
 
