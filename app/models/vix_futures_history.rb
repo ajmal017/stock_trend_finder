@@ -25,8 +25,9 @@ class VIXFuturesHistory < ActiveRecord::Base
     #days_to_expiration = TDAmeritradeDataInterface.market_days_between(Date.today, )
 
     vix = import_vix
+    xiv = import_xiv
 
-    vfh = VIXFuturesHistory.create(snapshot_time: Time.now, VIX: vix, contango_percent: contango, futures_curve: futures_curve)
+    vfh = VIXFuturesHistory.create(snapshot_time: Time.now, VIX: vix, XIV: xiv, contango_percent: contango, futures_curve: futures_curve)
 
     if screenshot
       vfh.update(screenshot_filename: import_vix_curve_screenshot)
@@ -36,6 +37,11 @@ class VIXFuturesHistory < ActiveRecord::Base
   def self.import_vix
     vix = Ystock.get_quote('^VIX')
     vix.has_key?(:price) ? vix[:price].to_f : 0
+  end
+
+  def self.import_xiv
+    xiv = Ystock.get_quote('XIV')
+    xiv.has_key?(:price) ? xiv[:price].to_f : 0
   end
 
   def self.import_vix_curve_screenshot

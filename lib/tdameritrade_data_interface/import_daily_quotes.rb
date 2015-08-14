@@ -539,9 +539,9 @@ module TDAmeritradeDataInterface
 
   def self.run_realtime_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('15,30,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
+    scheduler.cron('15,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
     scheduler2 = Rufus::Scheduler.new
-    scheduler2.cron('39,55 9 * * MON-FRI') { realtime_quote_daemon_block }
+    scheduler2.cron('45 9 * * MON-FRI') { realtime_quote_daemon_block }
     puts "#{Time.now} Beginning realtime quote import daemon..."
     [scheduler, scheduler2]
   end
@@ -608,7 +608,7 @@ module TDAmeritradeDataInterface
 
   def self.run_stocktwits_sync_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0 0,7,12,16 * * *') do
+    scheduler.cron('0 0,7,16 * * *') do
       puts "StockTwits data sync: #{Time.now}"
       ActiveRecord::Base.connection_pool.with_connection do
         Stocktwit.sync_twits
@@ -620,10 +620,10 @@ module TDAmeritradeDataInterface
 
   def self.run_import_vix_futures_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('0 10,11,14,17 * * MON-FRI') do
+    scheduler.cron('0 9,10,14,17 * * MON-FRI') do
       puts "VIX Futures data sync: #{Time.now}"
       ActiveRecord::Base.connection_pool.with_connection do
-        VIXFuturesHistory.import_vix_futures(true) if is_market_day?(Date.today)
+        VIXFuturesHistory.import_vix_futures if is_market_day?(Date.today)
       end
       puts "Done"
     end

@@ -716,8 +716,8 @@ SQL
         <<SQL
 update daily_stock_prices as dsp
 set
-(open, high, low, close, volume, updated_at, snapshot_time,previous_close,average_volume_50day,ema13,candle_vs_ema13)=
-(round(rtq.open, 2), round(rtq.high, 2), round(rtq.low, 2), round(rtq.last_trade, 2), rtq.volume/1000, current_timestamp, rtq.quote_time, null, null, null, null)
+(open, high, low, close, volume, updated_at, snapshot_time)=
+(round(rtq.open, 2), round(rtq.high, 2), round(rtq.low, 2), round(rtq.last_trade, 2), rtq.volume/1000, current_timestamp, rtq.quote_time)
 from real_time_quotes rtq
 where dsp.ticker_symbol=rtq.ticker_symbol and dsp.price_date=date(rtq.quote_time)
 SQL

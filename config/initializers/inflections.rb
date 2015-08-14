@@ -17,4 +17,5 @@
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'VIX'
+  inflect.acronym 'XIV'
 end

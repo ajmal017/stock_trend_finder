@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709020856) do
+ActiveRecord::Schema.define(version: 20150806141953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -341,12 +341,14 @@ ActiveRecord::Schema.define(version: 20150709020856) do
 
   create_table "vix_futures_histories", force: :cascade do |t|
     t.datetime "snapshot_time"
-    t.decimal  "contango_percent",    precision: 5, scale: 2
+    t.decimal  "contango_percent",    precision: 5,  scale: 2
     t.text     "futures_curve"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.decimal  "VIX",                 precision: 6, scale: 2
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.decimal  "VIX",                 precision: 6,  scale: 2
     t.string   "screenshot_filename"
+    t.decimal  "XIV",                 precision: 15, scale: 2
+    t.text     "report_fields"
   end
 
 end

@@ -11,6 +11,8 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_minute_quotes.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'util.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'vix.rb')
+  load File.join(Rails.root, 'lib', 'market_data_utility.rb')
+  load File.join(Rails.root, 'lib', 'market_data_pull', 'vix_futures_data_pull.rb')
 end
 
 def tda_login!
