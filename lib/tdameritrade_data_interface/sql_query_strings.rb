@@ -592,10 +592,24 @@ update premarket_prices pp set previous_close=(select close from daily_stock_pri
 SQL
       end
 
-      def update_premarket_prices_previous_high(begin_date=Date.new(2014,1,1))
-        <<SQL
+      def update_premarket_prices_previous_high(begin_date=Date.new(2014,1,1), update_all=false)
+        if update_all
+          <<SQL
 update premarket_prices dsp set previous_high=(select high from daily_stock_prices dspp where dspp.price_date < dsp.price_date and dspp.ticker_symbol=dsp.ticker_symbol order by dspp.price_date desc limit 1) where dsp.previous_high is null and dsp.price_date >= '#{begin_date.strftime('%Y-%m-%d')}'
 SQL
+        else
+          <<SQL
+with phd as (
+select ticker_symbol, max(price_date) as price_date
+from daily_stock_prices dsp
+where price_date < '#{begin_date.strftime('%Y-%m-%d')}' and high is not null
+group by ticker_symbol
+)
+update premarket_prices pmp set previous_high=(select dsp.high from phd inner join daily_stock_prices dsp on dsp.ticker_symbol=phd.ticker_symbol and dsp.price_date=phd.price_date where phd.ticker_symbol=pmp.ticker_symbol) where pmp.previous_high is null and pmp.price_date = '#{begin_date.strftime('%Y-%m-%d')}'
+select phd.ticker_symbol, phd.price_date, dsp.high from daily_stock_prices dsp inner join phd on dsp.ticker_symbol=phd.ticker_symbol and dsp.price_date=phd.price_date order by phd.ticker_symbol
+SQL
+
+        end
       end
 
       def update_premarket_prices_previous_low(begin_date=Date.new(2014,1,1))

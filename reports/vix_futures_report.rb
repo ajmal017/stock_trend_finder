@@ -32,8 +32,8 @@ class VIXFuturesReport
     @report[:roll_yield] = @report[:vx1].to_f / @report[:vix].to_f - 1
     @report[:contango]   = @report[:vx2].to_f / @report[:vx1].to_f - 1
     @report[:contango_roll] = @report[:vx2].to_f / @report[:vix].to_f - 1
-    @report[:contango_1day_gain] = @report[:contango] / @report[:days_to_expiration].to_f
-    @report[:contango_1day_gain_pts] = (@report[:contango_1day_gain] + 1) * @report[:xiv]
+    @report[:contango_1day_gain] = @report[:contango] / @report[:days_in_term].to_f
+    @report[:contango_1day_gain_pts] = (@report[:contango_1day_gain]) * @report[:xiv]
 
     @report[:vx1_delta] = (((@report[:vx1] + 1).to_f / @report[:vx1].to_f) - 1) * @report[:vx1_mix] * @report[:xiv]
     @report[:vx_avg_14] = 1 / (14.to_f / @report[:vx_avg]) * @report[:xiv]
@@ -42,6 +42,7 @@ class VIXFuturesReport
     @report[:vx_avg_20] = 1 / (20.to_f / @report[:vx_avg]) * @report[:xiv]
     @report[:vx_avg_25] = 1 / (25.to_f / @report[:vx_avg]) * @report[:xiv]
     @report[:vx_avg_30] = 1 / (30.to_f / @report[:vx_avg]) * @report[:xiv]
+    @report[:vx_avg_40] = 1 / (40.to_f / @report[:vx_avg]) * @report[:xiv]
 
     @report
   end
