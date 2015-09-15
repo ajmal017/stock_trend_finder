@@ -1,3 +1,5 @@
+=render "note_dialog"
+
 .col-md-9
   #header
     #title
@@ -31,7 +33,6 @@
   .last-twit-placeholder
     =image_tag(asset_path("loading.gif"))
 
-
 .col-md-3
   .stocktwits-ticker-navigation
     = render partial: 'ticker_navigation'
@@ -39,3 +40,4 @@
     = render partial: 'setup_navigation'
 
 =render "load_twits_script"
+=render "edit_note_dialog_script"

@@ -606,7 +606,6 @@ where price_date < '#{begin_date.strftime('%Y-%m-%d')}' and high is not null
 group by ticker_symbol
 )
 update premarket_prices pmp set previous_high=(select dsp.high from phd inner join daily_stock_prices dsp on dsp.ticker_symbol=phd.ticker_symbol and dsp.price_date=phd.price_date where phd.ticker_symbol=pmp.ticker_symbol) where pmp.previous_high is null and pmp.price_date = '#{begin_date.strftime('%Y-%m-%d')}'
-select phd.ticker_symbol, phd.price_date, dsp.high from daily_stock_prices dsp inner join phd on dsp.ticker_symbol=phd.ticker_symbol and dsp.price_date=phd.price_date order by phd.ticker_symbol
 SQL
 
         end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150806141953) do
+ActiveRecord::Schema.define(version: 20150915033759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -293,6 +293,7 @@ ActiveRecord::Schema.define(version: 20150806141953) do
     t.boolean  "watching"
     t.string   "stocktwits_user_name", limit: 255
     t.integer  "call_result"
+    t.string   "note"
   end
 
   create_table "tickers", force: :cascade do |t|

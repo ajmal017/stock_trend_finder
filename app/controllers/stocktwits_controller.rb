@@ -27,6 +27,16 @@ class StocktwitsController < ApplicationController
     end
   end
 
+  def edit_note
+    head :bad_request  if params[:note].nil? || params[:id].nil?
+    @twit = Stocktwit.find(params[:id])
+    if @twit.update(note: params[:note])
+      render 'note_result_ok'
+    else
+      render 'note_result_error'
+    end
+  end
+
   def refresh
     Stocktwit.sync_twits
     redirect_to stocktwits_path

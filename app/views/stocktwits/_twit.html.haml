@@ -4,6 +4,9 @@
       ="#{twit.stocktwit_time} - #{twit.id}"
     .stocktwit-message-text
       =format_stocktwits_message(twit.message)
+    .stocktwit-message-note
+      -if twit.note
+        ="#{twit.note}"
     -if twit.call_result.nil?
       .stocktwit-message-call-result-buttons
         =render 'call_result_buttons', :twit=>twit

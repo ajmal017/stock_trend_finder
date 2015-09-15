@@ -397,16 +397,16 @@ module TDAmeritradeDataInterface
     of.close
 
     puts "Updating Premarket Previous Close Cache - #{Time.now}"
-    populate_premarket_previous_close NEW_TICKER_BEGIN_DATE
+    populate_premarket_previous_close date
 
     puts "Updating Premarket Previous High Cache - #{Time.now}"
-    populate_premarket_previous_high NEW_TICKER_BEGIN_DATE
+    populate_premarket_previous_high date
 
     puts "Updating Premarket Previous Low Cache - #{Time.now}"
-    populate_premarket_previous_low NEW_TICKER_BEGIN_DATE
+    populate_premarket_previous_low date
 
     puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
-    populate_premarket_average_volume_50day(NEW_TICKER_BEGIN_DATE)
+    populate_premarket_average_volume_50day(date)
 
     puts "Done"
   end
@@ -564,7 +564,7 @@ module TDAmeritradeDataInterface
 
   def self.run_prepopulate_daily_stock_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('44 7 * * MON-FRI') do
+    scheduler.cron('12 6 * * MON-FRI') do
       puts "Prepopulating daily_stock_quotes table: #{Time.now}"
       ActiveRecord::Base.connection_pool.with_connection do
         prepopulate_daily_stock_prices(Date.today)
