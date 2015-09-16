@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915131920) do
+ActiveRecord::Schema.define(version: 20150916135915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -326,7 +326,7 @@ ActiveRecord::Schema.define(version: 20150915131920) do
     t.boolean  "russell3000"
     t.datetime "date_removed"
     t.string   "note",                           limit: 255
-    t.decimal  "float"
+    t.decimal  "float",                                      precision: 15, scale: 2
     t.decimal  "institutional_holdings_percent"
     t.date     "hide_from_reports_until"
   end

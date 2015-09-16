@@ -599,7 +599,7 @@ module TDAmeritradeDataInterface
       puts "Memoizing premarket high, low, close, average volume - #{Time.now}"
       if is_market_day? Date.today
         ActiveRecord::Base.connection_pool.with_connection do
-          populate_premarket_memoized_fields(date: Date.today)
+          populate_premarket_memoized_fields(Date.today)
         end
       else
         puts "Market closed today, no real time quote download necessary"
