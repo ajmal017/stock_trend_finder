@@ -1,5 +1,5 @@
 # Utilities for commonly used programming tasks
-require 'market_data_utility/datetime_utilities'
+require 'market_data_utilities/datetime_utilities'
 
 class MarketDataUtility
   extend DateTimeUtilities

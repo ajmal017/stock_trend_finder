@@ -396,6 +396,9 @@ module TDAmeritradeDataInterface
     of.write(log)
     of.close
 
+    puts "Copying Memoized Premarket Previous Close, High, Low, and Average Daily Volumes - #{Time.now}"
+    copy_memoized_fields_to_premarket_prices date
+
     puts "Updating Premarket Previous Close Cache - #{Time.now}"
     populate_premarket_previous_close date
 
@@ -590,6 +593,22 @@ module TDAmeritradeDataInterface
     scheduler
   end
 
+  def self.run_premarket_memoization_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('0 5 * * MON-FRI') do
+      puts "Memoizing premarket high, low, close, average volume - #{Time.now}"
+      if is_market_day? Date.today
+        ActiveRecord::Base.connection_pool.with_connection do
+          populate_premarket_memoized_fields(date: Date.today)
+        end
+      else
+        puts "Market closed today, no real time quote download necessary"
+      end
+    end
+    puts "#{Time.now} Beginning premarket calculations memoization daemon..."
+    scheduler
+  end
+
   def self.run_afterhours_quotes_daemon
     scheduler = Rufus::Scheduler.new
     scheduler.cron('0 17,18,19,21 * * MON-FRI') do
@@ -732,6 +751,19 @@ module TDAmeritradeDataInterface
 
   def self.populate_premarket_average_volume_50day(begin_date=Date.today)
     ActiveRecord::Base.connection.execute update_premarket_prices_average_volume_50day(begin_date)
+  end
+
+  def self.populate_premarket_memoized_fields(date=Date.today)
+    ActiveRecord::Base.connection.execute "TRUNCATE TABLE memoized_fields"
+    ActiveRecord::Base.connection.execute insert_memoized_tickers(date)
+    ActiveRecord::Base.connection.execute update_memoized_premarket_average_volume_50day(date)
+    ActiveRecord::Base.connection.execute update_memoized_premarket_previous_high(date)
+    ActiveRecord::Base.connection.execute update_memoized_premarket_previous_low(date)
+    ActiveRecord::Base.connection.execute update_memoized_premarket_previous_close(date)
+  end
+
+  def self.copy_memoized_fields_to_premarket_prices(date=Date.today)
+    ActiveRecord::Base.connection.execute insert_memoized_fields_into_premarket_prices(date)
   end
 
   def self.populate_afterhours_intraday_close(begin_date=NEW_TICKER_BEGIN_DATE)

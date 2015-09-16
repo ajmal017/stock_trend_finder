@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915033759) do
+ActiveRecord::Schema.define(version: 20150915131920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,17 @@ ActiveRecord::Schema.define(version: 20150915033759) do
     t.string   "quarter",            limit: 255
     t.integer  "year"
     t.integer  "low_liquidity_days"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "memoized_fields", force: :cascade do |t|
+    t.string   "ticker_symbol"
+    t.date     "price_date"
+    t.decimal  "premarket_average_volume_50day", precision: 15, scale: 2
+    t.decimal  "premarket_previous_high",        precision: 15, scale: 2
+    t.decimal  "premarket_previous_low",         precision: 15, scale: 2
+    t.decimal  "premarket_previous_close",       precision: 15, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end

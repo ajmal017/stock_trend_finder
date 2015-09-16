@@ -744,6 +744,105 @@ where snapshot_time is not null
 SQL
       end
 
+      def insert_memoized_tickers(date)
+        <<SQL
+insert into memoized_fields (ticker_symbol, price_date)
+select symbol, '#{date.strftime('%Y-%m-%d')}'  from tickers t where t.scrape_data and not exists (select ticker_symbol from memoized_fields where ticker_symbol=t.symbol)
+SQL
+      end
+
+      def update_memoized_premarket_previous_high(date)
+        <<SQL
+update memoized_fields mpp
+set
+premarket_previous_high=
+(
+with previous_market_day as
+(
+	select max(price_date) as previous_market_day from daily_stock_prices where price_date<'#{date.strftime('%Y-%m-%d')}'
+)
+select high from daily_stock_prices dsp where dsp.ticker_symbol=mpp.ticker_symbol and price_date=(select previous_market_day from previous_market_day)
+)
+where price_date='#{date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+      def update_memoized_premarket_previous_low(date)
+        <<SQL
+update memoized_fields mpp
+set
+premarket_previous_low=
+(
+with previous_market_day as
+(
+	select max(price_date) as previous_market_day from daily_stock_prices where price_date<'#{date.strftime('%Y-%m-%d')}'
+)
+select low from daily_stock_prices dsp where dsp.ticker_symbol=mpp.ticker_symbol and price_date=(select previous_market_day from previous_market_day)
+)
+where price_date='#{date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+      def update_memoized_premarket_previous_close(date)
+        <<SQL
+update memoized_fields mpp
+set
+premarket_previous_close=
+(
+with previous_market_day as
+(
+	select max(price_date) as previous_market_day from daily_stock_prices where price_date<'#{date.strftime('%Y-%m-%d')}'
+)
+select close from daily_stock_prices dsp where dsp.ticker_symbol=mpp.ticker_symbol and price_date=(select previous_market_day from previous_market_day)
+)
+where price_date='#{date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+      def update_memoized_premarket_average_volume_50day(date)
+        <<SQL
+update memoized_fields mf set
+premarket_average_volume_50day=
+(
+	with price_dates as
+	(
+		select distinct price_date from daily_stock_prices where price_date < '#{date.strftime('%Y-%m-%d')}' order by price_date desc limit 50
+	),
+	min_price_date as
+	(
+		select min(price_date) from price_dates
+	)
+	select avg_volume from
+	(
+		select pp.ticker_symbol, avg(coalesce(pp.volume, 0)) as avg_volume
+		from price_dates pd
+		left join
+		(
+			select id, ticker_symbol, price_date, volume
+			from premarket_prices
+			where price_date >= (select * from min_price_date)
+		) as pp on pp.price_date=pd.price_date
+		group by pp.ticker_symbol
+	) as average_volume_premarket
+	where average_volume_premarket.ticker_symbol=mf.ticker_symbol
+)
+where price_date='#{date.strftime('%Y-%m-%d')}'
+SQL
+      end
+
+      def insert_memoized_fields_into_premarket_prices(date)
+        <<SQL
+update premarket_prices pp
+set
+previous_high=mf.premarket_previous_high,
+previous_low=mf.premarket_previous_low,
+previous_close=mf.premarket_previous_close,
+average_volume_50day=mf.premarket_average_volume_50day
+from memoized_fields mf
+where pp.price_date='#{date.strftime('%Y-%m-%d')}' and mf.price_date=pp.price_date and mf.ticker_symbol=pp.ticker_symbol
+SQL
+      end
+
     end
 
   end
