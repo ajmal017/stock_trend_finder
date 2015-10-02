@@ -445,7 +445,8 @@ select
   average_volume_50day as average_volume,
   '---' as volume_ratio,
   price_date,
-  p.updated_at
+  p.updated_at,
+  t.float
 from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -472,7 +473,8 @@ select
   average_volume_50day as average_volume,
   round(volume / average_volume_50day, 2) as volume_ratio,
   price_date,
-  p.updated_at
+  p.updated_at,
+  t.float
 from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and

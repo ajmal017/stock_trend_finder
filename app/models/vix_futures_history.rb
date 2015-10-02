@@ -1,8 +1,8 @@
-class VIXFuturesHistory < ActiveRecord::Base
-  include Capybara::DSL
+require 'market_data_pull/vix_central_screenshot'
 
+class VIXFuturesHistory < ActiveRecord::Base
   FUTURES_SYMBOLS=['^VIXJAN','^VIXFEB', '^VIXMAR','^VIXAPR','^VIXMAY','^VIXJUN','^VIXJUL','^VIXAUG','^VIXSEP','^VIXOCT','^VIXNOV','^VIXDEC']
-  VIXCENTRAL_URL='http://www.vixcentral.com/'
+  FUTURES_MONTH_LETTERS=%w(F G H J K M N Q U V X Z)
 
   serialize :futures_curve
 
@@ -12,7 +12,7 @@ class VIXFuturesHistory < ActiveRecord::Base
     f = f.drop(f.index(starting_month)).take(8) # take the first 10 symbols beginning with the starting month
 
     futures_curve = f.inject({}) do |futures_curve, symbol|
-      quote = Ystock.get_quote(symbol)
+      quote = Ystock.quote(symbol)
       if quote.is_a?(Hash) && quote.has_key?(:price)
         futures_curve[symbol] = quote[:price].to_f
         futures_curve
@@ -30,29 +30,17 @@ class VIXFuturesHistory < ActiveRecord::Base
     vfh = VIXFuturesHistory.create(snapshot_time: Time.now, VIX: vix, XIV: xiv, contango_percent: contango, futures_curve: futures_curve)
 
     if screenshot
-      vfh.update(screenshot_filename: import_vix_curve_screenshot)
+      vfh.update(screenshot_filename: VIXCentralScreenshot.new.download_screenshot)
     end
   end
 
   def self.import_vix
-    vix = Ystock.get_quote('^VIX')
+    vix = Ystock.quote('^VIX')
     vix.has_key?(:price) ? vix[:price].to_f : 0
   end
 
   def self.import_xiv
-    xiv = Ystock.get_quote('XIV')
+    xiv = Ystock.quote('XIV')
     xiv.has_key?(:price) ? xiv[:price].to_f : 0
-  end
-
-  def self.import_vix_curve_screenshot
-    Capybara.visit VIXCENTRAL_URL
-    sleep(7)
-    Capybara.save_screenshot(File.join(Rails.root, 'downloads', 'vixcentral_screenshots', next_screenshot_file))
-  end
-
-  private
-
-  def self.next_screenshot_file
-    "vixcentral_#{Time.now.strftime('%Y-%m-%d_%H%M%S')}.png"
   end
 end

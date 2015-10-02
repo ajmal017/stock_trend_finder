@@ -5,14 +5,14 @@
 %h2 Gapping Up, By Average Volume
 
 -if @report_volume_up.count > 0
-  %div Last Updated: #{@report_volume_up.first['updated_at']}
+  %div Last Updated: #{@report_volume_up.first['updated_at'].in_time_zone("US/Eastern")}
   %div Items: #{@report_volume_up.count}
 
 .report_date_form
   =report_date_form :afterhours
 
 .report-container
-  %table.table-bordered#premarket_volume_up{ style: "width: 700px;"}
+  %table.table-bordered#premarket_volume_up{ style: "width: 800px;"}
     %thead
       %th#index
       %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
@@ -21,6 +21,7 @@
       %th#volume{ style: "width: 100px;"} Volume (K)
       %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
       %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
+      %th#float{ style: "width: 100px;"} Float
       %th#hide{ style: "width: 100px;"} Hide
       %th#unscrape{ style: "width: 100px;"} Unscrape
     -@report_volume_up.each_with_index do |r, i|
@@ -32,6 +33,7 @@
         %td{ class: set_css_class(r, :volume) }= r['volume']
         %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
         %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
         %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
         %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
 
@@ -43,7 +45,7 @@
 
 
 .report-container
-  %table.table-bordered#premarket_percent{ style: "width: 700px;"}
+  %table.table-bordered#premarket_percent{ style: "width: 800px;"}
     %thead
       %th#index
       %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
@@ -52,6 +54,7 @@
       %th#volume{ style: "width: 100px;"} Volume (K)
       %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
       %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
+      %th#float{ style: "width: 100px;"} Float
       %th#hide{ style: "width: 100px;"} Hide
       %th#unscrape{ style: "width: 100px;"} Unscrape
     -@report_percent.each_with_index do |r, i|
@@ -63,6 +66,7 @@
         %td{ class: set_css_class(r, :volume) }= r['volume']
         %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
         %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
         %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
         %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
 
@@ -72,7 +76,7 @@
   %div Items: #{@report_volume_down.count}
 
 .report-container
-  %table.table-bordered#premarket_volume_down{ style: "width: 700px;"}
+  %table.table-bordered#premarket_volume_down{ style: "width: 800px;"}
     %thead
       %th#index
       %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
@@ -81,6 +85,7 @@
       %th#volume{ style: "width: 100px;"} Volume (K)
       %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
       %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
+      %th#float{ style: "width: 100px;"} Float
       %th#hide{ style: "width: 100px;"} Hide
       %th#unscrape{ style: "width: 100px;"} Unscrape
     -@report_volume_down.each_with_index do |r, i|
@@ -92,5 +97,6 @@
         %td{ class: set_css_class(r, :volume) }= r['volume']
         %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
         %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
         %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
         %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

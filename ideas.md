@@ -7,9 +7,9 @@
     - barrons-positive
     - fundamental-favorite
     - sector-specific tags, i.e. China, oil, cloud
+* Add reason tag to tickers table with unscrape_reason: acquisition, liquidity, delist
 
 VIX
-    - Add column to calculate average contango effect each day to come up with a cumulative point value contango impact
     - Download the historical VIX futures data from CBOT and put it into the database
         - Determine length of historical bouts of contango and anticipated effects on XIV
 
