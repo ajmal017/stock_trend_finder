@@ -55,6 +55,9 @@ class ReportsController < ApplicationController
 
   def active_stocks
     @report = run_query(TDAmeritradeDataInterface.select_active_stocks(@report_date))
+
+    @report_up   = @report.select { |r| r['pct_change'].to_f >= 0 }
+    @report_down = @report.select { |r| r['pct_change'].to_f < 0  }
   end
 
   def candle_row
