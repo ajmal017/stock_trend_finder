@@ -503,20 +503,36 @@ ticker_symbol in (select symbol from tickers where scrape_data=true)
 SQL
       end
 
-      def update_sma50
-        <<SQL
+      def update_sma50(date=nil)
+        if date.nil?
+          <<SQL
 update daily_stock_prices dsp
 set sma50=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 50) as daq), 2)
 where dsp.sma50 is null or dsp.snapshot_time is not null
 SQL
+        else
+          <<SQL
+update daily_stock_prices dsp
+set sma50=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 50) as daq), 2)
+where dsp.price_date='#{date.strftime('%Y-%m-%d')}' and (dsp.sma50 is null or dsp.snapshot_time is not null)
+SQL
+        end
       end
 
-      def update_sma200
-        <<SQL
+      def update_sma200(date=nil)
+        if date.nil?
+          <<SQL
 update daily_stock_prices dsp
 set sma200=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 200) as daq), 2)
 where dsp.price_date > '2014-01-01' and (dsp.sma200 is null or dsp.snapshot_time is not null)
 SQL
+        else
+          <<SQL
+update daily_stock_prices dsp
+set sma200=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 200) as daq), 2)
+where dsp.price_date='#{date.strftime('%Y-%m-%d')}' and (dsp.sma200 is null or dsp.snapshot_time is not null)
+SQL
+        end
       end
 
       def update_average_volume_50day(begin_date)

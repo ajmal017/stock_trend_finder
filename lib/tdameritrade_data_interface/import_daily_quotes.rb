@@ -306,11 +306,18 @@ module TDAmeritradeDataInterface
   def self.prepopulate_daily_stock_prices(prepopulate_date)
     DailyStockPrice.transaction do
       if is_market_day?(prepopulate_date)
+        puts "Prepopulating Daily Stock Prices for #{prepopulate_date}"
         puts "Prepopulating Previous Close, Previous High, Previous Low - #{Time.now}"
         ActiveRecord::Base.connection.execute insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
 
-        puts "Calculating Average Daily Volumes - #{Time.now}"
+        puts "Prepopulating Average Daily Volumes - #{Time.now}"
         populate_average_volume_50day(Date.today)
+
+        puts "Prepopulating SMA50 - #{Time.now}"
+        populate_sma50(prepopulate_date)
+
+        puts "Prepopulating SMA200 - #{Time.now}"
+        populate_sma200(prepopulate_date)
 
         puts "Done - #{Time.now}"
       else
@@ -711,11 +718,11 @@ module TDAmeritradeDataInterface
 
   end
 
-  def self.populate_sma50
+  def self.populate_sma50(date=Date.today)
 
     begin
       # Populate the first entry - sma13
-      ActiveRecord::Base.connection.execute update_sma50
+      ActiveRecord::Base.connection.execute update_sma50(date)
 
     rescue => e
       puts "#{e.message}"
@@ -724,11 +731,11 @@ module TDAmeritradeDataInterface
 
   end
 
-  def self.populate_sma200
+  def self.populate_sma200(date=Date.today)
 
     begin
       # Populate the first entry - sma13
-      ActiveRecord::Base.connection.execute update_sma200
+      ActiveRecord::Base.connection.execute update_sma200(date)
 
     rescue => e
       puts "#{e.message}"
