@@ -441,8 +441,8 @@ select
   last_trade,
   round(((last_trade / intraday_close) - 1) * 100, 2) as pct_change,
   intraday_close,
-  volume,
-  average_volume_50day as average_volume,
+  round(volume, 0) as volume,
+  round(average_volume_50day, 0) as average_volume,
   '---' as volume_ratio,
   price_date,
   p.updated_at,
@@ -514,7 +514,7 @@ SQL
           <<SQL
 update daily_stock_prices dsp
 set sma50=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 50) as daq), 2)
-where dsp.price_date='#{date.strftime('%Y-%m-%d')}' and (dsp.sma50 is null or dsp.snapshot_time is not null)
+where dsp.price_date='#{date.strftime('%Y-%m-%d')}' and (dsp.sma50 is null)
 SQL
         end
       end
@@ -530,7 +530,7 @@ SQL
           <<SQL
 update daily_stock_prices dsp
 set sma200=round((select avg(close) from (select close from daily_stock_prices da where da.ticker_symbol=dsp.ticker_symbol and da.price_date <= dsp.price_date order by da.price_date desc limit 200) as daq), 2)
-where dsp.price_date='#{date.strftime('%Y-%m-%d')}' and (dsp.sma200 is null or dsp.snapshot_time is not null)
+where dsp.price_date='#{date.strftime('%Y-%m-%d')}' and (dsp.sma200 is null)
 SQL
         end
       end

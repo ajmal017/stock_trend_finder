@@ -810,10 +810,10 @@ module TDAmeritradeDataInterface
       #populate_ema13(Date.today)
 
       puts "Calculating SMA50's - #{Time.now}"
-      populate_sma50
+      populate_sma50(Date.today)
 
       puts "Calculating SMA200's - #{Time.now}"
-      populate_sma200
+      populate_sma200(Date.today)
 
       puts "Done"
     end

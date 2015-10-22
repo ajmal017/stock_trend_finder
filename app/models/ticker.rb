@@ -31,8 +31,12 @@ class Ticker < ActiveRecord::Base
     end
   end
 
-  def self.get_float(symbol)
+  def self.float(symbol)
     Ticker.find_by(symbol: symbol).float.to_s
+  end
+
+  def self.avg_volume(symbol)
+    DailyStockPrice.where(ticker_symbol: symbol).order(price_date: :desc).first.average_volume_50day.to_s
   end
 
   def self.add(symbol, company_name, exchange)

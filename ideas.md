@@ -29,7 +29,9 @@ Stocktwits Report
     - ExternalMarketData module
         - \#import_daily_quotes(date)
         - TDAmeritradeInterface
-            
-        - YahooInterface
-            - VIXFutures
+
+Ticker List
+    - Show 12-mo dividend yield
+    - Allow it to replace the tickers Excel sheet
+    - Tags with each ticker
             
