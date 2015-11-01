@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  earnings_date: 2015-10-30
+  before_the_close: false
+  tickers: MyString
+
+two:
+  earnings_date: 2015-10-30
+  before_the_close: false
+  tickers: MyString

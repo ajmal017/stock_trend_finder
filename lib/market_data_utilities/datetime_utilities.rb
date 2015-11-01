@@ -27,6 +27,16 @@ module DateTimeUtilities
     days_between
   end
 
+  def next_market_day(current_market_date=Date.today)
+    f=File.join(Dir.pwd, 'downloads', 'market_days.csv')
+    File.open(f) do |f|
+      f.any? do |line|
+        line_date = Date.strptime(line.strip, '%m/%d/%y')
+        return line_date if line_date > current_market_date
+      end
+    end
+  end
+
   def time_strip_date(time)
     time.to_r / 86400 % 1
   end

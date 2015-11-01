@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916135915) do
+ActiveRecord::Schema.define(version: 20151030043052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,14 @@ ActiveRecord::Schema.define(version: 20150916135915) do
   end
 
   add_index "dividends", ["ticker_id", "issue_date"], name: "index_dividends_on_ticker_id_and_issue_date", unique: true, using: :btree
+
+  create_table "earnings_days", force: :cascade do |t|
+    t.date     "earnings_date"
+    t.boolean  "before_the_open"
+    t.string   "tickers"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "gap_up_simulation_trades", force: :cascade do |t|
     t.integer  "gap_up_id"

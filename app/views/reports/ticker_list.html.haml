@@ -5,6 +5,7 @@
 
 
 .report-container
+
   %table.table-bordered#ticker_list{ style: "width: 700px;"}
     %thead
       %th#index
@@ -23,5 +24,9 @@
         %td{ class: set_css_class(r, :company_name) }= r['company_name']
         %td{ class: set_css_class(r, :exchange) }= r['exchange']
         %td{ class: set_css_class(r, :float) }= r['float'].to_f.round(2)
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['symbol']), remote: true, method: :patch
+        -if r['symbol'].size > 0
+          %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['symbol']), remote: true, method: :patch
+          %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['symbol']), remote: true, method: :patch
+        -else
+          %td{ class: set_css_class(r, :hide) }
+          %td{ class: set_css_class(r, :unscrape) }
