@@ -586,7 +586,7 @@ module TDAmeritradeDataInterface
 
   def self.run_premarket_quotes_daemon
     scheduler = Rufus::Scheduler.new
-    scheduler.cron('9,28,40,59 8 * * MON-FRI') do
+    scheduler.cron('4,25,40,59 8 * * MON-FRI') do
       puts "Premarket Quote Import: #{Time.now}"
       if is_market_day? Date.today
         ActiveRecord::Base.connection_pool.with_connection do

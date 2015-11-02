@@ -17,7 +17,7 @@ PATH
 PATH
   remote: ~/Development/gem-development/ystock
   specs:
-    ystock (0.4.12)
+    ystock (0.4.13)
 
 GEM
   remote: https://rubygems.org/
