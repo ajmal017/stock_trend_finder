@@ -1,0 +1,34 @@
+%h1 Earnings Calendar
+
+.report_date_form
+  =report_date_form :earnings
+
+-@report.each do |report_group|
+
+  %h2= "#{report_group[:earnings_date]} #{report_group[:before_after]}"
+
+  .report-container
+    %table.table-bordered#bullgaps{ style: "width: 930px;"}
+      %thead
+        %th#index
+        %th#ticker-symbol{ style: "width: 80px;"} Ticker
+        %th#company-name{ style: "width: 150px;"} Company
+        %th#category{ style: "width: 100px;"} Category
+        %th#last-trade{ style: "width: 100px;"} Last
+        %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
+        %th#float{ style: "width: 100px;"} Float
+        %th#short-interest{ style: "width: 100px;"} Short
+        %th#hide{ style: "width: 100px;"} Hide
+        %th#unscrape{ style: "width: 100px;"} Unscrape
+      -report_group[:data].each_with_index do |r, i|
+        %tr{ id: r['ticker_symbol'] }
+          %td= i+1
+          %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+          %td{ class: set_css_class(r, :company_name) }= r['company_name']
+          %td{ class: set_css_class(r, :category) }= r['category']
+          %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+          %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+          %td{ class: set_css_class(r, :float) }= r['float']
+          %td{ class: set_css_class(r, :short_interest) }= r['short_interest']
+          %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+          %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

@@ -12,8 +12,6 @@ class Ticker < ActiveRecord::Base
   validates_uniqueness_of :symbol
 
   scope :watching, ->{ where(scrape_data: true) }
-  scope :tracking_gap_ups, -> { where(track_gap_up: true) }
-  scope :russell3000, -> { where(russell3000: true) }
 
   def self.scrape?(symbol)
     Ticker.find_by(symbol: symbol).scrape_data

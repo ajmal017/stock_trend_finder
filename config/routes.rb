@@ -22,7 +22,7 @@ StockTrendFinder::Application.routes.draw do
     get 'premarket'
     get 'gaps'
     get 'afterhours'
-    #get 'ema13_breaks'  Obsolete for now. But keeping structure in place just in case I find a use for it.
+    get 'earnings'
     get 'sma50_breaks'
     get 'sma200_breaks'
     get 'candle_row'

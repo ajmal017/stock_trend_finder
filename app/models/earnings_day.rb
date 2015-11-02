@@ -11,7 +11,7 @@ class EarningsDay < ActiveRecord::Base
       EarningsDay.create(
             before_the_open: false,
             earnings_date: date,
-            tickers: parsed_earnings[:after_close_today]
+            tickers: parsed_earnings[:after_close_today].gsub(' ', '')
       )
     end
 
@@ -19,7 +19,7 @@ class EarningsDay < ActiveRecord::Base
       EarningsDay.create(
           before_the_open: true,
           earnings_date: next_market_day(date),
-          tickers: parsed_earnings[:before_open_tomorrow]
+          tickers: parsed_earnings[:before_open_tomorrow].gsub(' ', '')
       )
     end
   end

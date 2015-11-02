@@ -87,6 +87,19 @@ class ReportsController < ApplicationController
     @report_volume_down = @report_volume.select { |r| r['pct_change'].to_f < 0 }
   end
 
+  # What I want on earnings report:
+  # HEADING: DATE / BEFORE_OR_AFTER MARKET
+  # - Ticker
+  # - Name
+  # - Category
+  # - Last Price
+  # - Average Daily Volume
+  # - Float
+  # - Short interest (ratio/% of float)
+  def earnings
+    @report = build_upcoming_earnings_report
+  end
+
 private
   def run_query(qry)
     ActiveRecord::Base.connection.execute qry
@@ -102,5 +115,41 @@ private
 
   def set_vix_contango_reading
     @vix = VIXFuturesHistory.last
+  end
+
+  def build_upcoming_earnings_report
+    @report = []
+    EarningsDay
+        .where("earnings_date <= ?", @report_date)
+        .order(earnings_date: :desc, before_the_open: :desc)
+        .last(6)
+        .each do |earnings_day|
+          report_group = {
+              earnings_date: earnings_day.earnings_date,
+              before_after: earnings_day.before_the_open? ? "Before the Open" : "After the Close",
+              data: []
+          }
+          ticker_list = earnings_day.tickers.split(',')
+          tickers = Ticker.where(symbol: ticker_list).order(:symbol)
+          last_stock_prices = DailyStockPrice
+                              .where(ticker_symbol: ticker_list, price_date: DailyStockPrice.most_recent_date)
+
+          tickers.each do |ticker|
+            dsp = last_stock_prices.select { |lsp| lsp.ticker_symbol==ticker.symbol }.try(:first)
+
+            ticker_properties={}
+            ticker_properties['ticker_symbol'] = ticker.symbol
+            ticker_properties['company_name'] = ticker.company_name
+            ticker_properties['category'] = '' # I haven't created category tags yet
+            ticker_properties['last_trade'] = dsp.try(:close).try(:to_s)
+            ticker_properties['average_volume'] = dsp.try(:average_volume_50day).try(:to_s)
+            ticker_properties['float'] = ticker.float.to_s
+            ticker_properties['short_interest'] = ''  # Not implemented yet
+
+            report_group[:data] << ticker_properties
+          end
+          @report << report_group
+    end
+    @report
   end
 end
