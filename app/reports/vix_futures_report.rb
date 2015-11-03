@@ -44,7 +44,7 @@ class VIXFuturesReport
     @report[:vx_avg_30] = 1 / (30.to_f / @report[:vx_avg]) * @report[:xiv]
     @report[:vx_avg_40] = 1 / (40.to_f / @report[:vx_avg]) * @report[:xiv]
 
-    @report
+    @report.map { |k,v| [k, v.round(2).to_s] }.to_h
   end
 
   private

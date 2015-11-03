@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102141730) do
+ActiveRecord::Schema.define(version: 20151103041409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -216,6 +216,16 @@ ActiveRecord::Schema.define(version: 20151102141730) do
     t.decimal  "volume",                    precision: 15
   end
 
+  create_table "short_interest_histories", force: :cascade do |t|
+    t.string   "ticker_symbol"
+    t.date     "as_of_date"
+    t.integer  "shares_short"
+    t.decimal  "shares_short_pct_float", precision: 15, scale: 3
+    t.decimal  "short_ratio",            precision: 15, scale: 3
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
   create_table "stock_prices15_minutes", force: :cascade do |t|
     t.integer  "ticker_id"
     t.string   "ticker_symbol",         limit: 255
@@ -338,6 +348,9 @@ ActiveRecord::Schema.define(version: 20151102141730) do
     t.decimal  "institutional_holdings_percent"
     t.date     "hide_from_reports_until"
     t.integer  "category_tag"
+    t.date     "short_interest_date"
+    t.decimal  "short_ratio",                                precision: 15, scale: 3
+    t.decimal  "short_pct_float",                            precision: 15, scale: 3
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree

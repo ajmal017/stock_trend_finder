@@ -121,7 +121,7 @@ private
     @report = []
     EarningsDay
         .where("earnings_date <= ?", @report_date)
-        .order(earnings_date: :desc, before_the_open: :desc)
+        .order(earnings_date: :desc, before_the_open: :asc)
         .last(6)
         .each do |earnings_day|
           report_group = {
