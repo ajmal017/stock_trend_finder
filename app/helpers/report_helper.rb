@@ -49,6 +49,9 @@ module ReportHelper
           css_class << "bold "
         end
       when :float then
+        # Format how it is displayed into millions from thousands of shares
+        report['float'] = '%.2f' % (BigDecimal(report['float']) / 1000).truncate(2)
+
         if (report['float'.to_f < 15] && (report['float'].to_f) > 0)
           css_class << 'darkred-bg '
         elsif (report['float'].to_f < 100) && (report['float'].to_f > 0)

@@ -9,8 +9,12 @@
     font-size: 9pt;
     th, td {
       padding: 2px;
+      //text-align: right;
+
     }
+    //th#ticker-symbol { text-align: right; }
   }
+
 
   .table-bordered > tbody > tr > td {
     border: 0px;
@@ -22,6 +26,8 @@
     border-bottom: 1px solid $table-border-color;
   }
 }
+
+.align-right { text-align: right; }
 
 .green {
   color: greenyellow;

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103041409) do
+ActiveRecord::Schema.define(version: 20151105035431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,8 @@ ActiveRecord::Schema.define(version: 20151103041409) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
+
+  add_index "earnings_days", ["earnings_date", "before_the_open"], name: "index_earnings_days_date", unique: true, using: :btree
 
   create_table "gap_up_simulation_trades", force: :cascade do |t|
     t.integer  "gap_up_id"
@@ -218,13 +220,15 @@ ActiveRecord::Schema.define(version: 20151103041409) do
 
   create_table "short_interest_histories", force: :cascade do |t|
     t.string   "ticker_symbol"
-    t.date     "as_of_date"
+    t.date     "short_interest_date"
     t.integer  "shares_short"
-    t.decimal  "shares_short_pct_float", precision: 15, scale: 3
-    t.decimal  "short_ratio",            precision: 15, scale: 3
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.decimal  "short_pct_float",     precision: 15, scale: 3
+    t.decimal  "short_ratio",         precision: 15, scale: 3
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
   end
+
+  add_index "short_interest_histories", ["ticker_symbol", "short_interest_date"], name: "index_on_short_interest_histories_ticker_sid", unique: true, using: :btree
 
   create_table "stock_prices15_minutes", force: :cascade do |t|
     t.integer  "ticker_id"

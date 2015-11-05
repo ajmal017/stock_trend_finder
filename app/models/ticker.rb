@@ -61,12 +61,22 @@ class Ticker < ActiveRecord::Base
     end
   end
 
+  ########### CONVENIENCE METHODS FOR STOCK PROPERTIES ###########
+
+  def self.avg_volume(symbol)
+    DailyStockPrice.where(ticker_symbol: symbol).order(price_date: :desc).first.average_volume_50day.to_s
+  end
+
   def self.float(symbol)
     Ticker.find_by(symbol: symbol).float.to_s
   end
 
-  def self.avg_volume(symbol)
-    DailyStockPrice.where(ticker_symbol: symbol).order(price_date: :desc).first.average_volume_50day.to_s
+  def self.short(symbol)
+    t = Ticker.find_by(symbol: symbol).short
+  end
+
+  def short
+    "#{short_ratio} | #{((short_pct_float || 0) * 100).round}%"
   end
 
   def self.add(symbol, company_name, exchange)

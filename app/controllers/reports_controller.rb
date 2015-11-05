@@ -120,9 +120,9 @@ private
   def build_upcoming_earnings_report
     @report = []
     EarningsDay
-        .where("earnings_date <= ?", @report_date)
+        .where("earnings_date <= ?", @report_date + 1)
         .order(earnings_date: :desc, before_the_open: :asc)
-        .last(6)
+        .first(6)
         .each do |earnings_day|
           report_group = {
               earnings_date: earnings_day.earnings_date,
@@ -144,7 +144,7 @@ private
             ticker_properties['last_trade'] = dsp.try(:close).try(:to_s)
             ticker_properties['average_volume'] = dsp.try(:average_volume_50day).try(:to_s)
             ticker_properties['float'] = ticker.float.to_s
-            ticker_properties['short_interest'] = ''  # Not implemented yet
+            ticker_properties['short_interest'] = ticker.short  # Not implemented yet
 
             report_group[:data] << ticker_properties
           end

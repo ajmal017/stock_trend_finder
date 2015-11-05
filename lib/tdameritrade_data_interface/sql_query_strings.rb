@@ -414,6 +414,8 @@ select
   round(volume, 0) as volume,
   round(average_volume_50day, 0) as average_volume,
   round(volume / average_volume_50day, 2) as volume_ratio,
+  round(t.short_ratio, 2) as short_ratio,
+  round(t.short_pct_float * 100) as short_pct_float,
   price_date,
   p.updated_at,
   t.float
@@ -426,7 +428,8 @@ volume is not null and
 previous_close is not null and
 average_volume_50day is not null and
 average_volume_50day > 0 and
-(((last_trade / previous_close) - 1) * 100 < -2 or ((last_trade / previous_close) - 1) * 100 > 2) and
+(((last_trade / previous_close) - 1) * 100 < -2 or ((last_trade / previous_close) - 1) * 100 > 2
+   or ()) and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{report_date.strftime('%Y-%m-%d')}'
 order by volume_ratio desc

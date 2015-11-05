@@ -20,6 +20,7 @@ Reports
         * Graph of stocks above/below 50DMA over time
         * Sector/Category tags?
         * Order by tag
+    - Refactor report column builder
 
     
 Stocktwits Report
@@ -40,12 +41,22 @@ Ticker List
     
     
     
-Today after the close look for the following companies to report:
+    Good stuff:
+sims = DailyStockPrice.where.not(snapshot_time: nil).pluck(:ticker_symbol).uniq  # gets all problematic tickers
+quotes = c.get_quote(sims)
+qm = quotes.map { |q| [q[:symbol], q[:description], q[:error]] }
+filter_invalid = qm.select { |qm| qm[2] =~ /Invalid/ }
+filter_not_found = qm.select { |qm| qm[1] =~ /not found/ }
+filter_no_name = qm.select { |qm| qm[1].length==0 }
+filter_acquisition_unit = qm.select { |qm| qm[0] =~ /....U/ } 
+(filter_invalid + filter_not_found + filter_no_name).each { |f| Ticker.unscrape f[0] }
 
-PSMT, DGII, HWAY, NANO, RGA, RSG, SBUX, WSFS, BIDU, EMN, ARI, ATR, CALX, CSCD, OIS, VR, WRI, BXP, EHTH, IXYS, KRG, MEP, NBIX, RKUS, SCTY, THRM, ATEN, AUY, AXTI, BCOR, BCOV, BSAC, BVN, CATM, CLW, COHU, COLM, CPSI, CPT, CRAY, CTRL, CXP, DCT, DECK, DGI, DLR, EA, ESS, EXPE, FE, FIX, FLR, FLS, FPO, FRGI, GB, GSIT, ICFI, IM, IMMR, ISBC, KAMN, LEG, LNKD, LSCC, MGRC, MOBL, MOH, MTSN, MXWL, NR, NSR, OMCL, OUTR, PCCC, PDFS, QTM, SAM, SGEN, SQI, TMST, TNAV, TNDM, TSYS, VVI, WU, WWWW, YRCW, MOD, ON, BMRN, EYES, FSLR, FWM, GNW, LC, PRMW, TRMB, ECOL, CENX, CVCO, EXTR, FLDM, IMPV, NUS, SAAS, SEM, SHO, TSRO, EPAY, BGG, AZPN, ARAY, OSIS, SCSC, TUES
-Tomorrow before the open look for the following companies to report:
-
-GBX, AAN, ABBV, COL, MCO, LECO, CHH, ETN, EXC, IRT, TYPE, BCO, BIN, BUD, CL, CPN, EGO, IDCC, IRM, IRMD, PNW, SZYM, TOWR, UFS, WY, AON, AXL, BPL, CBOE, CMCO, CVX, HPY, IMO, ITT, KCG, LM, LPNT, MGI, NWL, PEG, PFS, PNM, PSX, PSXP, RUTH, STX, SWC, TDS, USM, VRTS, WETF, XOM, ARCB, GWR, CVS, HCN, STE, LPG, VLP, MYL
-    
-    
+sims.each do |symbol|
+   puts "Unscrape #{symbol}?"
+   r = gets
+   if r.index('y')
+     Ticker.unscrape symbol
+     puts "Removing #{symbol}"
+   end  
+end  
             
