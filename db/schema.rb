@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105035431) do
+ActiveRecord::Schema.define(version: 20151118035941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,45 +80,6 @@ ActiveRecord::Schema.define(version: 20151105035431) do
   end
 
   add_index "earnings_days", ["earnings_date", "before_the_open"], name: "index_earnings_days_date", unique: true, using: :btree
-
-  create_table "gap_up_simulation_trades", force: :cascade do |t|
-    t.integer  "gap_up_id"
-    t.integer  "simulation_id"
-    t.integer  "ticker_id"
-    t.string   "ticker_symbol",   limit: 255
-    t.date     "open_date"
-    t.date     "close_date"
-    t.decimal  "value_begin"
-    t.decimal  "value_end"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "portfolio_value"
-    t.decimal  "cash"
-    t.decimal  "invested_value"
-    t.decimal  "trade_open"
-    t.decimal  "trade_close"
-  end
-
-  create_table "gap_ups", force: :cascade do |t|
-    t.integer  "ticker_id"
-    t.string   "ticker_symbol",             limit: 255
-    t.date     "price_date"
-    t.decimal  "open"
-    t.decimal  "high"
-    t.decimal  "low"
-    t.decimal  "close"
-    t.decimal  "previous_close"
-    t.decimal  "previous_high"
-    t.decimal  "previous_low"
-    t.decimal  "open_pct_of_previous_high"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "strategy_number"
-    t.decimal  "trade_outcome"
-    t.integer  "week"
-    t.decimal  "last_year_close"
-    t.decimal  "pct_of_last_year_close"
-  end
 
   create_table "low_liquidity_quarters", force: :cascade do |t|
     t.integer  "ticker_id"
@@ -226,6 +187,7 @@ ActiveRecord::Schema.define(version: 20151105035431) do
     t.decimal  "short_ratio",         precision: 15, scale: 3
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
+    t.decimal  "float"
   end
 
   add_index "short_interest_histories", ["ticker_symbol", "short_interest_date"], name: "index_on_short_interest_histories_ticker_sid", unique: true, using: :btree
@@ -329,6 +291,18 @@ ActiveRecord::Schema.define(version: 20151105035431) do
     t.string   "note"
   end
 
+  create_table "ticker_notes", force: :cascade do |t|
+    t.integer  "ticker_id"
+    t.string   "ticker_symbol"
+    t.date     "note_date"
+    t.string   "note_type"
+    t.text     "note_text"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "ticker_notes", ["ticker_symbol"], name: "index_ticker_notes_on_ticker_symbol", using: :btree
+
   create_table "tickers", force: :cascade do |t|
     t.string   "symbol",                         limit: 255
     t.string   "company_name",                   limit: 255
@@ -358,24 +332,6 @@ ActiveRecord::Schema.define(version: 20151105035431) do
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree
-
-  create_table "trade_positions", force: :cascade do |t|
-    t.integer  "gap_up_id"
-    t.date     "trade_date"
-    t.string   "position",      limit: 255
-    t.decimal  "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.decimal  "price"
-    t.string   "reason",        limit: 255
-    t.string   "ticker_symbol", limit: 255
-    t.date     "close_date"
-    t.decimal  "close_value"
-    t.integer  "ticker_id"
-    t.decimal  "close_price"
-  end
-
-  add_index "trade_positions", ["gap_up_id", "position"], name: "index_trade_positions_on_gap_up_id_and_position", using: :btree
 
   create_table "vix_futures_histories", force: :cascade do |t|
     t.datetime "snapshot_time"

@@ -14,7 +14,6 @@ class TickerFloatDataPull
         end
 
         unless q[:short_ratio].nil? || BigDecimal.new(q[:short_ratio])==0
-          binding.pry
           dsp = DailyStockPrice.try(:find_by, ticker_symbol: q[:symbol], price_date: short_as_of_date)
           if dsp
             shares_short = BigDecimal.new(q[:short_ratio]) * dsp.average_volume_50day
@@ -26,8 +25,24 @@ class TickerFloatDataPull
               short_ratio: q[:short_ratio],
               short_pct_float: short_pct_float,
               shares_short: shares_short,
-              short_interest_date: short_as_of_date
+              short_interest_date: short_as_of_date,
+              float: float
           )
+        end
+      end
+    end
+  end
+
+  def self.update_floats
+    Ticker.watching.pluck(:symbol).each_slice(200) do |tickers|
+      quotes = Ystock.quote(tickers)
+      quotes.each do |q|
+        float = 0
+        unless q[:float].nil? || q[:float] =~ /N\/A/
+          float = BigDecimal(q[:float])
+          float = float / 1000 if float > 0
+
+          Ticker.update(Ticker.find_by(symbol: q[:symbol]), float: float)
         end
       end
     end

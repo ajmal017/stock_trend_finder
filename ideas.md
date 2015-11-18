@@ -21,6 +21,8 @@ Reports
         * Sector/Category tags?
         * Order by tag
     - Refactor report column builder
+    - Earnings report
+        * Have a "not interested" action
 
     
 Stocktwits Report

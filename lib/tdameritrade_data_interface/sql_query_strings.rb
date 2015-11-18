@@ -428,8 +428,7 @@ volume is not null and
 previous_close is not null and
 average_volume_50day is not null and
 average_volume_50day > 0 and
-(((last_trade / previous_close) - 1) * 100 < -2 or ((last_trade / previous_close) - 1) * 100 > 2
-   or ()) and
+(((last_trade / previous_close) - 1) * 100 < -2 or ((last_trade / previous_close) - 1) * 100 > 2) and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{report_date.strftime('%Y-%m-%d')}'
 order by volume_ratio desc

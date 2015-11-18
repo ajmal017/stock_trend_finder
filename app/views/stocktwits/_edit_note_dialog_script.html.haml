@@ -13,5 +13,5 @@
           note: note_text,
 
 
-  $('.message-call-result-buttons img.icon-note').on "click", ->
-    edit_twit_note($(this).parent().attr('data-twit-id'))
+  $(document).on("click", 'img.icon-note', () ->
+    edit_twit_note($(this).parent().attr('data-twit-id')))

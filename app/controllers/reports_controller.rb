@@ -118,6 +118,7 @@ private
   end
 
   def build_upcoming_earnings_report
+    # TODO this report should be a function of the model
     @report = []
     EarningsDay
         .where("earnings_date <= ?", @report_date + 1)
@@ -130,7 +131,7 @@ private
               data: []
           }
           ticker_list = earnings_day.tickers.split(',')
-          tickers = Ticker.where(symbol: ticker_list).order(:symbol)
+          tickers = Ticker.where(symbol: ticker_list, scrape_data: true).order(:symbol)
           last_stock_prices = DailyStockPrice
                               .where(ticker_symbol: ticker_list, price_date: DailyStockPrice.most_recent_date)
 
