@@ -1,75 +1,15 @@
 %h1 Gap Up / Gap Down
 
-=render partial: 'vix_contango'
-
 %h2 Bullish Gaps
 
 -if @report_bullgaps.count > 0
   %div Last Updated: #{@report_bullgaps.first['snapshot_time'] || @report_bullgaps.first['price_date']}
-  %div Items: #{@report_bullgaps.count}
 
 .report_date_form
   =report_date_form :gaps
 
-.report-container
-  %table.table-bordered#bullgaps{ style: "width: 900px;"}
-    %thead
-      %th#index
-      %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
-      %th#last-trade{ style: "width: 100px;"} Last
-      %th#gap-percent{ style: "width: 100px;"} %Gap
-      %th#volume{ style: "width: 100px;"} Volume (K)
-      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
-      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
-      %th#float{ style: "width: 100px;"} Float
-      %th#float-percent{ style: "width: 100px;"} Float %
-      %th#hide{ style: "width: 100px;"} Hide
-      %th#unscrape{ style: "width: 100px;"} Unscrape
-    -@report_bullgaps.each_with_index do |r, i|
-      %tr{ id: r['ticker_symbol'] }
-        %td= i+1
-        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
-        %td{ class: set_css_class(r, :gap_percent) }= r['gap_pct']
-        %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
-        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
-        %td{ class: set_css_class(r, :float) }= r['float']
-        %td{ class: set_css_class(r, :float_percent) }= (r['volume'].to_f / (r['float'].to_f * 1000) * 100).round(2).to_s + '%' if r['volume'].to_f > 0 && r['float'].to_f > 0
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+=render partial: "report_table", locals: { report: @report_bullgaps, report_name: "bullgaps", fields: [:ticker_symbol, :last_trade, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }
 
 %h2 Bearish Gaps
 
--if @report_beargaps.count > 0
-  %div Last Updated: #{@report_beargaps.first['quote_time']}
-  %div Items: #{@report_beargaps.count}
-
-
-.report-container
-  %table.table-bordered#beargaps{ style: "width: 900px;"}
-    %thead
-      %th#index
-      %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
-      %th#last-trade{ style: "width: 100px;"} Last
-      %th#gap-percent{ style: "width: 100px;"} %Gap
-      %th#volume{ style: "width: 100px;"} Volume (K)
-      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
-      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
-      %th#float{ style: "width: 100px;"} Float
-      %th#float-percent{ style: "width: 100px;"} Float %
-      %th#hide{ style: "width: 100px;"} Hide
-      %th#unscrape{ style: "width: 100px;"} Unscrape
-    -@report_beargaps.each_with_index do |r, i|
-      %tr{ id: r['ticker_symbol'] }
-        %td= i+1
-        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
-        %td{ class: set_css_class(r, :gap_percent) }= r['gap_pct']
-        %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
-        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
-        %td{ class: set_css_class(r, :float) }= r['float']
-        %td{ class: set_css_class(r, :float_percent) }= (r['volume'].to_f / (r['float'].to_f * 1000) * 100).round(2).to_s + '%' if r['volume'].to_f > 0 && r['float'].to_f > 0
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+=render partial: "report_table", locals: { report: @report_beargaps, report_name: "bullgaps", fields: [:ticker_symbol, :last_trade, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }

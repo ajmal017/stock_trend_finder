@@ -1,0 +1,43 @@
+.report-container
+  %table.table-bordered{ id: report_name, style: "width: #{fields.count * 100 - 25}px;" }
+    %thead
+      %th#index
+      %th#ticker-symbol{ style: "width: 100px;"} Symbol
+      -if fields.include?(:company_name)
+        %th#last-trade.rjust{ style: "width: 200px;"}
+      %th#last-trade.rjust{ style: "width: 50px;"} Last
+      -if fields.include?(:gap_percent)
+        %th#gap-percent.rjust{ style: "width: 100px;"} % Gap
+      -if fields.include?(:pct_change)
+        %th#percent-change.rjust{ style: "width: 100px;"} % Change
+      -if fields.include?(:volume)
+        %th#volume.rjust{ style: "width: 100px;"} Volume (K)
+      %th#average-volume.rjust{ style: "width: 100px;"} Avg Vol (K)
+      -if fields.include?(:volume_ratio)
+        %th#volume-ratio.rjust{ style: "width: 100px;"} Volume Ratio
+      %th#short-ratio.rjust{ style: "width: 125px;"} Short Ratio
+      %th#float.rjust{ style: "width: 100px;"} Float
+      -if fields.include?(:float_pct)
+        %th#float-percent.rjust{ style: "width: 100px;"} Float %
+      %th#actions{ style: "width: 100px; padding-left: 15px;"} Actions
+    -report.each_with_index do |r, i|
+      %tr{ id: r['ticker_symbol'] }
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        -if fields.include?(:company_name)
+          %td{ class: set_css_class(r, :company_name) }= r['company_name']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        -if fields.include?(:gap_percent)
+          %td{ class: set_css_class(r, :gap_percent)}= r['gap_pct']
+        -if fields.include?(:pct_change)
+          %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        -if fields.include?(:volume)
+          %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        -if fields.include?(:volume_ratio)
+          %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :short_ratio) }= raw(ReportPresenter.display_short(r['short_ratio'], r['short_pct_float']))
+        %td{ class: set_css_class(r, :float) }= r['float']
+        -if fields.include?(:float_pct)
+          %td{ class: set_css_class(r, :float_percent) }= format("%.2f", r['volume'].to_f / (r['float'].to_f * 1000) * 100) + '%' if r['volume'].to_f > 0 && r['float'].to_f > 0
+        %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

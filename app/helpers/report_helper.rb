@@ -1,4 +1,6 @@
 module ReportHelper
+  RJUST_FIELDS=[:last_trade, :pct_change, :gap_percent, :float, :float_percent, :volume, :volume_ratio, :average_volume, :short_ratio]
+
   def report_date_form(page)
     s = form_tag "/reports/#{page}", method: :get, authenticity_token: false do
       b = text_field_tag :report_date, @report_date.strftime('%m/%d/%Y')
@@ -12,8 +14,9 @@ module ReportHelper
     "background-color: red" if contango_percent < 1
   end
 
+  # TODO move this method into the presenter
   def set_css_class(report, field)
-    css_class = ""
+    css_class = "monospaced "
     if report['pct_change'].to_f > 0
       css_class << "green "
     elsif report['pct_change'].to_f < 0
@@ -26,6 +29,7 @@ module ReportHelper
       css_class << "red "
     end
 
+    css_class << "rjust " if RJUST_FIELDS.include?(field)
 
     case field
       when :pct_change
@@ -59,6 +63,7 @@ module ReportHelper
         end
       when :volume_ratio then css_class << "yellow-bg " if (report['volume_ratio'].to_f > 3)
       when :range then css_class << "yellow-bg " if (report['range'].to_f > 7)
+      when :unscrape then css_class << "clickable "
 
     end
 

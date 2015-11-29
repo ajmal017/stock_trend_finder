@@ -61,6 +61,14 @@ class TickersController < ApplicationController
     end
   end
 
+  def note
+    if params['note_text']
+      Ticker.find_by(symbol: params['ticker']).create_note(params['note_text'], note_date: Date.today)
+    end
+    # TODO this have it flash a message
+    render status: :ok
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ticker

@@ -145,7 +145,12 @@ private
             ticker_properties['last_trade'] = dsp.try(:close).try(:to_s)
             ticker_properties['average_volume'] = dsp.try(:average_volume_50day).try(:to_s)
             ticker_properties['float'] = ticker.float.to_s
-            ticker_properties['short_interest'] = ticker.short  # Not implemented yet
+            ticker_properties['short_ratio'] = ticker.short_ratio.try(:round, 2).to_s  # Not implemented yet
+            if ticker.short_pct_float
+              ticker_properties['short_pct_float'] = format("%.0f", ticker.short_pct_float * 100)  # Not implemented yet
+            else
+              ticker_properties['short_pct_float'] = ""
+            end
 
             report_group[:data] << ticker_properties
           end

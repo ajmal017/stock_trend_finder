@@ -9,10 +9,8 @@
     font-size: 9pt;
     th, td {
       padding: 2px;
-      //text-align: right;
 
     }
-    //th#ticker-symbol { text-align: right; }
   }
 
 
@@ -59,4 +57,13 @@
 
 .darkred-bg {
   background-color: darkred;
+}
+
+.monospaced {
+  font-family: Lucida Console;
+  font-size: 9pt;
+}
+
+.rjust {
+  text-align: right;
 }

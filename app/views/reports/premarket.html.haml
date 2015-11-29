@@ -1,7 +1,5 @@
 %h1 Premarket
 
-=render partial: 'vix_contango'
-
 %h2 Gapping Up, By Average Volume
 
 -if @report_volume_up.count > 0
@@ -11,98 +9,15 @@
 .report_date_form
   =report_date_form :premarket
 
-.report-container
-  %table.table-bordered#premarket_volume_up{ style: "width: 900px;"}
-    %thead
-      %th#index
-      %th#ticker-symbol{ style: "width: 100px;"} Symbol
-      %th#last-trade{ style: "width: 100px;"} Last
-      %th#percent-change{ style: "width: 100px;"} % Change
-      %th#volume{ style: "width: 100px;"} Volume (K)
-      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
-      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
-      %th#short-ratio{ style: "width: 100px;"} SR
-      %th#float{ style: "width: 100px;"} Float
-      %th#hide{ style: "width: 100px;"} Hide
-      %th#unscrape{ style: "width: 100px;"} Unscrape
-    -@report_volume_up.each_with_index do |r, i|
-      %tr{ id: r['ticker_symbol'] }
-        %td= i+1
-        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
-        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
-        %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
-        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
-        %td{ class: set_css_class(r, :short_ratio) }= "#{r['short_ratio']} | #{r['short_pct_float']}%"
-        %td{ class: set_css_class(r, :float) }= r['float']
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+=render partial: "report_table", locals: { report: @report_volume_up, report_name: "premarket_volume_up", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
 
-%h2 Gaps, No Premarket Volume History
+%h2 Gaps by Percent, No Premarket Volume History
 
--if @report_percent.count > 0
-  %div Last Updated: #{@report_volume.first['updated_at']}
-  %div Items: #{@report_volume.count}
-
-
-.report-container
-  %table.table-bordered#premarket_percent{ style: "width: 900px;"}
-    %thead
-      %th#index
-      %th#ticker-symbol{ style: "width: 100x;"} Symbol
-      %th#last-trade{ style: "width: 100px;"} Last
-      %th#pct-change{ style: "width: 100px;"} % Change
-      %th#volume{ style: "width: 100px;"} Volume (K)
-      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
-      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
-      %th#short-ratio{ style: "width: 100px;"} SR
-      %th#float{ style: "width: 100px;"} Float
-      %th#hide{ style: "width: 100px;"} Hide
-      %th#unscrape{ style: "width: 100px;"} Unscrape
-    -@report_percent.each_with_index do |r, i|
-      %tr{ id: r['ticker_symbol'] }
-        %td= i+1
-        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
-        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
-        %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
-        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
-        %td{ class: set_css_class(r, :short_ratio) }= r['short_ratio']
-        %td{ class: set_css_class(r, :float) }= r['float']
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+=render partial: "report_table", locals: { report: @report_percent, report_name: "premarket_percent", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
 
 %h2 Gapping Down, By Average Volume
 
 -if @report_volume_down.count > 0
   %div Items: #{@report_volume_down.count}
 
-.report-container
-  %table.table-bordered#premarket_volume_down{ style: "width: 900px;"}
-    %thead
-      %th#index
-      %th#ticker-symbol{ style: "width: 100px;"} Symbol
-      %th#last-trade{ style: "width: 100px;"} Last
-      %th#percent-change{ style: "width: 100px;"} % Change
-      %th#volume{ style: "width: 100px;"} Volume (K)
-      %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
-      %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
-      %th#short-ratio{ style: "width: 100px;"} SR
-      %th#float{ style: "width: 100px;"} Float
-      %th#hide{ style: "width: 100px;"} Hide
-      %th#unscrape{ style: "width: 100px;"} Unscrape
-    -@report_volume_down.each_with_index do |r, i|
-      %tr{ id: r['ticker_symbol'] }
-        %td= i+1
-        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
-        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
-        %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
-        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
-        %td{ class: set_css_class(r, :short_ratio) }= r['short_ratio']
-        %td{ class: set_css_class(r, :float) }= r['float']
-        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
-        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+=render partial: "report_table", locals: { report: @report_volume_down, report_name: "premarket_volume_down", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }

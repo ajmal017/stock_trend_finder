@@ -10,15 +10,17 @@ module TDAmeritradeDataInterface
         <<SQL
 select
   ticker_symbol,
-  close,
+  close as last_trade,
   round(((close / previous_close) - 1) * 100, 2) as pct_change,
   previous_close,
-  volume,
-  average_volume_50day as average_volume,
+  round(volume, 0) as volume,
+  round(average_volume_50day, 0) as average_volume,
   round(volume / average_volume_50day, 2) as volume_ratio,
   price_date,
   float,
-  snapshot_time
+  snapshot_time,
+  round(t.short_ratio, 2) as short_ratio,
+  round(t.short_pct_float * 100) as short_pct_float
 
 from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
 where
@@ -289,8 +291,20 @@ SQL
 
       def select_bullish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, round(volume, 0) as volume, round(average_volume_50day, 0) as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_high,
-round((close / previous_high-1)*100, 2) as gap_pct
+select
+  ticker_symbol,
+  price_date,
+  open,
+  high,
+  low,
+  close as last_trade,
+  round(volume, 0) as volume,
+  round(average_volume_50day, 0) as average_volume,
+  float,
+  round(volume / average_volume_50day, 2) as volume_ratio,
+  snapshot_time,
+  previous_high,
+  round((close / previous_high-1)*100, 2) as gap_pct,
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
@@ -323,8 +337,23 @@ SQL
 
       def select_bearish_gaps(most_recent_date)
         <<SQL
-select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time, previous_low,
-round((close / previous_low-1)*100, 2) as gap_pct
+select
+  ticker_symbol,
+  price_date,
+  open,
+  high,
+  low,
+  close as last_trade,
+  volume,
+  average_volume_50day as average_volume,
+  float,
+  round(volume / average_volume_50day, 2) as volume_ratio,
+  snapshot_time,
+  previous_low,
+  round((close / previous_low-1)*100, 2) as gap_pct,
+  round(t.short_ratio, 2) as short_ratio,
+  round(t.short_pct_float * 100) as short_pct_float
+
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
@@ -448,7 +477,9 @@ select
   '---' as volume_ratio,
   price_date,
   p.updated_at,
-  t.float
+  t.float,
+  round(t.short_ratio, 2) as short_ratio,
+  round(t.short_pct_float * 100) as short_pct_float
 from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -471,12 +502,14 @@ select
   last_trade,
   round(((last_trade / intraday_close) - 1) * 100, 2) as pct_change,
   intraday_close,
-  volume,
-  average_volume_50day as average_volume,
+  round(volume, 0) as volume,
+  round(average_volume_50day, 0) as average_volume,
   round(volume / average_volume_50day, 2) as volume_ratio,
   price_date,
   p.updated_at,
-  t.float
+  t.float,
+  round(t.short_ratio, 2) as short_ratio,
+  round(t.short_pct_float * 100) as short_pct_float
 from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and

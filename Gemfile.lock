@@ -6,7 +6,7 @@ PATH
 PATH
   remote: ~/Development/gem-development/tdameritrade_api
   specs:
-    tdameritrade_api (1.1.1)
+    tdameritrade_api (1.2.0)
       activesupport (~> 4.0)
       bindata (>= 1.8)
       bundler (~> 1.5)

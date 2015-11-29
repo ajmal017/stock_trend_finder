@@ -33,6 +33,7 @@ StockTrendFinder::Application.routes.draw do
   end
   patch 'reports/hide/:symbol(.:format)', to: 'reports#hide_symbol', as: 'reports_hide_symbol'
   patch 'reports/unscrape/:symbol(.:format)', to: 'reports#unscrape_symbol', as: 'reports_unscrape_symbol'
+  post 'tickers/:ticker/note', to: 'tickers#note', as: 'tickers_note'
 
 
   # Example of regular route:
