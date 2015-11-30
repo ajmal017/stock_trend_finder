@@ -6,7 +6,7 @@ PATH
 PATH
   remote: ~/Development/gem-development/tdameritrade_api
   specs:
-    tdameritrade_api (1.2.0)
+    tdameritrade_api (1.2.1)
       activesupport (~> 4.0)
       bindata (>= 1.8)
       bundler (~> 1.5)
@@ -82,8 +82,11 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
-    dalli (2.7.4)
     erubis (2.7.0)
+    evernote-thrift (1.25.2)
+    evernote_oauth (0.2.3)
+      evernote-thrift
+      oauth (>= 0.4.1)
     execjs (2.5.2)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
@@ -120,6 +123,7 @@ GEM
     multi_xml (0.5.5)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    oauth (0.4.7)
     pg (0.18.1)
     poltergeist (1.6.0)
       capybara (~> 2.1)
@@ -209,7 +213,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.2)
   capybara (~> 2.1)
   coffee-rails (~> 4.0.0)
-  dalli
+  evernote_oauth (~> 0.2.3)
   haml (~> 4.0)
   htmlentities (~> 4.3)
   httparty (~> 0.13)

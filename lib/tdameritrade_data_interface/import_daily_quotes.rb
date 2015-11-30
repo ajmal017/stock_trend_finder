@@ -1,5 +1,6 @@
 require 'tdameritrade_data_interface/sql_query_strings'
 require 'tdameritrade_data_interface/util'
+require 'evernote/evernote_watchlist'
 
 module TDAmeritradeDataInterface
   NEW_TICKER_BEGIN_DATE=Date.new(2013,10,1)
@@ -677,6 +678,17 @@ module TDAmeritradeDataInterface
       puts "Done"
     end
     puts "#{Time.now} Beginning DB Maintenance daemon..."
+    scheduler
+  end
+
+  def self.run_evernote_watchlist_daemon
+    scheduler = Rufus::Scheduler.new
+    scheduler.cron('45 1 * * *') do
+      puts "Building Evernote Watchlist #{Time.now}"
+      Evernote::EvernoteWatchList.build_evernote_watchlist
+      puts "Done building Evernote Watchlist"
+    end
+    puts "#{Time.now} Beginning Evernote watchlist daemon..."
     scheduler
   end
 

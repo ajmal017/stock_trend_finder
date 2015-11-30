@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2'
 gem 'haml', '~> 4.0'
 gem 'pg'
@@ -24,21 +23,21 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails', '~> 5.0'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'   # disabled - this feature is unnecessary, but is causing interference
+gem 'turbolinks'
 gem 'jquery-turbolinks', '~> 2.1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
 gem "rufus-scheduler", '~> 3.0'
-gem "dalli"
 gem 'httparty', '~> 0.13'
 gem 'htmlentities', '~> 4.3'
 
+gem "bindata"
 gem "tdameritrade_api",  :path=>'~/Development/gem-development/tdameritrade_api'
 gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/gem-development/stocktwits-api-ruby'
-gem "bindata"
 gem 'ystock', '~> 0.4.10', path: '~/Development/gem-development/ystock'
+gem 'evernote_oauth', '~> 0.2.3'
 
 # Don't put these in the development-only group because certain
 # financial data crawling functions make use of these gems.
