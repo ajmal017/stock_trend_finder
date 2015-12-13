@@ -45,7 +45,7 @@ module Evernote
 
     def self.extract_tickers_from_title(title)
       result = []
-      title.scan(/([A-Z]+)/) { |m| result << m.first }
+      title.scan(/\b([A-Z]+)\b/) { |m| result << m.first }
       result
     end
 

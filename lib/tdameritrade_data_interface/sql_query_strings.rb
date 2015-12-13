@@ -304,7 +304,7 @@ select
   round(volume / average_volume_50day, 2) as volume_ratio,
   snapshot_time,
   previous_high,
-  round((close / previous_high-1)*100, 2) as gap_pct,
+  round((close / previous_high-1)*100, 2) as gap_pct
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where

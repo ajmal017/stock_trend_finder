@@ -23,6 +23,7 @@ Reports
     - Refactor report column builder
     - Earnings report
         * Have a "not interested" action
+    - Bond yield curve that mimics VIX Futures curve functionality
 
     
 Stocktwits Report

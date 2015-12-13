@@ -2,6 +2,7 @@ require 'stocktwits_api'
 
 class Stocktwit < ActiveRecord::Base
   FIRST_TWIT_ID=18772403
+  ATTEMPTS=3
 
   has_many :stocktwit_tickers # Keeping this separate from the Tickers table because there may be tickers encountered on ST not in the table
   has_many :stocktwit_hashtags
@@ -43,19 +44,18 @@ class Stocktwit < ActiveRecord::Base
   def self.sync_twits
     messages_synced = 0
 
-    ['greenspud', 'traderstewie', 'TraderRL23', 'stt2318', 'starbreakouts', 'Mastertrader_Consultant'].each do |stocktwits_user_name|
+    #['markminervini'].each do |stocktwits_user_name|
+    ['greenspud', 'traderstewie', 'TraderRL23', 'stt2318', 'starbreakouts', 'Mastertrader_Consultant', 'markminervini'].each do |stocktwits_user_name|
       attempt = 1
-      while attempt < 3
+      [1..ATTEMPTS].each do |attempt|
         since_id = Stocktwit.where(stocktwits_user_name: stocktwits_user_name).maximum(:stocktwit_id) || FIRST_TWIT_ID
         begin
           r = StockTwits.get_user_stream(stocktwits_user_name, since: since_id)
           if r.nil?
-            attempt += 1
             next
           end
           if r['response']['status'] != 200
             puts r['response']
-            attempt += 1
             next
           end
           break if r['messages'].count == 0
@@ -66,16 +66,16 @@ class Stocktwit < ActiveRecord::Base
           messages.each do |m|
             if m['symbols'] # Not interested in twits that don't talk about a specific ticker
               twit = Stocktwit.create(
-                  stocktwit_id: m['id'],
-                  stocktwit_time: DateTime.parse(m['created_at']),
-                  stocktwit_url: m['entities'] ? m['entities']['chart']['url'] : nil,
-                  symbol: m['symbols'].first['symbol'],
-                  message: m['body'],
-                  image_thumb_url: m['entities'] ? m['entities']['chart']['thumb'] : nil,
-                  image_large_url: m['entities'] ? m['entities']['chart']['large'] : nil,
-                  image_original_url: m['entities'] ? m['entities']['chart']['original'] : nil,
-                  hide: false,
-                  stocktwits_user_name: stocktwits_user_name
+                stocktwit_id: m['id'],
+                stocktwit_time: DateTime.parse(m['created_at']),
+                stocktwit_url: m['entities'] ? m['entities']['chart']['url'] : nil,
+                symbol: m['symbols'].first['symbol'],
+                message: m['body'],
+                image_thumb_url: m['entities'] ? m['entities']['chart']['thumb'] : nil,
+                image_large_url: m['entities'] ? m['entities']['chart']['large'] : nil,
+                image_original_url: m['entities'] ? m['entities']['chart']['original'] : nil,
+                hide: false,
+                stocktwits_user_name: stocktwits_user_name
               )
               m['symbols'].each do |s|
                 twit.stocktwit_tickers.create(ticker_symbol: s['symbol'])
@@ -85,12 +85,11 @@ class Stocktwit < ActiveRecord::Base
             messages_synced += 1
           end
 
-          break if !cursor['more']
-          attempt = 1
+          #break if !cursor['more']
         rescue Exception => e
           puts "Error syncing StockTwits, attempt #{attempt}: #{e.message}"
-          attempt += 1
         end
+
       end
     end
 

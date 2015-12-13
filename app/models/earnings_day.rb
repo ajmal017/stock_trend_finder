@@ -23,4 +23,20 @@ class EarningsDay < ActiveRecord::Base
       )
     end
   end
+
+  def self.load_before_list(text, date=Date.today+1)
+    EarningsDay.create(
+      before_the_open: true,
+      earnings_date: date,
+      tickers: text.gsub(' ', '')
+    )
+  end
+
+  def self.load_after_list(text, date=Date.today+1)
+    EarningsDay.create(
+      before_the_open: false,
+      earnings_date: date,
+      tickers: text.gsub(' ', '')
+    )
+  end
 end
