@@ -14,8 +14,8 @@ class TickerFloatDataPull
         end
 
         unless q[:short_ratio].nil? || BigDecimal.new(q[:short_ratio])==0
-          dsp = DailyStockPrice.try(:find_by, ticker_symbol: q[:symbol], price_date: short_as_of_date)
-          if dsp
+            dsp = DailyStockPrice.try(:find_by, ticker_symbol: q[:symbol], price_date: short_as_of_date)
+          if dsp.present? && dsp.average_volume_50day.present?
             shares_short = BigDecimal.new(q[:short_ratio]) * dsp.average_volume_50day
             short_pct_float = shares_short / float if float > 0
           end

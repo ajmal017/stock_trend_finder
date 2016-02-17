@@ -5,10 +5,11 @@
 
 
 .report-container
-  %table.table-bordered#ipo_list{ style: "width: 600px;"}
+  %table.table-bordered#ipo_list{ style: "width: 700px;"}
     %thead
       %th#ticker-id ID
       %th#symbol{ style: "width: 100px;"} Ticker Symbol
+      %th#symbol{ style: "width: 100px;"} Company Name
       %th#symbol{ style: "width: 100px;"} First Price Date
       %th#hide{ style: "width: 100px;"} Days
       %th#hide{ style: "width: 100px;"} Hide
@@ -17,6 +18,7 @@
       %tr{ id: r['ticker_symbol'] }
         %td= i+1
         %td{ class: set_css_class(r, :symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :company_name) }= r['company_name']
         %td{ class: set_css_class(r, :first_price_date) }= r['first_price_date']
         %td{ class: set_css_class(r, :first_price_date) }= r['days']
         %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch

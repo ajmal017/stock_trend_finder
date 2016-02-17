@@ -398,9 +398,10 @@ SQL
 
       def select_ipo_list
         <<SQL
-select ticker_symbol, min(price_date) as first_price_date, current_date - date_trunc('day', min(price_date)) as days
+select ticker_symbol, t.company_name, min(price_date) as first_price_date, current_date - date_trunc('day', min(price_date)) as days
 from daily_stock_prices d
-group by ticker_symbol
+inner join tickers t on t.symbol=d.ticker_symbol
+group by ticker_symbol, t.company_name
 having min(price_date) > '2014-01-01'
 order by first_price_date desc
 SQL

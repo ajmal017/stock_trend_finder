@@ -7,7 +7,7 @@
     - barrons-positive
     - fundamental-favorite
     - sector-specific tags, i.e. China, oil, cloud
-* Add reason tag to tickers table with unscrape_reason: acquisition, liquidity, delist
+* Handle splits!
 
 VIX
     - Download the historical VIX futures data from CBOT and put it into the database
@@ -20,10 +20,11 @@ Reports
         * Graph of stocks above/below 50DMA over time
         * Sector/Category tags?
         * Order by tag
-    - Refactor report column builder
     - Earnings report
         * Have a "not interested" action
     - Bond yield curve that mimics VIX Futures curve functionality
+    - Dividend leaders
+    - Number of stocks above/below 200DMA (need split function for this to work effectively)
 
     
 Stocktwits Report
