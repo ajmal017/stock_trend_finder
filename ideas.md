@@ -25,10 +25,10 @@ Reports
     - Bond yield curve that mimics VIX Futures curve functionality
     - Dividend leaders
     - Number of stocks above/below 200DMA (need split function for this to work effectively)
+    - Stocks that hit a 52wk high within the last 2 weeks. Number & list.
 
     
 Stocktwits Report
-    - Add comments field for twits
 
 * Download system refactor ideas
     - PrepopulateDatabase module

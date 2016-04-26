@@ -1,7 +1,13 @@
 # THIS IS BEING DEPRECATED BY the MarketDataUtility class in market_data_utility.rb
 # DO NOT ADD NEW FUNCTIONALITY, INSTEAD USE THE
+require 'evernote/evernote_watchlist'
+
 
 module TDAmeritradeDataInterface
+  def self.evernote
+    Evernote::EvernoteWatchList.copy_evernote_watchlist
+  end
+
   def self.is_market_day?(day)
     date_string = day.strftime('%-m/%-d/%y')
     market_open=false

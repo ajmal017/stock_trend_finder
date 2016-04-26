@@ -6,7 +6,7 @@ PATH
 PATH
   remote: ~/Development/gem-development/tdameritrade_api
   specs:
-    tdameritrade_api (1.2.1)
+    tdameritrade_api (1.2.2)
       activesupport (~> 4.0)
       bindata (>= 1.8)
       bundler (~> 1.5)
@@ -72,6 +72,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    clipboard (1.1.0)
     cliver (0.3.2)
     coderay (1.1.0)
     coffee-rails (4.0.1)
@@ -212,6 +213,7 @@ DEPENDENCIES
   bindata
   bootstrap-sass (~> 3.2)
   capybara (~> 2.1)
+  clipboard (~> 1.1)
   coffee-rails (~> 4.0.0)
   evernote_oauth (~> 0.2.3)
   haml (~> 4.0)

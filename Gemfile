@@ -34,6 +34,7 @@ gem 'httparty', '~> 0.13'
 gem 'htmlentities', '~> 4.3'
 
 gem "bindata"
+gem 'clipboard', '~> 1.1'
 gem "tdameritrade_api",  :path=>'~/Development/gem-development/tdameritrade_api'
 gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/gem-development/stocktwits-api-ruby'
 gem 'ystock', '~> 0.4.10', path: '~/Development/gem-development/ystock'
