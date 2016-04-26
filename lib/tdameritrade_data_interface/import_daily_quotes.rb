@@ -7,6 +7,11 @@ module TDAmeritradeDataInterface
 
   include SQLQueryStrings
 
+  def self.defunct_tickers
+    scrape = Ticker.watching.pluck(:symbol)
+    scrape.select { |ticker| DailyStockPrice.where("ticker_symbol=? AND price_date=?", ticker, Date.today-20).count == 0 }
+  end
+
   def self.import_quotes(opts={})
     begin_date = (opts.has_key? :begin_date) && (opts[:begin_date].is_a? Date) ? opts[:begin_date] : nil
     end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date] : Date.today
