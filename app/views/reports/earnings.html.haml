@@ -1,0 +1,10 @@
+%h1 Earnings Calendar
+
+.report_date_form
+  =report_date_form :earnings
+
+-@report.each do |report_group|
+
+  %h2= "#{report_group[:earnings_date]} #{report_group[:before_after]}"
+
+  =render partial: "report_table", locals: { report: report_group[:data], report_name: "earnings", fields: [:ticker_symbol, :company_name, :last_trade, :average_volume, :short_ratio, :float, :actions] }

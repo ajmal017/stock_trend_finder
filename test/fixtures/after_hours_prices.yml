@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  price_date: 2015-01-31
+  ticker_symbol: MyString
+  ah_high: 9.99
+  ah_low: 9.99
+  ah_volume: 9.99
+  ah_vwap: 9.99
+
+two:
+  price_date: 2015-01-31
+  ticker_symbol: MyString
+  ah_high: 9.99
+  ah_low: 9.99
+  ah_volume: 9.99
+  ah_vwap: 9.99

@@ -1,0 +1,14 @@
+%tr{ id: twit.id }
+  %td.stocktwit-message{ class: message_call_result_class(twit.call_result) }
+    .stocktwit-message-timestamp
+      ="#{twit.stocktwit_time} - #{twit.id}"
+    .stocktwit-message-text
+      =format_stocktwits_message(twit.message)
+    .stocktwit-message-note
+      -if twit.note
+        ="#{twit.note}"
+    -if twit.call_result.nil?
+      .stocktwit-message-call-result-buttons
+        =render 'call_result_buttons', :twit=>twit
+  %td.stocktwit-thumb
+    =link_to(image_tag(twit.image_thumb_url), twit.image_original_url, target: "_blank")

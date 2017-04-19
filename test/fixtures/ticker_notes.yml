@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker_symbol: MyString
+  note_date: 2015-11-17
+  note_type: MyString
+  note_text: MyText
+
+two:
+  ticker_symbol: MyString
+  note_date: 2015-11-17
+  note_type: MyString
+  note_text: MyText

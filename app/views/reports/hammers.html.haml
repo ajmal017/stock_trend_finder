@@ -1,0 +1,32 @@
+%h1 Hammers and Dojis Report
+
+-if @report.count > 0
+  %div Last Updated: #{@report.first['quote_time']}
+  %div Items: #{@report.count}
+
+
+.report-container
+  %table.table-bordered#hammers
+    %thead
+      %th#index
+      %th#ticker-symbol Ticker Symbol
+      %th#last-trade Last
+      %th#pct_change %Chg
+      %th#volume Volume (K)
+      %th#average-volume Avg Vol (K)
+      %th#volume-ratio Volume Ratio
+      %th#float Float
+      %th#hide{ style: "width: 100px;"} Hide
+      %th#unscrape{ style: "width: 100px;"} Unscrape
+    -@report.each_with_index do |r, i|
+      %tr{ id: r['ticker_symbol'] }
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']
+        %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
+        %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

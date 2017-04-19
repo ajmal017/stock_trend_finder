@@ -1,0 +1,115 @@
+body.stocktwits {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+.stocktwits-ticker-navigation {
+  background-color: #ddcd5e;
+  height: 900px;
+  overflow: scroll;
+}
+
+.stocktwits-setup-navigation {
+  background-color: #ddaba2;
+  height: 900px;
+  overflow: scroll;
+}
+
+table.stocktwits {
+  width: 739px;
+}
+
+td.stocktwit-message {
+  padding: 5px 0px;
+  border-bottom: 1px solid #CCCCCC;
+}
+
+.stocktwit-message-timestamp {
+  color: #999999;
+  font-size: 9pt;
+  padding-bottom: 4px;
+}
+
+.stocktwit-message-note {
+  padding-left: 30px;
+  font-size: 8pt;
+}
+
+td.stocktwit-thumb {
+  width: 175px;
+  padding: 5px 0px;
+  border-bottom: 1px solid #CCCCCC;
+}
+
+.last-twit-placeholder{
+  text-align:center;
+  display:none;
+}
+
+.stocktwits-ticker-nav-filter, .stocktwits-ticker-nav-list, .stocktwits-setup-nav-list {
+  font-size: 9pt;
+  font-color: black;
+}
+
+.stocktwits-ticker-nav-list#symbol, .stocktwits-ticker-nav-list#count, .stocktwits-ticker-nav-list#watching {
+  display: none;
+}
+
+.message-call-result-buttons {
+  margin-top: 10px;
+  img {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.message-call-result-correct {
+  background-color: #a1eda2;
+}
+
+.message-call-result-incorrect {
+  background-color: #fcbdbd;
+}
+
+.message-call-result-partial {
+  background-color: #fcfbb1;
+}
+
+.message-call-result-no-call {
+  background-color: #e1eee8;
+}
+
+.stocktwits-ticker-nav-link {
+  margin: 2px;
+}
+
+
+#stocktwits-filter-indicator {
+  display: inline;
+  font-size: 16pt;
+  font-weight: bold;
+  color: #2E2F30;
+}
+
+#stocktwits-watch-indicator {
+  display: inline;
+  width: 200px;
+  font-size: 16pt;
+  color: #2E2F30;
+  img {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+#header {
+  height: 75px;
+  #title {
+    float: left;
+  }
+  #user-dropdown {
+    padding-top: 25px;
+    float: right;
+    width: 200px;
+  }
+}

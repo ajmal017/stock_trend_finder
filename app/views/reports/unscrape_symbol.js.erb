@@ -1,0 +1,17 @@
+//alert('Unscraped Symbol: <%= @symbol %>');
+
+symbol_note = function(symbol) {
+    reason_text = window.prompt('Unscrape ' + symbol + ' reason');
+    $.ajax(
+            {
+                url: '/tickers/' + symbol + '/note',
+                method: 'post',
+                context: document.body,
+                data: {
+                    note_text: reason_text
+                }
+            }
+    );
+};
+$('table tr#<%= @symbol %>').slideUp();
+symbol_note('<%= @symbol %>');

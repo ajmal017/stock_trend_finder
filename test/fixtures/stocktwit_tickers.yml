@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  stocktwit_id: 1
+  ticker_symbol: MyString
+
+two:
+  stocktwit_id: 1
+  ticker_symbol: MyString

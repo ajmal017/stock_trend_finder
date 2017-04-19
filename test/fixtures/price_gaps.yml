@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_date: 2013-11-14
+  previous_day_close: 9.99
+  previous_day_high: 9.99
+  today_open: 9.99
+  participate: false
+
+two:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_date: 2013-11-14
+  previous_day_close: 9.99
+  previous_day_high: 9.99
+  today_open: 9.99
+  participate: false

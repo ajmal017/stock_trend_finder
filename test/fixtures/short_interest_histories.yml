@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker_symbol: MyString
+  as_of_date: 2015-11-02
+  shares_short: 1
+  shares_short_pct_float: 9.99
+  short_ratio: 9.99
+
+two:
+  ticker_symbol: MyString
+  as_of_date: 2015-11-02
+  shares_short: 1
+  shares_short_pct_float: 9.99
+  short_ratio: 9.99

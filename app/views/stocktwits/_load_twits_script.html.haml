@@ -1,0 +1,76 @@
+:coffee
+  loading = false
+  nomore = false
+
+  $last_twit_id = () -> $('table.stocktwits tr').filter(':last').attr('id')
+  $symbol_filter = () -> $('#stocktwits-filter-indicator').attr('data-symbol')
+  $setup_filter = () -> $('#stocktwits-filter-indicator').attr('data-setup')
+  $setup_or_symbol_filter = () -> $('#stocktwits-filter-indicator').text()
+  $user_id_filter = () -> $('#user-dropdown-button').text().trim()
+
+  load_next = (symbol_or_setup, last_id) ->
+    loading = true
+
+    console.log symbol_or_setup
+    console.log symbol_or_setup[0] == '#'
+    if symbol_or_setup[0] == '#'
+      postdata = { user_id: $user_id_filter, setup: symbol_or_setup, max: last_id }
+    else
+      postdata = { user_id: $user_id_filter, symbol: symbol_or_setup, max: last_id }
+
+    $('.last-twit-placeholder').show()
+    $.post '/stocktwits/load_twits' \
+      , postdata \
+      , (data) ->
+        if data.length > 0
+           if $('table.stocktwits tr').filter(':last').length > 0
+             $('table.stocktwits tr').filter(':last').after(data)
+           else
+             $('#stocktwits-content table.stocktwits').append(data)
+        else
+          nomore = true
+        $('.last-twit-placeholder').hide()
+        loading = false
+
+  set_symbol_filter = (symbol) ->
+    $('#stocktwits-content table.stocktwits').empty()
+    $('#stocktwits-filter-indicator').attr('data-symbol', symbol)
+    $('#stocktwits-filter-indicator').text(symbol)
+    nomore = false
+    load_next($symbol_filter(), null)
+
+  set_setup_filter = (setup) ->
+    $('#stocktwits-content table.stocktwits').empty()
+    $('#stocktwits-filter-indicator').attr('data-setup', setup)
+    $('#stocktwits-filter-indicator').text(setup)
+    nomore = false
+    load_next($setup_filter(), null)
+
+  set_watching_icon = () ->
+    $.getJSON '/stocktwits/watching.json', {symbol: $symbol_filter}, (data) ->
+      if data.watching
+        $('img.stocktwits-watch-indicator').attr('src', '/assets/icon-star-sm-yellow.png')
+      else
+        $('img.stocktwits-watch-indicator').attr('src', '/assets/icon-star-sm-grey.png')
+      $('img.stocktwits-watch-indicator').show()
+
+  $('a.symbol-filter-link').click () ->
+    symbol = $(this).attr('data-symbol')
+    set_symbol_filter(symbol)
+    set_watching_icon()
+    false
+
+  $('a.setup-filter-link').click () ->
+    set_setup_filter($(this).attr('data-setup'))
+    set_watching_icon()
+    false
+
+  $('a#toggle-watching').click () ->
+    console.log($.get('/stocktwits/toggle_watching', {symbol: $symbol_filter}))
+    set_watching_icon()
+    false
+
+  $(window).scroll () ->
+    if $(window).scrollTop() >= $('#stocktwits-content').height() - $(window).height() - 500
+      if !loading && !nomore
+        load_next($setup_or_symbol_filter, $last_twit_id)

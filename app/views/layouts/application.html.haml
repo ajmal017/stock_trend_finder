@@ -1,0 +1,31 @@
+!!!
+%html
+  %head
+    %title Stock Trend Finder
+    = stylesheet_link_tag  "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+    :javascript
+      $(function() {
+          $( "#report_date" ).datepicker();
+        });
+  %body
+    %nav.navbar.navbar-default{ role: "navigation" }
+      .container
+        %ul.nav.navbar-nav
+          %li.active= link_to "Pre", reports_premarket_path
+          %li.active= link_to "Gaps", reports_gaps_path
+          %li.active= link_to "Active", reports_active_stocks_path
+          %li.active= link_to "After", reports_afterhours_path
+          %li.active= link_to "Earnings", reports_earnings_path
+          %li.active= link_to "Range", reports_range_path
+          %li.active= link_to "50DMA", reports_sma50_breaks_path
+          %li.active= link_to "200DMA", reports_sma200_breaks_path
+          %li.active= link_to "52wk", reports_week52_highs_path
+          -#%li.active= link_to "13EMA", reports_ema13_breaks_path  This one is obsolete
+          %li.active= link_to "4-candle", reports_candle_row_path
+          %li.active= link_to "10% g/l", reports_pctgainloss_path
+          %li.active= link_to "Tickers", reports_ticker_list_path
+          %li.active= link_to "IPO", reports_ipo_list_path
+    .container
+      = yield

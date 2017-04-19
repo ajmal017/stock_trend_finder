@@ -1,0 +1,15 @@
+%h1 Gap Up / Gap Down
+
+%h2 Bullish Gaps
+
+-if @report_bullgaps.count > 0
+  %div Last Updated: #{@report_bullgaps.first['snapshot_time'] || @report_bullgaps.first['price_date']}
+
+.report_date_form
+  =report_date_form :gaps
+
+=render partial: "report_table", locals: { report: @report_bullgaps, report_name: "bullgaps", fields: [:ticker_symbol, :last_trade, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }
+
+%h2 Bearish Gaps
+
+=render partial: "report_table", locals: { report: @report_beargaps, report_name: "bullgaps", fields: [:ticker_symbol, :last_trade, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }

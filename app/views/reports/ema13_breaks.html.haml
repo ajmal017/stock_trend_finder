@@ -1,0 +1,28 @@
+%h1 Bullish 13 EMA Breaks
+
+-if @report.count > 0
+  %div Last Updated: #{@report.first['quote_time']}
+  %div Items: #{@report.count}
+
+
+.report-container
+  %table.table-bordered#active-stocks
+    %thead
+      %th#index
+      %th#ticker-symbol Ticker Symbol
+      %th#last-trade Last
+      %th#pct_change %Chg
+      %th#volume Volume (K)
+      %th#average-volume Avg Vol (K)
+      %th#volume-ratio Volume Ratio
+      %th#float Float
+    -@report.each_with_index do |r, i|
+      %tr
+        %td= i+1
+        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+        %td{ class: set_css_class(r, :volume) }= r['volume']
+        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+        %td{ class: set_css_class(r, :float) }= r['float']

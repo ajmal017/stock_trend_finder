@@ -1,0 +1,69 @@
+.report-container {
+  // set up the center alignment of the table
+  width: 90%;
+  margin: 0% 5%;
+  padding-top: 30px;
+
+  table {
+    width: 100%;
+    font-size: 9pt;
+    th, td {
+      padding: 2px;
+
+    }
+  }
+
+
+  .table-bordered > tbody > tr > td {
+    border: 0px;
+    border-bottom: 1px solid $table-border-color;
+  }
+
+  .table-bordered > thead > tr > th {
+    border: 0px;
+    border-bottom: 1px solid $table-border-color;
+  }
+}
+
+.align-right { text-align: right; }
+
+.green {
+  color: greenyellow;
+}
+
+.red {
+  color: red;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.gold-bg {
+  background-color: #272524;
+}
+
+.yellow-bg {
+  background-color: #77725a;
+}
+
+.darkgreen-bg {
+  background-color: darkolivegreen;
+}
+
+.darkred-bg {
+  background-color: darkred;
+}
+
+.monospaced {
+  font-family: Lucida Console, Monaco;
+  font-size: 9pt;
+}
+
+.rjust {
+  text-align: right;
+}

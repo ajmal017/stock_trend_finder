@@ -1,0 +1,17 @@
+-##-alert($(this).parent().attr('data-twit-id') + " " + note_text)
+
+:coffee
+  edit_twit_note = (id) ->
+    note_text = window.prompt('Note Text')
+    if note_text
+      $.ajax
+        url: 'stocktwits/note',
+        method: 'post',
+        context: document.body,
+        data:
+          id: id,
+          note: note_text,
+
+
+  $(document).on("click", 'img.icon-note', () ->
+    edit_twit_note($(this).parent().attr('data-twit-id')))

@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_date: 2013-11-17
+  open: 9.99
+  high: 9.99
+  low: 
+  close: 9.99
+  previous_close: 9.99
+  previous_high: 9.99
+  previous_low: 9.99
+  open_pct_of_previous_high: 9.99
+
+two:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_date: 2013-11-17
+  open: 9.99
+  high: 9.99
+  low: 
+  close: 9.99
+  previous_close: 9.99
+  previous_high: 9.99
+  previous_low: 9.99
+  open_pct_of_previous_high: 9.99

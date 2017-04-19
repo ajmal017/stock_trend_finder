@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ticker_id: 1
+  price_time: 2014-07-19 22:29:53
+  open: 
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  volume: 
+  truerangepct: 9.99
+
+two:
+  ticker_id: 1
+  price_time: 2014-07-19 22:29:53
+  open: 
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  volume: 
+  truerangepct: 9.99

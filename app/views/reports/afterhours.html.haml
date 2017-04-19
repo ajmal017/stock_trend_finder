@@ -1,0 +1,23 @@
+%h1 Afterhours
+
+=render partial: 'vix_contango'
+
+%h2 Gapping Up, By Average Volume
+
+-if @report_volume_up.count > 0
+  %div Last Updated: #{@report_volume_up.first['updated_at'].in_time_zone("US/Eastern")}
+  %div Items: #{@report_volume_up.count}
+
+.report_date_form
+  =report_date_form :afterhours
+
+=render partial: "report_table", locals: { report: @report_volume_up, report_name: "afterhours_volume_up", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
+
+%h2 Gaps, No Afterhours Volume History
+
+=render partial: "report_table", locals: { report: @report_percent, report_name: "afterhours_percent", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
+
+
+%h2 Gapping Down, By Average Volume
+
+=render partial: "report_table", locals: { report: @report_volume_down, report_name: "afterhours_volume_down", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }

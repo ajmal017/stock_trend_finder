@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gap_up_id: 1
+  simulation_id: 1
+  ticker_id: 1
+  ticker_symbol: MyString
+  open_date: 2013-12-11
+  close_date: 2013-12-11
+  value_begin: 
+  value_end: 9.99
+
+two:
+  gap_up_id: 1
+  simulation_id: 1
+  ticker_id: 1
+  ticker_symbol: MyString
+  open_date: 2013-12-11
+  close_date: 2013-12-11
+  value_begin: 
+  value_end: 9.99

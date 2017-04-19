@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_date: 2015-02-15
+  latest_print_time: MyString
+  last_trade: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  volume: 9.99
+  avg_volume: 9.99
+
+two:
+  ticker_id: 1
+  ticker_symbol: MyString
+  price_date: 2015-02-15
+  latest_print_time: MyString
+  last_trade: 9.99
+  high: 9.99
+  low: 9.99
+  close: 9.99
+  volume: 9.99
+  avg_volume: 9.99

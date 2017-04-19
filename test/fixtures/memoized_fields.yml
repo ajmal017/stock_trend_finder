@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ticker_symbol: MyString
+  price_date: 2015-09-15
+  premarket_average_volume_50day: 9.99
+  premarket_previous_high: 9.99
+  premarket_previous_low: 9.99
+  premarket_previous_close: 9.99
+
+two:
+  ticker_symbol: MyString
+  price_date: 2015-09-15
+  premarket_average_volume_50day: 9.99
+  premarket_previous_high: 9.99
+  premarket_previous_low: 9.99
+  premarket_previous_close: 9.99

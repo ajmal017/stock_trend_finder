@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gap_up_id: 1
+  trade_date: 2013-11-17
+  position: MyString
+  value: 9.99
+
+two:
+  gap_up_id: 1
+  trade_date: 2013-11-17
+  position: MyString
+  value: 9.99
