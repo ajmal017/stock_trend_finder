@@ -57,21 +57,4 @@ group :development, :test do
   gem 'pry', '~> 0.10'
   gem 'pry-rails', '~> 0.3'
   gem 'pry-byebug'
-#  gem 'linecache19', '>= 0.5.13', :git => 'https://github.com/robmathews/linecache19-0.5.13.git'
-#  gem 'ruby-debug-base19x', '>= 0.11.30.pre10'
-  #gem 'ruby-debug-ide', '~> 0.4.29'
-  #   gem 'ruby-debug-base19x'
-  # gem 'ruby-debug-ide'
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

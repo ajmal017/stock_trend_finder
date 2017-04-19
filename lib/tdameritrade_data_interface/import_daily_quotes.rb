@@ -7,6 +7,10 @@ module TDAmeritradeDataInterface
 
   include SQLQueryStrings
 
+  def self.vix_futures_report
+    VIXFuturesReport.new.build_report
+  end
+
   def self.defunct_tickers
     scrape = Ticker.watching.pluck(:symbol)
     scrape.select { |ticker| DailyStockPrice.where("ticker_symbol=? AND price_date=?", ticker, Date.today-20).count == 0 }
