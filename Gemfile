@@ -35,9 +35,9 @@ gem 'htmlentities', '~> 4.3'
 
 gem "bindata"
 gem 'clipboard', '~> 1.1'
-gem "tdameritrade_api",  :path=>'~/Development/gem-development/tdameritrade_api'
-gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/gem-development/stocktwits-api-ruby'
-gem 'ystock', '~> 0.4.10', path: '~/Development/gem-development/ystock'
+gem "tdameritrade_api",  :path=>'~/Development/tdameritrade_api'
+gem "stocktwits-api-ruby", "~> 0.0.1.1.alpha", :path=>'~/Development/stocktwits-api-ruby'
+gem 'ystock', '~> 0.4.10', path: '~/Development/ystock'
 gem 'evernote_oauth', '~> 0.2.3'
 
 # Don't put these in the development-only group because certain
@@ -45,6 +45,8 @@ gem 'evernote_oauth', '~> 0.2.3'
 gem 'nokogiri', '~>1.6'
 gem 'capybara', '~>2.1'
 gem 'poltergeist', '~>1.5'
+
+gem 'json', '~> 1.8.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

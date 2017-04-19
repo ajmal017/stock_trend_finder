@@ -44,8 +44,7 @@ class Stocktwit < ActiveRecord::Base
   def self.sync_twits
     messages_synced = 0
 
-    #['markminervini'].each do |stocktwits_user_name|
-    ['greenspud', 'traderstewie', 'stt2318', 'starbreakouts', 'Mastertrader_Consultant', 'markminervini', 'robertlesnicki'].each do |stocktwits_user_name|
+    ['greenspud', 'traderstewie', 'stt2318', 'starbreakouts', 'markminervini', 'robertlesnicki'].each do |stocktwits_user_name|
       attempt = 1
       [1..ATTEMPTS].each do |attempt|
         since_id = Stocktwit.where(stocktwits_user_name: stocktwits_user_name).maximum(:stocktwit_id) || FIRST_TWIT_ID

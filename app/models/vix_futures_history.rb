@@ -6,6 +6,12 @@ class VIXFuturesHistory < ActiveRecord::Base
 
   serialize :futures_curve
 
+  # Scopes
+  def self.on_date(date)
+    where('snapshot_time::date=?', date).last
+  end
+
+  # Class utility methods
   def self.import_vix_futures(screenshot=true)
     starting_month = TDAmeritradeDataInterface.next_vix_futures_symbol
     f = FUTURES_SYMBOLS * 2

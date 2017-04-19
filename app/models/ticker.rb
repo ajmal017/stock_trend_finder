@@ -68,7 +68,8 @@ healthcare_insurer
   end
 
   def self.scrape?(symbol)
-    Ticker.find_by(symbol: symbol).scrape_data
+    t = Ticker.find_by(symbol: symbol)
+    t.present? && t.scrape_data
   end
 
   def self.scrape(*symbols)
