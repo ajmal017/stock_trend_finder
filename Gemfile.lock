@@ -224,7 +224,7 @@ DEPENDENCIES
   pg (~> 0.18.1)
   poltergeist (~> 1.5)
   pry (~> 0.10.4)
-  pry-byebug
+  pry-byebug (~> 3.4.2)
   pry-rails (~> 0.3.6)
   rails (= 4.2)
   rufus-scheduler (~> 3.0)
