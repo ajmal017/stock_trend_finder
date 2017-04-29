@@ -67,6 +67,22 @@ healthcare_insurer
     )
   end
 
+  def self.rename(original_symbol, new_symbol)
+    nt = Ticker.find_or_create_by(symbol: new_symbol)
+    raise "Ticker #{new_symbol} #{nt.company_name} already exists!" unless nt.new_record?
+
+    ot = Ticker.find_by(symbol: original_symbol)
+    raise "Ticker #{original_symbol} not found" if ot.nil?
+
+    nt_attributes = ot.attributes
+    nt_attributes.delete('id')
+    nt_attributes.delete('symbol')
+    nt.assign_attributes(nt_attributes)
+    nt.save!
+
+    Ticker.unscrape(original_symbol)
+  end
+
   def self.scrape?(symbol)
     t = Ticker.find_by(symbol: symbol)
     t.present? && t.scrape_data
@@ -82,6 +98,12 @@ healthcare_insurer
     symbols.each do |symbol|
       Ticker.find_by(symbol: symbol).update!(scrape_data: false)
     end
+  end
+
+  def self.unscrape_with_note(symbol, reason)
+    t = Ticker.find_by(symbol: symbol)
+    t.update(scrape_data: false)
+    t.create_note(reason)
   end
 
   ########### CONVENIENCE METHODS FOR STOCK PROPERTIES ###########
