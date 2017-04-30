@@ -1,3 +1,4 @@
+ruby '2.3'
 source 'https://rubygems.org'
 
 ### Rails and related ###
