@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118035941) do
+ActiveRecord::Schema.define(version: 20170430154228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -329,6 +329,7 @@ ActiveRecord::Schema.define(version: 20151118035941) do
     t.date     "short_interest_date"
     t.decimal  "short_ratio",                                precision: 15, scale: 3
     t.decimal  "short_pct_float",                            precision: 15, scale: 3
+    t.boolean  "on_nasdaq_list"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree

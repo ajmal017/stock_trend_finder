@@ -9,7 +9,7 @@ require File.join(Rails.root, 'lib/autoload_libs')
 # Note that this was built before I figured out how to use the eager_load_paths Rails setting to
 # automatically add everything in lib to the path and also make it work with the console reload! command.
 # I'm not ready to chance it yet since this system is lacking test coverage and I'm not sure what impact
-# it would have if I were to change this load process.
+# it would have if I were to change this load process. Will fix this and make use of eager_load_paths sometime later.
 #
 def reload_libs!
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'tdameritrade_data_interface.rb')
@@ -22,6 +22,7 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'market_data_pull', 'vix_futures_data_pull.rb')
   load File.join(Rails.root, 'lib', 'market_data_pull', 'ticker_float_data_pull.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'download_nasdaq_company_list.rb')
+  load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'insert_line_items.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'line_item_filter.rb')
 end
 
