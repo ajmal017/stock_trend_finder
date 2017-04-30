@@ -104,7 +104,7 @@ healthcare_insurer
 
   def self.unscrape(*symbols)
     symbols.each do |symbol|
-      Ticker.find_by(symbol: symbol).update!(scrape_data: false)
+      Ticker.find_by(symbol: symbol).update!(scrape_data: false, unscrape_date: Date.today)
     end
   end
 

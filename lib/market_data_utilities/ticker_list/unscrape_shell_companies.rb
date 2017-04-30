@@ -4,7 +4,7 @@ module MarketDataUtilities
       include Verbalize::Action
 
       def call
-        Ticker.shell_companies.map { |symbol, _company_name| Ticker.find_by(symbol: symbol).update(scrape_data: false) }
+        Ticker.shell_companies.map { |symbol, _company_name| Ticker.unscrape(symbol) }
       end
 
     end
