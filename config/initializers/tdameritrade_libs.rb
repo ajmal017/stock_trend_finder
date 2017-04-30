@@ -22,6 +22,7 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'market_data_pull', 'vix_futures_data_pull.rb')
   load File.join(Rails.root, 'lib', 'market_data_pull', 'ticker_float_data_pull.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'download_nasdaq_company_list.rb')
+  load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'line_item_filter.rb')
 end
 
 def tda_login!
