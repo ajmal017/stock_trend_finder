@@ -23,6 +23,7 @@ module MarketDataUtilities
       private
 
       def command(url, destination_file)
+        # In a production environment, would be a good idea to download to a temporary folder then save to S3
         "wget -O #{destination_file} \"#{url}\""
       end
 
