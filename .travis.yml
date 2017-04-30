@@ -3,3 +3,5 @@ rvm:
   - 2.3.0
 services:
   - postgresql
+before_script:
+  - psql -c 'create database stock_trend_finder_test;' -U postgres
