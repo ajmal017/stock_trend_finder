@@ -15,6 +15,14 @@ module MarketDataUtilities
           end
         end
       end
+
+      def remove_invalid_tickers(line_items)
+        line_items.select { |li| li[:symbol] =~ /\A[A-Z]+\z/  }
+      end
+
+      def remove_missing_industry_tag(line_items)
+        line_items.select { |li| li[:sector] != 'n/a' && li[:industry] != 'n/a' }
+      end
     end
   end
 end
