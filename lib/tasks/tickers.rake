@@ -9,6 +9,7 @@ namespace :tickers do
 
     puts "Importing into tickers table..."
     report = MarketDataUtilities::TickerList::ImportNasdaqCompanyLists.(date: Date.today).value
+    MarketDataUtilities::TickerList::UnscrapeShellCompanies.call
 
     puts "Done!"
 
@@ -20,6 +21,7 @@ namespace :tickers do
 
     puts "Tickers Dropped:"
     report[:tickers_dropped].sort{|i1, i2| i1[0]<=>i2[0]}.each { |line| puts(line.join(",\t"))}
+
   end
   
 end

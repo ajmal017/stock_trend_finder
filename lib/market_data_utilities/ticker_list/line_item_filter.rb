@@ -24,9 +24,14 @@ module MarketDataUtilities
           line_items.select { |li| li[:sector] != 'n/a' && li[:industry] != 'n/a' }
         end
 
+        def remove_shell_companies(line_items)
+          line_items.reject { |li| li[:symbol] =~ /[A-Z]{4}(W|U|X)/ }
+        end
+
         def run_all(line_items)
           result = self.convert_market_caps(line_items)
           result = self.remove_invalid_tickers(result)
+          result = self.remove_shell_companies(result)
           self.remove_missing_industry_tag(result)
         end
       end

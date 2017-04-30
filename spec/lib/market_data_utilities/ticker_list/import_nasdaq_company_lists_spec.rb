@@ -33,7 +33,5 @@ describe MarketDataUtilities::TickerList::ImportNasdaqCompanyLists do
       expect(Ticker.find_by(attrs)).to be_present,
         "Expected:\n#{attrs}\n\nDB has:\n#{Ticker.find_by(symbol:attrs[:symbol]).try(:attributes).try(:symbolize_keys).try(:slice, *attrs.keys)}"
     end
-
-    binding.pry
   end
 end

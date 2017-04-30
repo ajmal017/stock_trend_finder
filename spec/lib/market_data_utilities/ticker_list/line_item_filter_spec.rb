@@ -64,4 +64,25 @@ describe MarketDataUtilities::TickerList::LineItemFilter do
     it { is_expected.to eql(expected_returned_line_items) }
   end
 
+  context '.remove_shell_companies' do
+    subject { described_class.remove_shell_companies(new_tickers) }
+
+    let(:new_tickers) do
+      [
+        { symbol: 'SHLD', company_name: 'Sears Holding' },
+        { symbol: 'SHLDU', company_name: 'Sears Holding Acquisition' },
+        { symbol: 'SHLDW', company_name: 'Sears Holding Warrant' },
+      ]
+    end
+
+    let(:expected_returned_line_items) do
+      [
+        { symbol: 'SHLD', company_name: 'Sears Holding' },
+      ]
+    end
+
+    it { is_expected.to eql(expected_returned_line_items) }
+    
+  end
+
 end
