@@ -67,6 +67,10 @@ healthcare_insurer
     )
   end
 
+  def self.removed_tickers
+    Ticker.where(on_nasdaq_list: false, scrape_data: true).pluck(:symbol, :company_name).sort {|p1,p2| p1[0]<=>p2[0] }
+  end
+
   def self.rename(original_symbol, new_symbol)
     nt = Ticker.find_or_create_by(symbol: new_symbol)
     raise "Ticker #{new_symbol} #{nt.company_name} already exists!" unless nt.new_record?
@@ -92,6 +96,10 @@ healthcare_insurer
     symbols.each do |symbol|
       Ticker.find_by(symbol: symbol).update!(scrape_data: true)
     end
+  end
+
+  def self.shell_companies
+    Ticker.where(scrape_data: true).pluck(:symbol, :company_name).select { |symbol, _company_name| symbol =~ /[A-Z]{4}(W|U|X)/ }
   end
 
   def self.unscrape(*symbols)

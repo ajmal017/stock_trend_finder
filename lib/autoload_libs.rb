@@ -1,6 +1,11 @@
 #autoload :VIXFuturesCBOEHistoricalDataPull, 'market_data_pull/vix_futures_cboe_historical_data_pull'
 require 'market_data_pull/vix_futures_cboe_historical_data_pull'
 require 'market_data_pull/vix_central_screenshot'
+require 'market_data_utilities/ticker_list/download_nasdaq_company_list'
+require 'market_data_utilities/ticker_list/insert_line_items'
+require 'market_data_utilities/ticker_list/import_nasdaq_company_lists'
+require 'market_data_utilities/ticker_list/line_item_filter'
+require 'market_data_utilities/ticker_list/unscrape_shell_companies'
 require 'briefing/earnings_parser'
 require 'evernote/evernote_watchlist'
 

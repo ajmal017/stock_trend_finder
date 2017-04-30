@@ -1,6 +1,8 @@
 Winston's Stock Trend Finder Utilities
 --------------------------------------
 
+[![Build Status](https://travis-ci.org/wakproductions/tdameritrade_api.svg?branch=master)](https://travis-ci.org/wakproductions/tdameritrade_api)
+
 You will not find this to be a usable application. The only reason this is on
 Github is to discuss and collaborate with other people who are interested in
 how I'm using Ruby on Rails as a finance tool.
