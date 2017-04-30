@@ -11,7 +11,7 @@ module TDAmeritradeDataInterface
   def self.is_market_day?(day)
     date_string = day.strftime('%-m/%-d/%y')
     market_open=false
-    f=File.join(Dir.pwd, 'downloads', 'market_days.csv')
+    f=MARKET_DAYS_FILE
     File.open(f) do |f|
       f.any? do |line|
         market_open = true if line.strip==date_string
@@ -23,7 +23,7 @@ module TDAmeritradeDataInterface
   # gets number of market days between begin_day (excluding) and end_day (including)
   def self.market_days_between(begin_day, end_day)
     days_between=0
-    f=File.join(Dir.pwd, 'downloads', 'market_days.csv')
+    f=MARKET_DAYS_FILE
     File.open(f) do |f|
       f.any? do |line|
         line_date = Date.strptime(line.strip, '%m/%d/%y')
