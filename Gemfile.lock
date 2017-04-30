@@ -1,11 +1,11 @@
 GIT
-  remote: git@github.com:wakproductions/stocktwits-api-ruby.git
+  remote: https://github.com/wakproductions/stocktwits-api-ruby.git
   revision: f29adc5acf4c8cc7b575cdd7bbefb69d94f7837c
   specs:
     stocktwits-api-ruby (0.0.1.1.alpha)
 
 GIT
-  remote: git@github.com:wakproductions/tdameritrade_api.git
+  remote: https://github.com/wakproductions/tdameritrade_api.git
   revision: 520deb59344eade05a9a04c6114eed613eec1886
   specs:
     tdameritrade_api (1.2.2)

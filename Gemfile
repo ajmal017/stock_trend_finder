@@ -19,8 +19,8 @@ gem 'uglifier',           '>= 1.3.0'
 
 ### APIs for scraping/storing financial data ###
 gem 'evernote_oauth',       '~> 0.2.3'
-gem "stocktwits-api-ruby",  git: 'git@github.com:wakproductions/stocktwits-api-ruby.git'
-gem "tdameritrade_api",     git: 'git@github.com:wakproductions/tdameritrade_api.git'
+gem "stocktwits-api-ruby",  git: 'https://github.com/wakproductions/stocktwits-api-ruby.git'
+gem "tdameritrade_api",     git: 'https://github.com/wakproductions/tdameritrade_api.git'
 gem 'ystock',               '~> 0.4.10'
 
 # Don't put these in the development-only group because certain
