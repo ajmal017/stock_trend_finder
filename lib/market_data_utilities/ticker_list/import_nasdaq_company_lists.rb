@@ -31,7 +31,7 @@ module MarketDataUtilities
 
         MarketDataUtilities::TickerList::InsertLineItems.(
           input: MarketDataUtilities::TickerList::LineItemFilter.run_all(line_items)
-        )
+        ).value
       end
 
       private
