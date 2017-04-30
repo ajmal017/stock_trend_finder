@@ -37,6 +37,7 @@ gem 'bindata',              '~> 2.1'  # Used for parsing data received by the TD
 gem 'httparty',             '~> 0.13'
 gem 'htmlentities',         '~> 4.3'
 gem 'rufus-scheduler',      '~> 3.0'
+gem 'verbalize',            '~> 2.1'
 
 
 group :doc do
