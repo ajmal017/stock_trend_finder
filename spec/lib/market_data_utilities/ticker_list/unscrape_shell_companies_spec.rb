@@ -33,6 +33,7 @@ describe MarketDataUtilities::TickerList::UnscrapeShellCompanies do
       subject
 
       unscrapeable_records.each { |symbol| expect(Ticker.find_by(symbol: symbol).scrape_data).to eql(false)}
+      unscrapeable_records.each { |symbol| expect(Ticker.find_by(symbol: symbol).unscrape_date).to eql(Date.today)}
       scrapeable_records.each { |symbol| expect(Ticker.find_by(symbol: symbol).scrape_data).to eql(true)}
     end
   end
