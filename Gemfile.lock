@@ -258,7 +258,7 @@ DEPENDENCIES
   ystock (~> 0.4.10)
 
 RUBY VERSION
-   ruby 2.3.0p0
+   ruby 2.3.1p112
 
 BUNDLED WITH
    1.13.7
