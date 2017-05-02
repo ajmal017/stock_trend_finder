@@ -2,10 +2,12 @@ module LocalNoteTaker
   class Screenshot
     include Verbalize::Action
 
-    input :ticker, optional: [:symbol]
+    input optional: [:symbol]
 
     def call
       `#{command}`
+
+      screenshot_file_path
     end
 
     private
@@ -19,7 +21,7 @@ module LocalNoteTaker
     end
 
     def screenshot_file_name
-      "chart-#{Date.today.strftime('%Y%m%d')}#{'-' if symbol.present?}#{symbol}.png"
+      "chart-#{Time.now.strftime('%Y-%m-%d-%H%M%S')}#{'-' if symbol.present?}#{symbol}.png"
     end
 
     def screenshot_file_path
