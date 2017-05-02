@@ -13,50 +13,7 @@ class Ticker < ActiveRecord::Base
 
   validates_uniqueness_of :symbol
 
-  CATEGORY_TAGS=%w(
-      fundamental
-      dividend
-
-      cybersecurity
-      high-growth
-      new-tech
-      old-tech
-      four-horsemen-tech
-
-      banks
-
-      china
-
-      oil_exploration
-      oil_drilling
-      oil_drilling_offshore
-
-      utility
-      reit
-      healthcare_reit
-      oil_mlp
-      consumer_staples
-
-      chemicals
-
-
-      biotech
-      big-pharma
-
-      public-storage
-
-healthcare_insurer
-      drug_distributor
-      healthcare_service_provider
-
-      drugstore
-
-      earnings-mover
-  )
-
   scope :watching, ->{ where(scrape_data: true) }
-
-  enum category_tag: CATEGORY_TAGS
 
   def create_note(note_text='', note_date: Date.today, note_type: nil)
     ticker_notes.create(

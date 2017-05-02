@@ -22,9 +22,11 @@
 /log/*.log
 /tmp
 
-# Ignore temporary import files
+# Ignore temporary import & data files
 /downloads
 /data_stream_archive
+/public/local_note_taker_screenshots
 
 # Ignore the old versions of files I'm hoarding
 /lib/old
+

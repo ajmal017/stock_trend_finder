@@ -41,12 +41,13 @@ class Stocktwit < ActiveRecord::Base
     # @result = twit.watching
   end
 
+  # TODO abstract to lib
   def self.sync_twits
     messages_synced = 0
 
     ['greenspud', 'traderstewie', 'stt2318', 'starbreakouts', 'markminervini', 'robertlesnicki'].each do |stocktwits_user_name|
       attempt = 1
-      [1..ATTEMPTS].each do |attempt|
+      (1..ATTEMPTS).each do |attempt|
         since_id = Stocktwit.where(stocktwits_user_name: stocktwits_user_name).maximum(:stocktwit_id) || FIRST_TWIT_ID
         begin
           r = StockTwits.get_user_stream(stocktwits_user_name, since: since_id)
@@ -59,7 +60,7 @@ class Stocktwit < ActiveRecord::Base
           end
           break if r['messages'].count == 0
 
-          cursor = r['cursor']
+          _cursor = r['cursor']
           messages = r['messages'].reverse
 
           messages.each do |m|

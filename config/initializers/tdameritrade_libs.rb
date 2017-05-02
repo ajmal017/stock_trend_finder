@@ -26,6 +26,7 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'insert_line_items.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'line_item_filter.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'unscrape_shell_companies.rb')
+  reload!
 end
 
 def tda_login!
