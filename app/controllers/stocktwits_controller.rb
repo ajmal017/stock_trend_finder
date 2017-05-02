@@ -27,6 +27,16 @@ class StocktwitsController < ApplicationController
     end
   end
 
+  def add_twit
+    head :bad_request  if params[:message].nil?
+    outcome, @twit = LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(note: params[:message])
+    if outcome == :ok
+      render 'twit_result_ok'
+    else
+      render 'twit_result_error'
+    end
+  end
+
   def edit_note
     head :bad_request  if params[:note].nil? || params[:id].nil?
     @twit = Stocktwit.find(params[:id])

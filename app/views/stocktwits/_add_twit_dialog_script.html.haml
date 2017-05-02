@@ -1,0 +1,14 @@
+:coffee
+  add_twit = () ->
+    note_text = window.prompt('New Local Twit Text')
+    if note_text
+      $.ajax
+        url: 'stocktwits/add_twit',
+        method: 'post',
+        context: document.body,
+        data:
+          message: note_text,
+
+  $(document).on("click", 'button#add-twit-button', () ->
+    add_twit()
+  )

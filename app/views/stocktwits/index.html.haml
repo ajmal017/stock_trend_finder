@@ -23,6 +23,8 @@
     =link_to(image_tag(asset_path('icon-star-sm-yellow.png'), class: 'stocktwits-watch-indicator', style: "display: none;"), "#", id: 'toggle-watching')
   #stocktwits-filter-indicator{ "data-symbol"=>"" }
     &nbsp;
+  #stocktwits-add-twit
+    %button.btn.btn-default#add-twit-button{ type: 'button' } New Note
 
   #stocktwits-content
     %table.stocktwits
@@ -41,3 +43,4 @@
 
 =render "load_twits_script"
 =render "edit_note_dialog_script"
+=render "add_twit_dialog_script"

@@ -6,7 +6,7 @@ module LocalNoteTaker
 
     def call
       raise "You forgot to add ticker symbol" if symbols.empty?
-      Stocktwits::Create.call(
+      outcome, result = Stocktwits::Create.call(
         stocktwit_time: Time.now,
         message: note,
         user_name: 'greenspud',
@@ -16,6 +16,8 @@ module LocalNoteTaker
         image_large_url: screenshot_file_url,
         image_original_url: screenshot_file_url,
       )
+
+      result
     end
 
     private

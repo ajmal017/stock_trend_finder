@@ -46,7 +46,7 @@ td.stocktwit-message {
 
 td.stocktwit-thumb {
   img {
-    width: 175px;
+    width: 125px;
   }
   width: 175px;
   padding: 5px 0px;
@@ -68,7 +68,6 @@ td.stocktwit-thumb {
 }
 
 .message-call-result-buttons {
-  margin-top: 10px;
   img {
     width: 15px;
     height: 15px;
@@ -95,6 +94,10 @@ td.stocktwit-thumb {
   margin: 2px;
 }
 
+
+#stocktwits-add-twit {
+  display: inline;
+}
 
 #stocktwits-filter-indicator {
   display: inline;
