@@ -136,6 +136,7 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.6)
       pry (>= 0.10.4)
+    puma (3.6.0)
     rack (1.6.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -245,6 +246,7 @@ DEPENDENCIES
   pry (~> 0.10.4)
   pry-byebug (~> 3.4.2)
   pry-rails (~> 0.3.6)
+  puma (= 3.6)
   rails (= 4.2)
   rspec-rails (~> 3.5)
   rufus-scheduler (~> 3.0)
@@ -261,4 +263,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.7
+   1.14.6
