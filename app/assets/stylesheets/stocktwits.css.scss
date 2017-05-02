@@ -36,6 +36,9 @@ td.stocktwit-message {
 }
 
 td.stocktwit-thumb {
+  img {
+    width: 175px;
+  }
   width: 175px;
   padding: 5px 0px;
   border-bottom: 1px solid #CCCCCC;
