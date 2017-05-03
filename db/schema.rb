@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 20170501223625) do
     t.integer  "price_gap_id"
     t.string   "action",        limit: 255
     t.decimal  "pct_value_end"
-    t.datetime "created_at"
+    t.datetime "created_at"                         
     t.datetime "updated_at"
   end
 

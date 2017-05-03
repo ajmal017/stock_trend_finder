@@ -153,7 +153,7 @@ module TDAmeritradeDataInterface
       records_to_update.select { |dsp| dsp[:price_date]==price_date }.map { |dsp| dsp[:ticker_symbol] }.each_slice(100) do |tickers|
         begin
           quote_bunch=[]
-          3.times.each do |error_count|
+          2.times.each do |error_count|
             begin
               quote_bunch = c.get_price_history(tickers, intervaltype: :daily, intervalduration: 1, startdate: price_date, enddate: price_date)
               break
@@ -161,7 +161,7 @@ module TDAmeritradeDataInterface
               #binding.pry
               puts "Error processing - #{e.message} - attempt (#{error_count + 1})"
               log = log + "Error processing - #{e.message} - attempt (#{error_count + 1})\n"
-              sleep 10
+              sleep Random.rand(15)
             end
           end
 

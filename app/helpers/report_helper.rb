@@ -69,4 +69,13 @@ module ReportHelper
 
     css_class.strip
   end
+
+  def symbol_icon(symbol)
+    image = $ticker_icon_categories[symbol]
+    if image
+      image_tag(asset_path(image), class: 'report-stock-icon')
+    else
+      ''
+    end
+  end
 end
