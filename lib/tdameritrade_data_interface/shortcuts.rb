@@ -6,6 +6,10 @@ module TDAmeritradeDataInterface
     def n(message)
       LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(note: message)
     end
+
+    def vix_futures_report
+      VIXFuturesReport.new.build_report
+    end
   end
 
   extend Shortcuts
