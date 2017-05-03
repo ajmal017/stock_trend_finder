@@ -9,6 +9,12 @@
       $(function() {
           $( "#report_date" ).datepicker();
         });
+
+    :javascript
+      setTimeout(function(){
+        window.location.reload(1);
+      }, 600000);
+      
   %body
     %nav.navbar.navbar-default{ role: "navigation" }
       .container
