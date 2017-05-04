@@ -39,8 +39,7 @@ class StocktwitsController < ApplicationController
 
   def edit_note
     head :bad_request  if params[:note].nil? || params[:id].nil?
-    @twit = Stocktwit.find(params[:id])
-    if @twit.update(note: params[:note])
+    if @twit = Stocktwits::AddNote.(stocktwit_id: params[:id], note_message: params[:note])
       render 'note_result_ok'
     else
       render 'note_result_error'

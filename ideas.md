@@ -26,7 +26,11 @@ Reports
     - Dividend leaders
     - Number of stocks above/below 200DMA (need split function for this to work effectively)
     - Stocks that hit a 52wk high within the last 2 weeks. Number & list.
-    - Put a little symbol on the biotech stocks on the watch lists so I know what's a #btf
+    - 72-wk high list
+    - Sectors that are up or down by the last X number of days
+      - market cap
+      - country (Chinese stocks, American stocks, etc)
+      - custom groups - video game stocks, certain types of x or y stocks
 
     
 Stocktwits Report

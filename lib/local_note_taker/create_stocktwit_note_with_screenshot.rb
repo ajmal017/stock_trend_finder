@@ -1,5 +1,6 @@
 module LocalNoteTaker
   class CreateStocktwitNoteWithScreenshot
+    include ParseTags
     include Verbalize::Action
 
     input :note
@@ -23,12 +24,12 @@ module LocalNoteTaker
     private
 
     def hashtags
-      @hashtags ||= note.scan(/#\S*/)
+      @hashtags ||= parse_hashtags(note)
     end
 
     # First characters of the note should be the ticker symbol
     def symbols
-      @symbols ||= note.scan(/^[A-Z]+/)
+      @symbols ||= parse_symbols(note)
     end
 
     def screenshot_file_paths

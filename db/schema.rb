@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170501223625) do
+ActiveRecord::Schema.define(version: 20170504152130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 20170501223625) do
     t.integer  "price_gap_id"
     t.string   "action",        limit: 255
     t.decimal  "pct_value_end"
-    t.datetime "created_at"                         
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
@@ -254,6 +254,8 @@ ActiveRecord::Schema.define(version: 20170501223625) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "stocktwit_hashtags", ["stocktwit_id", "tag"], name: "index_stocktwit_hashtags_on_stocktwit_id_and_tag", unique: true, using: :btree
 
   create_table "stocktwit_tickers", force: :cascade do |t|
     t.integer  "stocktwit_id"
