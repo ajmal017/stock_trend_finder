@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504152130) do
+ActiveRecord::Schema.define(version: 20170504184910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20170504152130) do
     t.datetime "snapshot_time"
     t.decimal  "sma50",                            precision: 15, scale: 3
     t.decimal  "sma200",                           precision: 15, scale: 3
+    t.float    "high_52_week"
   end
 
   add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree

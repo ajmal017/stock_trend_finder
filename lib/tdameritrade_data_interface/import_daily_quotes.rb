@@ -3,8 +3,6 @@ require 'tdameritrade_data_interface/util'
 require 'evernote/evernote_watchlist'
 
 module TDAmeritradeDataInterface
-  NEW_TICKER_BEGIN_DATE=Date.new(2013,10,1)
-
   include SQLQueryStrings
 
   def self.defunct_tickers
