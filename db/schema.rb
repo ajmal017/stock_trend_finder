@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170504184910) do
+ActiveRecord::Schema.define(version: 20170505012556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,17 +19,17 @@ ActiveRecord::Schema.define(version: 20170504184910) do
   create_table "after_hours_prices", force: :cascade do |t|
     t.date     "price_date"
     t.string   "ticker_symbol",        limit: 255
-    t.decimal  "high",                             precision: 15, scale: 2
-    t.decimal  "low",                              precision: 15, scale: 2
-    t.decimal  "volume",                           precision: 15, scale: 2
+    t.float    "high"
+    t.float    "low"
+    t.float    "volume"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "last_trade",                       precision: 15, scale: 2
+    t.float    "last_trade"
     t.datetime "latest_print_time"
-    t.decimal  "intraday_high",                    precision: 15, scale: 2
-    t.decimal  "intraday_low",                     precision: 15, scale: 2
-    t.decimal  "intraday_close",                   precision: 15, scale: 2
-    t.decimal  "average_volume_50day",             precision: 15, scale: 3
+    t.float    "intraday_high"
+    t.float    "intraday_low"
+    t.float    "intraday_close"
+    t.float    "average_volume_50day"
   end
 
   add_index "after_hours_prices", ["ticker_symbol", "price_date"], name: "index_after_hours_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
@@ -37,24 +37,24 @@ ActiveRecord::Schema.define(version: 20170504184910) do
   create_table "daily_stock_prices", force: :cascade do |t|
     t.integer  "ticker_id"
     t.date     "price_date"
-    t.decimal  "open",                             precision: 15, scale: 2
-    t.decimal  "high",                             precision: 15, scale: 2
-    t.decimal  "low",                              precision: 15, scale: 2
-    t.decimal  "close",                            precision: 15, scale: 2
-    t.decimal  "volume",                           precision: 15, scale: 3
+    t.float    "open"
+    t.float    "high"
+    t.float    "low"
+    t.float    "close"
+    t.float    "volume"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "ticker_symbol",        limit: 255
-    t.decimal  "previous_close",                   precision: 15, scale: 2
-    t.decimal  "previous_high",                    precision: 15, scale: 2
-    t.decimal  "previous_low",                     precision: 15, scale: 2
-    t.boolean  "exclude",                                                   default: false
-    t.decimal  "average_volume_50day",             precision: 15, scale: 3
+    t.float    "previous_close"
+    t.float    "previous_high"
+    t.float    "previous_low"
+    t.boolean  "exclude",                          default: false
+    t.float    "average_volume_50day"
     t.decimal  "ema13"
     t.string   "candle_vs_ema13",      limit: 255
     t.datetime "snapshot_time"
-    t.decimal  "sma50",                            precision: 15, scale: 3
-    t.decimal  "sma200",                           precision: 15, scale: 3
+    t.float    "sma50"
+    t.float    "sma200"
     t.float    "high_52_week"
   end
 
@@ -95,10 +95,10 @@ ActiveRecord::Schema.define(version: 20170504184910) do
   create_table "memoized_fields", force: :cascade do |t|
     t.string   "ticker_symbol"
     t.date     "price_date"
-    t.decimal  "premarket_average_volume_50day", precision: 15, scale: 2
-    t.decimal  "premarket_previous_high",        precision: 15, scale: 2
-    t.decimal  "premarket_previous_low",         precision: 15, scale: 2
-    t.decimal  "premarket_previous_close",       precision: 15, scale: 2
+    t.float    "premarket_average_volume_50day"
+    t.float    "premarket_previous_high"
+    t.float    "premarket_previous_low"
+    t.float    "premarket_previous_close"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -142,15 +142,15 @@ ActiveRecord::Schema.define(version: 20170504184910) do
     t.string   "ticker_symbol",        limit: 255
     t.date     "price_date"
     t.datetime "latest_print_time"
-    t.decimal  "last_trade",                       precision: 15, scale: 2
-    t.decimal  "high",                             precision: 15, scale: 2
-    t.decimal  "low",                              precision: 15, scale: 2
-    t.decimal  "close",                            precision: 15, scale: 2
-    t.decimal  "previous_high",                    precision: 15, scale: 2
-    t.decimal  "previous_low",                     precision: 15, scale: 2
-    t.decimal  "previous_close",                   precision: 15, scale: 2
-    t.decimal  "volume",                           precision: 15, scale: 3
-    t.decimal  "average_volume_50day",             precision: 15, scale: 3
+    t.float    "last_trade"
+    t.float    "high"
+    t.float    "low"
+    t.float    "close"
+    t.float    "previous_high"
+    t.float    "previous_low"
+    t.float    "previous_close"
+    t.float    "volume"
+    t.float    "average_volume_50day"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -169,26 +169,26 @@ ActiveRecord::Schema.define(version: 20170504184910) do
   create_table "real_time_quotes", force: :cascade do |t|
     t.integer  "ticker_id"
     t.string   "ticker_symbol", limit: 255
-    t.decimal  "last_trade"
+    t.float    "last_trade"
     t.datetime "quote_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "run_time",      limit: 255
-    t.decimal  "open"
-    t.decimal  "low"
-    t.decimal  "high"
-    t.decimal  "volume",                    precision: 15
+    t.float    "open"
+    t.float    "low"
+    t.float    "high"
+    t.float    "volume"
   end
 
   create_table "short_interest_histories", force: :cascade do |t|
     t.string   "ticker_symbol"
     t.date     "short_interest_date"
     t.integer  "shares_short"
-    t.decimal  "short_pct_float",     precision: 15, scale: 3
-    t.decimal  "short_ratio",         precision: 15, scale: 3
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.decimal  "float"
+    t.float    "short_pct_float"
+    t.float    "short_ratio"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.float    "float"
   end
 
   add_index "short_interest_histories", ["ticker_symbol", "short_interest_date"], name: "index_on_short_interest_histories_ticker_sid", unique: true, using: :btree
@@ -321,12 +321,12 @@ ActiveRecord::Schema.define(version: 20170504184910) do
     t.boolean  "adr"
     t.datetime "date_removed"
     t.string   "note",                           limit: 255
-    t.decimal  "float",                                      precision: 15, scale: 2
-    t.decimal  "institutional_holdings_percent"
+    t.float    "float"
+    t.float    "institutional_holdings_percent"
     t.date     "hide_from_reports_until"
     t.date     "short_interest_date"
-    t.decimal  "short_ratio",                                precision: 15, scale: 3
-    t.decimal  "short_pct_float",                            precision: 15, scale: 3
+    t.float    "short_ratio"
+    t.float    "short_pct_float"
     t.boolean  "on_nasdaq_list"
     t.date     "unscrape_date"
   end

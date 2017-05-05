@@ -21,14 +21,12 @@ class ConvertDecimalFieldsToFloat < ActiveRecord::Migration
     change_column :daily_stock_prices, :sma50, :float
     change_column :daily_stock_prices, :sma200, :float
 
-    change_column :memoized_fields, :open, :float
-    change_column :memoized_fields, :high, :float
-    change_column :memoized_fields, :low, :float
-    change_column :memoized_fields, :close, :float
-    change_column :memoized_fields, :volume, :float
+    change_column :memoized_fields, :premarket_average_volume_50day, :float
+    change_column :memoized_fields, :premarket_previous_high, :float
+    change_column :memoized_fields, :premarket_previous_low, :float
+    change_column :memoized_fields, :premarket_previous_close, :float
 
     change_column :premarket_prices, :last_trade, :float
-    change_column :premarket_prices, :open, :float
     change_column :premarket_prices, :high, :float
     change_column :premarket_prices, :low, :float
     change_column :premarket_prices, :close, :float
@@ -76,14 +74,12 @@ class ConvertDecimalFieldsToFloat < ActiveRecord::Migration
     change_column :daily_stock_prices, :sma50, :decimal, precision: 15, scale: 2
     change_column :daily_stock_prices, :sma200, :decimal, precision: 15, scale: 2
 
-    change_column :memoized_fields, :open, :decimal, precision: 15, scale: 2
-    change_column :memoized_fields, :high, :decimal, precision: 15, scale: 2
-    change_column :memoized_fields, :low, :decimal, precision: 15, scale: 2
-    change_column :memoized_fields, :close, :decimal, precision: 15, scale: 2
-    change_column :memoized_fields, :volume, :decimal, precision: 15, scale: 2
+    change_column :memoized_fields, :premarket_average_volume_50day, :decimal, precision: 15, scale: 2
+    change_column :memoized_fields, :premarket_previous_high, :decimal, precision: 15, scale: 2
+    change_column :memoized_fields, :premarket_previous_low, :decimal, precision: 15, scale: 2
+    change_column :memoized_fields, :premarket_previous_close, :decimal, precision: 15, scale: 2
 
     change_column :premarket_prices, :last_trade, :decimal, precision: 15, scale: 2
-    change_column :premarket_prices, :open, :decimal, precision: 15, scale: 2
     change_column :premarket_prices, :high, :decimal, precision: 15, scale: 2
     change_column :premarket_prices, :low, :decimal, precision: 15, scale: 2
     change_column :premarket_prices, :close, :decimal, precision: 15, scale: 2
