@@ -157,15 +157,17 @@ module TDAmeritradeDataInterface
       records_to_update.select { |dsp| dsp[:price_date]==price_date }.map { |dsp| dsp[:ticker_symbol] }.each_slice(100) do |tickers|
         begin
           quote_bunch=[]
-          3.times.each do |error_count|
+          2.times.each do |error_count|
             begin
               quote_bunch = c.get_price_history(tickers, intervaltype: :daily, intervalduration: 1, startdate: price_date, enddate: price_date)
               break
             rescue Exception => e
               #binding.pry
+
+              #TODO figure out what causes it - why we trying to get records that dont exist
               puts "Error processing - #{e.message} - attempt (#{error_count + 1})"
               log = log + "Error processing - #{e.message} - attempt (#{error_count + 1})\n"
-              sleep 10
+              sleep 3 # TODO reduced from 10 to 3
             end
           end
 
@@ -526,7 +528,7 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
   end
 
-  def self.catch_up(date)
+  def self.catch_up(date, vacuum=true)
     unless date.is_a? Date
       puts "Enter an input date"
       return
@@ -537,11 +539,16 @@ module TDAmeritradeDataInterface
     update_daily_stock_prices_from_real_time_snapshot
     import_premarket_quotes(date: date)
     import_afterhours_quotes(date: date)
-    VIXFuturesHistory.import_vix_futures(true)
-    Stocktwit.sync_twits
 
-    ActiveRecord::Base.connection.execute "VACUUM FULL"
-    ActiveRecord::Base.connection.execute "VACUUM ANALYZE"
+    if date == Date.today
+      VIXFuturesHistory.import_vix_futures(true)
+      Stocktwit.sync_twits
+    end
+
+    if vacuum
+      ActiveRecord::Base.connection.execute "VACUUM FULL"
+      ActiveRecord::Base.connection.execute "VACUUM ANALYZE"
+    end
   end
 
   def self.realtime_quote_daemon_block
