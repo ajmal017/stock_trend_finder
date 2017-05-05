@@ -23,7 +23,7 @@
     -report.each_with_index do |r, i|
       %tr{ id: r['ticker_symbol'] }
         %td= i+1
-        %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
+        %td{ class: set_css_class(r, :ticker_symbol) }= "#{r['ticker_symbol']} #{symbol_icon(r['ticker_symbol'])}".html_safe
         -if fields.include?(:company_name)
           %td{ class: set_css_class(r, :company_name) }= r['company_name']
         %td{ class: set_css_class(r, :last_trade) }= r['last_trade']

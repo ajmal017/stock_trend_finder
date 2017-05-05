@@ -9,6 +9,13 @@
     - sector-specific tags, i.e. China, oil, cloud
 * Handle splits!
 
+Stock Data
+* Reset stock history after split
+* "as recorded" daily stock price table - populate it with stock data upon resetting. only daily stock prices 
+  get reset - premarket prices remain
+*  
+
+
 VIX
     - Download the historical VIX futures data from CBOT and put it into the database
         - Determine length of historical bouts of contango and anticipated effects on XIV
@@ -26,6 +33,13 @@ Reports
     - Dividend leaders
     - Number of stocks above/below 200DMA (need split function for this to work effectively)
     - Stocks that hit a 52wk high within the last 2 weeks. Number & list.
+    - 52-wk high list
+    - Sectors that are up or down by the last X number of days
+      - market cap
+      - country (Chinese stocks, American stocks, etc)
+      - custom groups - video game stocks, certain types of x or y stocks
+    - Way to hide stocks I don't want to see on each report - report - hide_until date
+    -  
 
     
 Stocktwits Report

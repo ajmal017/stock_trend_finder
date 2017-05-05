@@ -13,8 +13,8 @@
       %th#index
       %th#ticker-symbol{ style: "width: 100px;"} Ticker Symbol
       %th#last-trade{ style: "width: 100px;"} Last Trade
-      %th#high{ style: "width: 100px;"} High
-      %th#pct-change{ style: "width: 100px;"} % Chg
+      %th#wk52-high{ style: "width: 100px;"} 52wk
+      %th#pct-change{ style: "width: 100px;"} % above
       %th#volume{ style: "width: 100px;"} Volume (K)
       %th#average-volume{ style: "width: 100px;"} Avg Vol (K)
       %th#volume-ratio{ style: "width: 100px;"} Volume Ratio
@@ -26,7 +26,7 @@
         %td= i+1
         %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
         %td{ class: set_css_class(r, :last_trade) }= r['close']
-        %td{ class: set_css_class(r, :high) }= r['high']
+        %td{ class: set_css_class(r, :high) }= r['high_52_week']
         %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
         %td{ class: set_css_class(r, :volume) }= r['volume']
         %td{ class: set_css_class(r, :average_volume) }= r['average_volume']

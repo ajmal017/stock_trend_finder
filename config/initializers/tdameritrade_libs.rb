@@ -1,6 +1,21 @@
+# frozen_string_literal: true
 require File.join(Rails.root, 'lib/tdameritrade_data_interface/tdameritrade_data_interface')
 require File.join(Rails.root, 'lib/tdameritrade_data_interface/db_maintenance')
 require File.join(Rails.root, 'lib/autoload_libs')
+
+def load_ticker_icon_category_list
+  biotech = Ticker.all.select(:symbol).where(industry: "Biotechnology: Electromedical & Electrotherapeutic Apparatus").pluck(:symbol)
+  pharma = Ticker.all.select(:symbol).where(industry: "Major Pharmaceuticals").pluck(:symbol)
+
+  ticker_hash = {}
+  biotech.each { |symbol| ticker_hash[symbol] = 'stock-icon-biotech.png' }
+  pharma.each { |symbol| ticker_hash[symbol] = 'stock-icon-majorpharma.png' }
+
+  $ticker_icon_categories = ticker_hash
+end
+
+load_ticker_icon_category_list
+
 
 # This method is here to initially load the libraries at the command line, and
 # it uses the 'load' method vs 'require' so that I can make minor changes to the libs without
@@ -16,6 +31,7 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'sql_query_strings.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_daily_quotes.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'import_minute_quotes.rb')
+  load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'shortcuts.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'util.rb')
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'vix.rb')
   load File.join(Rails.root, 'lib', 'market_data_utility.rb')
@@ -26,6 +42,9 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'insert_line_items.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'line_item_filter.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'unscrape_shell_companies.rb')
+
+  load_ticker_icon_category_list
+
   reload!
 end
 

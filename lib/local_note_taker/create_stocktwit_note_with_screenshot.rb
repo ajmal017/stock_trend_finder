@@ -1,43 +1,48 @@
 module LocalNoteTaker
   class CreateStocktwitNoteWithScreenshot
+    include ParseTags
     include Verbalize::Action
 
     input :note
 
     def call
-      Stocktwits::Create.call(
+      raise "You forgot to add ticker symbol" if symbols.empty?
+      outcome, result = Stocktwits::Create.call(
         stocktwit_time: Time.now,
         message: note,
         user_name: 'greenspud',
-        symbols: parse_symbols,
-        hashtags: parse_hashtags,
-        image_thumbnail_url: thumbnail_file_url,
+        symbols: symbols,
+        hashtags: hashtags,
+        image_thumbnail_url: screenshot_file_url, # decided not to use thumbnails
         image_large_url: screenshot_file_url,
         image_original_url: screenshot_file_url,
       )
+
+      result
     end
 
     private
 
-    def parse_hashtags
-      @parse_hashtags ||= note.scan(/#\S*/)
+    def hashtags
+      @hashtags ||= parse_hashtags(note)
     end
 
     # First characters of the note should be the ticker symbol
-    def parse_symbols
-      @parse_symbols ||= note.scan(/^[A-Z]+/)
+    def symbols
+      @symbols ||= parse_symbols(note)
     end
 
     def screenshot_file_paths
-      @screenshot_file_paths ||= Screenshot.call(symbol: parse_symbols.first).value
+      @screenshot_file_paths ||= Screenshot.call(symbol: symbols.first).value
     end
 
     def screenshot_file_url
       @screenshot_file_url ||= "/local_note_taker_screenshots/full_size/#{screenshot_file_paths[:image]}"
     end
 
-    def thumbnail_file_url
-      @thumbnail_file_url ||= "/local_note_taker_screenshots/thumbnails/#{screenshot_file_paths[:thumbnail]}"
-    end
+    # Decided we're not going to use thumbnails, but keeping the code here in case I change my mind
+    # def thumbnail_file_url
+    #   @thumbnail_file_url ||= "/local_note_taker_screenshots/thumbnails/#{screenshot_file_paths[:thumbnail]}"
+    # end
   end
 end

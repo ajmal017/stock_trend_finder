@@ -11,6 +11,12 @@ class Stocktwit < ActiveRecord::Base
 
   scope :showing, -> (user_id='greenspud') { where(hide: false, stocktwits_user_name: user_id).order(id: :desc) }
 
+  def self.rename_symbol(old_symbol, new_symbol)
+    Stocktwit.where(symbol: old_symbol).update_all(symbol: new_symbol)
+    StocktwitTicker.where(ticker_symbol: old_symbol).update_all(ticker_symbol: new_symbol)
+    StocktwitWatchTicker.where(ticker_symbol: old_symbol).update_all(ticker_symbol: new_symbol)
+  end
+
   def self.ticker_list(order_by='ticker_symbol', user_id='greenspud')
     ActiveRecord::Base.connection.execute(ticker_list_sql(order_by, user_id))
   end

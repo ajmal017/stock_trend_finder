@@ -260,32 +260,36 @@ SQL
 
       def select_52week_highs(most_recent_date)
         <<SQL
-with ticker_list as (
+with ticker_list as 
+(
   select
-  ticker_symbol, high, close, volume,
-  round(close/previous_close, 2) as pct_change,
-  average_volume_50day as average_volume,
-  round(volume / average_volume_50day, 2) as volume_ratio,
-  float
+    ticker_symbol, high, close, volume,
+    round((close/previous_close-1)*100, 2) as pct_change,
+    average_volume_50day as average_volume,
+    round(volume / average_volume_50day, 2) as volume_ratio,
+    float,
+    high_52_week,
+    round(high_52_week::numeric/close, 2) as pct_above_52_week
   from daily_stock_prices dsp inner join tickers tix on dsp.ticker_symbol=tix.symbol
-  where price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and tix.scrape_data and average_volume_50day>0
+  where 
+    price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
+    close > high_52_week and 
+    tix.scrape_data and
+    (tix.hide_from_reports_until is null or tix.hide_from_reports_until <= current_date)
 )
 select
-ticker_symbol,
-close,
-pct_change,
-high,
-volume,
-average_volume,
-volume_ratio,
-float
+  ticker_symbol,
+  close,
+  pct_change,
+  high,
+  volume,
+  average_volume,
+  volume_ratio,
+  float,
+  high_52_week
 from ticker_list
-where
-high=(select max(high) as high_52week from (select high from daily_stock_prices dsp52 where ticker_symbol=ticker_list.ticker_symbol and price_date<='#{most_recent_date.strftime('%Y-%m-%d')}' order by price_date desc limit 250) as high_52week_qry)
 order by
-volume_ratio desc and
-(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
-scrape_data=true
+  volume_ratio desc
 SQL
       end
 
@@ -536,6 +540,18 @@ from daily_stock_prices
 where price_date=(select max(price_date) from daily_stock_prices) and
 ticker_symbol not in (select ticker_symbol from daily_stock_prices where price_date='#{prepopulate_date.strftime('%Y-%m-%d')}') and
 ticker_symbol in (select symbol from tickers where scrape_data=true)
+SQL
+      end
+
+      def update_high_52_week(begin_date=NEW_TICKER_BEGIN_DATE)
+        <<SQL
+update daily_stock_prices dsp_upd set
+high_52_week=(
+  select max(high) 
+  from daily_stock_prices dsp_high 
+  where dsp_high.ticker_symbol=dsp_upd.ticker_symbol and price_date>=(current_date - interval '1 year')
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and high_52_week is null
 SQL
       end
 
