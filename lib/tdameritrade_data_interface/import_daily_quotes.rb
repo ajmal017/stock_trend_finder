@@ -1,3 +1,4 @@
+require 'tdameritrade_data_interface/run_daemons'
 require 'tdameritrade_data_interface/sql_query_strings'
 require 'tdameritrade_data_interface/util'
 require 'evernote/evernote_watchlist'
@@ -40,8 +41,6 @@ module TDAmeritradeDataInterface
             else
               if begin_date.nil?
                 prices = c.get_daily_price_history(ticker.symbol, (last_dsp.price_date+1), end_date)
-                #prices = c.get_daily_price_history(ticker.symbol, Date.today.strftime('%Y%m%d'))
-                #prices = c.get_daily_price_history(ticker.symbol, '20140708')
               else
                 prices = c.get_daily_price_history(ticker.symbol, begin_date, end_date)
               end

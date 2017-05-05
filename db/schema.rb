@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20170504184910) do
     t.string   "ticker_symbol",        limit: 255
     t.decimal  "high",                             precision: 15, scale: 2
     t.decimal  "low",                              precision: 15, scale: 2
-    t.decimal  "volume",                           precision: 15, scale: 3
+    t.decimal  "volume",                           precision: 15, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "last_trade",                       precision: 15, scale: 2
