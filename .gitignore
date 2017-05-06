@@ -29,4 +29,5 @@
 
 # Ignore the old versions of files I'm hoarding
 /lib/old
+gitignore/
 
