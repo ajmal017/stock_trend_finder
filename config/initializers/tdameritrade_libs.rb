@@ -4,6 +4,8 @@ require File.join(Rails.root, 'lib/tdameritrade_data_interface/db_maintenance')
 require File.join(Rails.root, 'lib/autoload_libs')
 
 def load_ticker_icon_category_list
+  return $ticker_icon_categories = {} unless ActiveRecord::Base.connection.data_source_exists? 'tickers'
+
   biotech = Ticker.all.select(:symbol).where(industry: "Biotechnology: Electromedical & Electrotherapeutic Apparatus").pluck(:symbol)
   pharma = Ticker.all.select(:symbol).where(industry: "Major Pharmaceuticals").pluck(:symbol)
 
