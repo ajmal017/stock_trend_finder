@@ -2,7 +2,7 @@ ruby '2.3.1'
 source 'https://rubygems.org'
 
 ### Rails and related ###
-gem 'rails', '4.2'
+gem 'rails', '4.2.7'
 gem 'puma',  '3.6'
 
 gem 'autoprefixer-rails', '~> 2.1'
