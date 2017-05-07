@@ -9,6 +9,12 @@ class ReportPresenter
     @report = report
   end
 
+  def self.display_number(value, round=2)
+    return unless (f = value.try(:to_f)).present?
+
+    "%.#{round}f" % f
+  end
+
   def self.display_short(days_to_cover, float_pct)
     if days_to_cover && float_pct
       days_to_cover.rjust(5) + " | " + float_pct.rjust(3).gsub(' ', '&nbsp;') + "%"

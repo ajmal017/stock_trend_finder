@@ -25,12 +25,12 @@
       %tr{ id: r['ticker_symbol'] }
         %td= i+1
         %td{ class: set_css_class(r, :ticker_symbol) }= r['ticker_symbol']
-        %td{ class: set_css_class(r, :last_trade) }= r['close']
-        %td{ class: set_css_class(r, :high) }= r['high_52_week']
-        %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
-        %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
-        %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
-        %td{ class: set_css_class(r, :float) }= r['float'].to_f.round(2)
+        %td{ class: set_css_class(r, :last_trade) }= ReportPresenter.display_number(r['close'], 2)
+        %td{ class: set_css_class(r, :high) }= ReportPresenter.display_number(r['high_52_week'], 2)
+        %td{ class: set_css_class(r, :pct_change) }= ReportPresenter.display_number(r['pct_change'], 2)
+        %td{ class: set_css_class(r, :volume) }= ReportPresenter.display_number(r['volume'], 1)
+        %td{ class: set_css_class(r, :average_volume) }= ReportPresenter.display_number(r['average_volume'], 1)
+        %td{ class: set_css_class(r, :volume_ratio) }= ReportPresenter.display_number(r['volume_ratio'], 1)
+        %td{ class: set_css_class(r, :float) }= ReportPresenter.display_number(r['float'], 2)
         %td{ class: set_css_class(r, :hide) }= link_to "H", reports_hide_symbol_path(r['ticker_symbol']), remote: true, method: :patch
         %td{ class: set_css_class(r, :unscrape) }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch

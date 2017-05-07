@@ -26,18 +26,18 @@
         %td{ class: set_css_class(r, :ticker_symbol) }= "#{r['ticker_symbol']} #{symbol_icon(r['ticker_symbol'])}".html_safe
         -if fields.include?(:company_name)
           %td{ class: set_css_class(r, :company_name) }= r['company_name']
-        %td{ class: set_css_class(r, :last_trade) }= r['last_trade']
+        %td{ class: set_css_class(r, :last_trade) }= ReportPresenter.display_number(r['last_trade'], 2)
         -if fields.include?(:gap_percent)
-          %td{ class: set_css_class(r, :gap_percent)}= r['gap_pct']
+          %td{ class: set_css_class(r, :gap_percent)}= ReportPresenter.display_number(r['gap_pct'], 2)
         -if fields.include?(:pct_change)
-          %td{ class: set_css_class(r, :pct_change) }= r['pct_change']
+          %td{ class: set_css_class(r, :pct_change) }= ReportPresenter.display_number(r['pct_change'], 1)
         -if fields.include?(:volume)
-          %td{ class: set_css_class(r, :volume) }= r['volume']
-        %td{ class: set_css_class(r, :average_volume) }= r['average_volume']
+          %td{ class: set_css_class(r, :volume) }= ReportPresenter.display_number(r['volume'], 1)
+        %td{ class: set_css_class(r, :average_volume) }= ReportPresenter.display_number(r['average_volume'], 1)
         -if fields.include?(:volume_ratio)
-          %td{ class: set_css_class(r, :volume_ratio) }= r['volume_ratio']
+          %td{ class: set_css_class(r, :volume_ratio) }= ReportPresenter.display_number(r['volume_ratio'], 1)
         %td{ class: set_css_class(r, :short_ratio) }= raw(ReportPresenter.display_short(r['short_ratio'], r['short_pct_float']))
-        %td{ class: set_css_class(r, :float) }= r['float']
+        %td{ class: set_css_class(r, :float) }= ReportPresenter.display_number(r['float'], 1)
         -if fields.include?(:float_pct)
           %td{ class: set_css_class(r, :float_percent) }= format("%.2f", r['volume'].to_f / (r['float'].to_f * 1000) * 100) + '%' if r['volume'].to_f > 0 && r['float'].to_f > 0
         %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to "U", reports_unscrape_symbol_path(r['ticker_symbol']), remote: true, method: :patch
