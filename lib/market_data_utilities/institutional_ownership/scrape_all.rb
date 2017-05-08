@@ -6,14 +6,16 @@ module MarketDataUtilities
       def call
         create_html_page_container_dir
         
-        tickers_to_scrape.each do |symbol|
+        tickers_to_scrape.each_with_index do |symbol, i|
+          print "Scraping #{i+1} of #{tickers_to_scrape.size} - #{symbol}..."
           values = MarketDataUtilities::InstitutionalOwnership::ScrapeNasdaqPage.(
             symbol: symbol,
             save_page_html_file: file_path_for_symbol(symbol)
           ).value
           MarketDataUtilities::InstitutionalOwnership::PopulateNewSnapshot.(symbol: symbol, values: values)
+          print "#{values[:institutional_ownership_pct]}%\n"
 
-          sleep(Random.rand(3..11))
+          sleep(Random.rand(1..8))
         end
       end
 
