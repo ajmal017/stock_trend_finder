@@ -6,7 +6,7 @@ module LocalNoteTaker
     end
 
     def parse_symbols(message)
-      message.scan(/^[A-Z]+/)
+      message.scan(/^[A-Z\\]+/)
     end
 
   end
