@@ -136,6 +136,7 @@ SQL
     select swt.ticker_symbol, swt.watching, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, count(st.ticker_symbol)
     from stocktwit_watch_tickers swt inner join stocktwit_tickers st on swt.ticker_symbol=st.ticker_symbol
     inner join stocktwits s on s.id=st.stocktwit_id
+    where swt.watching
     group by swt.ticker_symbol, swt.watching
     order by last_updated
 SQL

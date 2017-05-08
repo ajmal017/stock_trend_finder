@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170505012556) do
+ActiveRecord::Schema.define(version: 20170507194645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,7 +58,9 @@ ActiveRecord::Schema.define(version: 20170505012556) do
     t.float    "high_52_week"
   end
 
-  add_index "daily_stock_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
+  add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree
+  add_index "daily_stock_prices", ["ticker_id", "price_date"], name: "index_daily_stock_prices_on_ticker_id_and_price_date", unique: true, using: :btree
+  add_index "daily_stock_prices", ["ticker_symbol"], name: "index_daily_stock_prices_on_ticker_symbol", using: :btree
 
   create_table "dividends", force: :cascade do |t|
     t.integer  "ticker_id"
@@ -79,6 +81,26 @@ ActiveRecord::Schema.define(version: 20170505012556) do
   end
 
   add_index "earnings_days", ["earnings_date", "before_the_open"], name: "index_earnings_days_date", unique: true, using: :btree
+
+  create_table "institutional_ownership_snapshots", force: :cascade do |t|
+    t.string   "ticker_symbol"
+    t.date     "scrape_date"
+    t.float    "institutional_ownership_pct"
+    t.integer  "total_shares",                limit: 8
+    t.integer  "holdings_value",              limit: 8
+    t.integer  "increased_positions_count"
+    t.integer  "decreased_positions_count"
+    t.integer  "held_positions_count"
+    t.integer  "increased_positions_shares",  limit: 8
+    t.integer  "decreased_positions_shares",  limit: 8
+    t.integer  "held_positions_shares",       limit: 8
+    t.integer  "new_positions_count"
+    t.integer  "sold_positions_count"
+    t.integer  "new_positions_shares",        limit: 8
+    t.integer  "sold_positions_shares",       limit: 8
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
 
   create_table "low_liquidity_quarters", force: :cascade do |t|
     t.integer  "ticker_id"
@@ -153,7 +175,7 @@ ActiveRecord::Schema.define(version: 20170505012556) do
     t.datetime "updated_at"
   end
 
-  add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_price_date", unique: true, using: :btree
+  add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
 
   create_table "price_dates", force: :cascade do |t|
     t.date     "price_date"

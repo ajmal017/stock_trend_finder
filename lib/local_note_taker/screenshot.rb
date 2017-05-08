@@ -30,6 +30,10 @@ module LocalNoteTaker
       @screenshot_file_name ||= "chart-#{Time.now.strftime('%Y-%m-%d-%H%M%S')}#{'-' if symbol.present?}#{symbol}.png"
     end
 
+    def symbol
+      @symbol.gsub('/', 'futures-')
+    end
+
     def thumbnail_file_name
       @thumnnail_file_name ||= "chart-thumbnail-#{Time.now.strftime('%Y-%m-%d-%H%M%S')}#{'-' if symbol.present?}#{symbol}.png"
     end

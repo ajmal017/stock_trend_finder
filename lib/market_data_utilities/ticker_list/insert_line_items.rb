@@ -51,6 +51,7 @@ module MarketDataUtilities
             symbol: ticker.symbol,
             previous_company_name: ticker.company_name,
             new_company_name: new_attributes[:company_name],
+            scrape_data: true,
           }
         end
 
