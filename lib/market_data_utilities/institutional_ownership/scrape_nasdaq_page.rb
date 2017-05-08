@@ -28,7 +28,7 @@ module MarketDataUtilities
       end
 
       def page_uri
-        @page_uri ||= URI.parse("http://www.nasdaq.com/symbol/#{symbol}/institutional-holdings")
+        @page_uri ||= URI.parse("http://www.nasdaq.com/symbol/#{symbol.downcase}/institutional-holdings")
       end
 
       def save_page_html
