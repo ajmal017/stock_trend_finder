@@ -8,7 +8,6 @@ module MarketDataUtilities
       def call
         save_page_html if save_page_html_file.present?
 
-        binding.pry
         ParsePageData.(page_html: page_contents.body).value
       end
 
@@ -32,7 +31,7 @@ module MarketDataUtilities
       end
 
       def save_page_html
-        File.open(save_page_html_file) { |f| f.write(page_contents) }
+        File.open(save_page_html_file, 'w') { |f| f.write(page_contents) }
       end
     end
   end
