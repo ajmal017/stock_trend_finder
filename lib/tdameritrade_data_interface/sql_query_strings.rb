@@ -544,7 +544,7 @@ update daily_stock_prices dsp_upd set
 high_52_week=(
   select max(high) 
   from daily_stock_prices dsp_high 
-  where dsp_high.ticker_symbol=dsp_upd.ticker_symbol and dsp_high.price_date >= (dsp_upd.price_date - interval '1 year')
+  where dsp_high.ticker_symbol=dsp_upd.ticker_symbol and dsp_high.price_date >= (dsp_upd.price_date - interval '1 year') and dsp_high.price_date < dsp_upd.price_date
 )
 where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and high_52_week is null
 SQL
