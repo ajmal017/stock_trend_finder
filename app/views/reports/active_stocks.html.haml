@@ -1,7 +1,7 @@
 %h1 Active Stocks Report
 
 -if @report.count > 0
-  %div Last Updated: #{@report.first['snapshot_time']}
+  %div Last Updated: #{@report.count > 0 ? @report.first[:snapshot_time] : ''}
   %div Items: #{@report.count}
 
 .report_date_form
@@ -9,8 +9,8 @@
 
 %h2 Gainers
 
-=render partial: "report_table", locals: { report: @report_up, report_name: "active_stocks_up", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }
+=render partial: "report_table", locals: { report: @report_up, report_name: "active_stocks_up", fields: @fields }
 
 %h2 Losers
 
-=render partial: "report_table", locals: { report: @report_down, report_name: "active_stocks_down", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }
+=render partial: "report_table", locals: { report: @report_down, report_name: "active_stocks_down", fields: @fields }

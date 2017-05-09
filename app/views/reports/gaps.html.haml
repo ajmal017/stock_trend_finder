@@ -8,8 +8,8 @@
 .report_date_form
   =report_date_form :gaps
 
-=render partial: "report_table", locals: { report: @report_bullgaps, report_name: "bullgaps", fields: [:ticker_symbol, :last_trade, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }
+=render partial: "report_table", locals: { report: @report_bullgaps, report_name: "bullgaps", fields: @fields }
 
 %h2 Bearish Gaps
 
-=render partial: "report_table", locals: { report: @report_beargaps, report_name: "bullgaps", fields: [:ticker_symbol, :last_trade, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions] }
+=render partial: "report_table", locals: { report: @report_beargaps, report_name: "bullgaps", fields: @fields }
