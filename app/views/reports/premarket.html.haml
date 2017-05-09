@@ -3,21 +3,21 @@
 %h2 Gapping Up, By Average Volume
 
 -if @report_volume_up.count > 0
-  %div Last Updated: #{@report_volume_up.first['updated_at'].in_time_zone("US/Eastern")}
+  %div Last Updated: #{@report_volume_up.count > 0 ? Time.parse(@report_volume_up.first[:updated_at]).in_time_zone("US/Eastern") : ''}
   %div Items: #{@report_volume_up.count}
 
 .report_date_form
   =report_date_form :premarket
 
-=render partial: "report_table", locals: { report: @report_volume_up, report_name: "premarket_volume_up", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
+=render partial: "report_table", locals: { report: @report_volume_up, report_name: "premarket_volume_up", fields: @fields }
 
 %h2 Gaps by Percent, No Premarket Volume History
 
-=render partial: "report_table", locals: { report: @report_percent, report_name: "premarket_percent", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
+=render partial: "report_table", locals: { report: @report_percent, report_name: "premarket_percent", fields: @fields }
 
 %h2 Gapping Down, By Average Volume
 
 -if @report_volume_down.count > 0
   %div Items: #{@report_volume_down.count}
 
-=render partial: "report_table", locals: { report: @report_volume_down, report_name: "premarket_volume_down", fields: [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :actions] }
+=render partial: "report_table", locals: { report: @report_volume_down, report_name: "premarket_volume_down", fields: @fields }

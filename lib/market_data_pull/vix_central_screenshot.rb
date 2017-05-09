@@ -20,6 +20,6 @@ class VIXCentralScreenshot
   end
 
   def next_screenshot_path
-    File.join(Rails.root, 'downloads', 'vixcentral_screenshots', next_screenshot_filename)
+    File.join(STOCK_TREND_FINDER_DATA_DIR, 'vix_central_screenshots', next_screenshot_filename)
   end
 end

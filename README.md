@@ -30,9 +30,12 @@ The models, controllers, and views provide me an interface for analyzing the
 data downloaded by the daemons. I run the Rails application in the background
 and use the web browser to review my scans throughout the day.
 
-## New Concepts
+## DB Key
 
-* lib/reports - use to build reports from the data currently cached in the database
-* lib/market_data_pull - use to fetch new data from market data sources in the cloud and populate the DB
+`tickers`
+- float (in thousands)
 
+
+`daily_stock_price`
+- all volume in thousands
 

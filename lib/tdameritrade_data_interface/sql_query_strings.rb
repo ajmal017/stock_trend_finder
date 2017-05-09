@@ -22,7 +22,7 @@ select
   t.short_ratio as short_ratio,
   t.short_pct_float * 100 as short_pct_float
 
-from daily_stock_prices d inner join tickers t on t.id=d.ticker_id
+from daily_stock_prices d inner join tickers t on t.symbol=d.ticker_symbol
 where
 t.scrape_data=true and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
@@ -263,30 +263,37 @@ SQL
 with ticker_list as 
 (
   select
-    ticker_symbol, high, close, volume,
+    ticker_symbol, high, close as last_trade, volume,
     (close/previous_close-1)*100 as pct_change,
     average_volume_50day as average_volume,
     volume / average_volume_50day as volume_ratio,
     float,
     high_52_week,
-    high_52_week as pct_above_52_week
-  from daily_stock_prices dsp inner join tickers tix on dsp.ticker_symbol=tix.symbol
+    (close/high_52_week-1)*100 as pct_above_52_week,
+    snapshot_time,
+    t.short_ratio as short_ratio,
+    t.short_pct_float * 100 as short_pct_float
+  from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     close > high_52_week and 
-    tix.scrape_data and
-    (tix.hide_from_reports_until is null or tix.hide_from_reports_until <= current_date)
+    t.scrape_data and
+    (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date)
 )
 select
   ticker_symbol,
-  close,
+  last_trade,
   pct_change,
   high,
   volume,
   average_volume,
   volume_ratio,
   float,
-  high_52_week
+  high_52_week,
+  pct_above_52_week,
+  snapshot_time,
+  short_ratio,
+  short_pct_float
 from ticker_list
 order by
   volume_ratio desc
@@ -308,7 +315,10 @@ select
   volume / average_volume_50day as volume_ratio,
   snapshot_time,
   previous_high,
-  (close / previous_high-1)*100 as gap_pct
+  (close / previous_close-1)*100 as pct_change,
+  (open / previous_high-1)*100 as gap_pct,
+  t.short_ratio as short_ratio,
+  t.short_pct_float * 100 as short_pct_float
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
@@ -321,22 +331,6 @@ price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 open / previous_high > 1.03
 order by gap_pct desc
 SQL
-
-#         <<SQL
-# select ticker_symbol, price_date, open, high, low, close as last_trade, volume, average_volume_50day as average_volume, float, round(volume / average_volume_50day, 2) as volume_ratio, snapshot_time,
-# (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) as yesterdays_high,
-# round((close / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1)-1)*100, 2) as gap_pct
-# from daily_stock_prices d
-# inner join tickers t on d.ticker_symbol=t.symbol
-# where
-# volume > 100 and
-# low > (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) and
-# price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
-# t.scrape_data = true and
-# (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
-# open / (select high from daily_stock_prices dy where dy.price_date < d.price_date and dy.ticker_symbol=d.ticker_symbol order by price_date desc limit 1) > 1.03
-# order by gap_pct desc
-# SQL
       end
 
       def select_bearish_gaps(most_recent_date)
@@ -354,7 +348,8 @@ select
   volume / average_volume_50day as volume_ratio,
   snapshot_time,
   previous_low,
-  (close / previous_low-1)*100 as gap_pct,
+  (close / previous_close-1)*100 as pct_change,
+  (high / previous_low-1)*100 as gap_pct,
   t.short_ratio as short_ratio,
   t.short_pct_float * 100 as short_pct_float
 

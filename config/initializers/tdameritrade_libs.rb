@@ -6,7 +6,13 @@ require File.join(Rails.root, 'lib/autoload_libs')
 def load_ticker_icon_category_list
   return $ticker_icon_categories = {} unless ActiveRecord::Base.connection.data_source_exists? 'tickers'
 
-  biotech = Ticker.all.select(:symbol).where(industry: "Biotechnology: Electromedical & Electrotherapeutic Apparatus").pluck(:symbol)
+  biotech = Ticker.all.select(:symbol).where(
+    industry:
+      [
+        "Biotechnology: Electromedical & Electrotherapeutic Apparatus",
+        "Biotechnology: Biological Products (No Diagnostic Substances)",
+      ]
+  ).pluck(:symbol)
   pharma = Ticker.all.select(:symbol).where(industry: "Major Pharmaceuticals").pluck(:symbol)
 
   ticker_hash = {}
