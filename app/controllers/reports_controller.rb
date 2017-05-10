@@ -5,7 +5,7 @@ class ReportsController < ApplicationController
   # before_filter :set_vix_contango_reading
 
   def active_stocks
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions]
+    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
     @report = run_query(
       TDAmeritradeDataInterface.select_active_stocks(@report_date),
       @fields
@@ -16,7 +16,7 @@ class ReportsController < ApplicationController
   end
 
   def afterhours
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions]
+    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
 
     @report_volume = run_query(
       TDAmeritradeDataInterface.select_afterhours_by_volume(@report_date),
@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
   end
 
   def gaps
-    @fields = [:ticker_symbol, :last_trade, :high, :pct_change, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions]
+    @fields = [:ticker_symbol, :last_trade, :pct_change, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
 
     @report_bullgaps = run_query(
       TDAmeritradeDataInterface.select_bullish_gaps(@report_date),
@@ -45,7 +45,7 @@ class ReportsController < ApplicationController
   end
 
   def premarket
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions]
+    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
     @report_volume = run_query(
       TDAmeritradeDataInterface.select_premarket_by_volume(@report_date),
       @fields,
@@ -70,7 +70,7 @@ class ReportsController < ApplicationController
   end
 
   def week52_highs
-    @fields = [:ticker_symbol, :last_trade, :pct_above_52, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :actions]
+    @fields = [:ticker_symbol, :last_trade, :pct_above_52, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
     @report = run_query(
       TDAmeritradeDataInterface.select_52week_highs(@report_date),
       @fields,

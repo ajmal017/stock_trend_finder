@@ -34,8 +34,9 @@ class ReportPresenter
         average_volume: display_number(row['average_volume'], 0),
         volume_ratio: display_number(row['volume_ratio'], 1),
         short_ratio: display_short(row['short_ratio'], row['short_pct_float']),
+        institutional_ownership_percent: display_percent(row['institutional_ownership_percent'], 0),
         float: row['float'],
-        float_pct: (row['volume'].to_f > 0 && row['float'].to_f > 0) ? ("%.1f" % (row['volume'].to_f / (row['float'].to_f) * 100)) + '%' : ''
+        float_pct: (row['volume'].to_f > 0 && row['float'].to_f > 0) ? display_percent(row['volume'].to_f / (row['float'].to_f) * 100) : ''
       }.slice(*(fields_filter + [:snapshot_time, :updated_at]))
     end
     new_report
@@ -43,10 +44,14 @@ class ReportPresenter
 
   # everything below should be private but I haven't made the switch entirely yet
 
-  def self.display_number(value, round=2)
+  def self.display_number(value, round=1)
     return unless (f = value.try(:to_f)).present?
 
     "%.#{round}f" % f
+  end
+
+  def self.display_percent(value, round=2)
+    display_number(value, round) + '%'
   end
 
   def self.display_short(days_to_cover, float_pct)
