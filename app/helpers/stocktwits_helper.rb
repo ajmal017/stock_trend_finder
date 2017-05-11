@@ -32,12 +32,23 @@ module StocktwitsHelper
 
 private
   def convert_links(s)
+    # convert link text to links
     m = s.match /\bhttp:\/\/.*\b/
     if m
       s.sub(m[0], link_to(m[0], m[0], target: "_blank"))
     else
       s
     end
+
+    # convert ticker symbols to links
+    m = s.match /^\$*[A-Z]+/
+    if m
+      symbol = m[0].gsub('$', '')
+      s.sub(m[0], link_to(m[0], stocktwits_path(symbol: symbol), class: 'no-decoration'))
+    else
+      s
+    end
+
   end
 
 end

@@ -1,9 +1,15 @@
 class StocktwitsController < ApplicationController
   layout "stocktwits"
-  before_action :user_id
+  before_action :user_id, :ticker_symbol
 
   def index
-    @twits = Stocktwit.showing(@user_id).limit(20)
+    unless ticker_symbol.present?
+      @twits = Stocktwit.showing(@user_id).limit(20)
+    else
+      # If we have a ticker param, don't load any because the Javascript will load the page
+      @twits = Stocktwit.none
+    end
+
     ticker_list = Stocktwit.ticker_list('ticker_symbol', @user_id)
     @ticker_list_symbol = ticker_list.to_a
     @ticker_list_count = @ticker_list_symbol.sort { |a,b| b['count'].to_i <=> a['count'].to_i }
@@ -80,6 +86,10 @@ class StocktwitsController < ApplicationController
   end
 
 private
+  def ticker_symbol
+    @ticker_symbol = params[:symbol]
+  end
+
   def user_id
     @user_id = params[:user_id] || 'greenspud'
   end

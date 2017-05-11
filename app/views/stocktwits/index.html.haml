@@ -4,7 +4,7 @@
   #header
     #title
       %h1
-        StockTwits Archive
+        =link_to('StockTwits Archive', stocktwits_path, class: 'no-decoration')
         =link_to(image_tag(asset_path('icon-cloud-download.png')), stocktwits_refresh_path)
     #user-dropdown
       .btn-group
