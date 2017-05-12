@@ -3,8 +3,9 @@ require 'concerns/tickers/tags'
 
 class Ticker < ActiveRecord::Base
   include Tags
+  self.primary_key = 'symbol'
 
-  has_many :daily_stock_prices
+  has_many :daily_stock_prices, foreign_key: 'ticker_symbol', primary_key: 'symbol'
   has_many :dividends
   has_many :minute_stock_prices
   has_many :real_time_quotes

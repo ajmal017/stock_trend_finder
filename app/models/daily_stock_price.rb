@@ -1,5 +1,5 @@
 class DailyStockPrice < ActiveRecord::Base
-  belongs_to :ticker
+  belongs_to :ticker, primary_key: 'symbol', foreign_key: 'ticker_symbol'
   validates_uniqueness_of :price_date, scope: :ticker
 
   def self.most_recent_date
