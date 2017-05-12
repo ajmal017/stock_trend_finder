@@ -55,8 +55,8 @@ class ReportsController < ApplicationController
       @fields,
     )
 
-    @report_volume_up = @report_volume.select { |r| r[:pct_change].to_f >= 0 }
-    @report_volume_down = @report_volume.select { |r| r[:pct_change].to_f < 0 }
+    @report_volume_up = @report_volume.select { |r| r[:pct_change].to_f >= 0 }.first(50)
+    @report_volume_down = @report_volume.select { |r| r[:pct_change].to_f < 0 }.first(50)
   end
 
   def hide_symbol

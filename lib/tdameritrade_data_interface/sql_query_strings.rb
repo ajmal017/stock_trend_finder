@@ -413,7 +413,7 @@ from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
 last_trade is not null and
-volume > 1 and
+volume > 8 and
 previous_close is not null and
 average_volume_50day = 0 and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
@@ -445,6 +445,7 @@ t.scrape_data and
 last_trade is not null and
 last_trade > 1 and
 volume is not null and
+volume > 8 and
 previous_close is not null and
 average_volume_50day is not null and
 average_volume_50day > 0 and
@@ -452,7 +453,6 @@ average_volume_50day > 0 and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{report_date.strftime('%Y-%m-%d')}'
 order by volume_ratio desc
-limit 50
 SQL
       end
 
@@ -477,7 +477,7 @@ where
 t.scrape_data and
 last_trade is not null and
 last_trade > 1 and
-volume > 1 and
+volume > 10 and
 intraday_close is not null and
 average_volume_50day = 0 and
 (t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
@@ -508,6 +508,7 @@ where
 t.scrape_data and
 last_trade is not null and
 volume is not null and
+volume > 10 and
 last_trade > 1 and
 intraday_close is not null and
 average_volume_50day is not null and
