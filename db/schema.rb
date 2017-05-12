@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170512164704) do
+ActiveRecord::Schema.define(version: 20170512191949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20170512164704) do
     t.float    "high_52_week"
   end
 
+  add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree
   add_index "daily_stock_prices", ["ticker_symbol", "price_date"], name: "index_daily_stock_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
 
   create_table "dividends", force: :cascade do |t|
@@ -351,7 +352,7 @@ ActiveRecord::Schema.define(version: 20170512164704) do
     t.date     "unscrape_date"
   end
 
-  add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree
+  add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", unique: true, using: :btree
 
   create_table "vix_daily_histories", force: :cascade do |t|
     t.date     "price_date"
