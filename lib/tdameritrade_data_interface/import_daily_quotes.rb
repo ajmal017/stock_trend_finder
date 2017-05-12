@@ -664,7 +664,9 @@ module TDAmeritradeDataInterface
 
   def self.copy_realtime_quotes_to_daily_stock_prices
     DailyStockPrice.transaction do
+      puts "Inserting daily stock prices #{Time.now}"
       ActiveRecord::Base.connection.execute insert_daily_stock_prices_from_realtime_quotes
+      puts "Updating daily stock prices #{Time.now}"
       ActiveRecord::Base.connection.execute update_daily_stock_prices_from_realtime_quotes
 
       puts "Updating Previous Close Cache - #{Time.now}"
