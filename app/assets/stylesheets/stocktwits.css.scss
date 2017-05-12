@@ -1,3 +1,4 @@
+
 .container {
   width: 100%;
 }
@@ -10,6 +11,11 @@ div[class*="col-"] {
 body.stocktwits {
   background-color: #FFFFFF;
   color: #000000;
+}
+
+a:link.no-decoration, a:hover.no-decoration, a:visited.no-decoration {
+  color: #000000;
+  text-decoration: none;
 }
 
 .stocktwits-ticker-navigation {

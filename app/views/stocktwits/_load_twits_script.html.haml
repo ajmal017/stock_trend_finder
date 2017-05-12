@@ -8,6 +8,18 @@
   $setup_or_symbol_filter = () -> $('#stocktwits-filter-indicator').text()
   $user_id_filter = () -> $('#user-dropdown-button').text().trim()
 
+  #  http://www.jquerybyexample.net/2012/06/get-url-parameters-using-jquery.html
+  getUrlParameter = (sParam) ->
+    sPageURL = decodeURIComponent(window.location.search.substring(1))
+    sURLVariables = sPageURL.split('&')
+    for sURLVariable in sURLVariables
+      sParameterName = sURLVariable.split('=')
+      if sParameterName[0] == sParam
+        if sParameterName[1] == undefined
+          return false
+        else
+          return sParameterName[1]
+
   load_next = (symbol_or_setup, last_id) ->
     loading = true
 
@@ -74,3 +86,10 @@
     if $(window).scrollTop() >= $('#stocktwits-content').height() - $(window).height() - 500
       if !loading && !nomore
         load_next($setup_or_symbol_filter, $last_twit_id)
+
+  $ ->
+    symbol = getUrlParameter('symbol')
+    if symbol != undefined
+      set_symbol_filter(symbol)
+      set_watching_icon()
+

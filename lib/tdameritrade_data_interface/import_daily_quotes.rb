@@ -257,13 +257,12 @@ module TDAmeritradeDataInterface
         c.login
         break
       rescue Exception => e
-        puts "Error downloading real time quotes, attempt #{attempt}: #{e.message}"
+        puts "Error logging in for downloading real time quotes, attempt #{attempt}: #{e.message}"
         attempt += 1
       end
     end
 
     log = ""
-    #c.session_id = "128459556EEA989391FBAAA5E2BF8EB4.cOr5v8xckaAXQxWmG7bn2g"
 
     RealTimeQuote.reset_cache
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170507194645) do
+ActiveRecord::Schema.define(version: 20170511231745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema.define(version: 20170507194645) do
   end
 
   add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
+  add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_price_date", unique: true, using: :btree
 
   create_table "price_dates", force: :cascade do |t|
     t.date     "price_date"
@@ -352,6 +353,17 @@ ActiveRecord::Schema.define(version: 20170507194645) do
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", using: :btree
+
+  create_table "vix_daily_histories", force: :cascade do |t|
+    t.date     "price_date"
+    t.float    "open"
+    t.float    "high"
+    t.float    "low"
+    t.float    "close"
+    t.float    "long_term_average"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
 
   create_table "vix_futures_histories", force: :cascade do |t|
     t.datetime "snapshot_time"
