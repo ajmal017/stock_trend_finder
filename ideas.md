@@ -10,7 +10,7 @@
 * Handle splits!
 
 Stock Data
-* Reset stock history after split
+* Reset stock history after split - this includes making volume history adjustments
 * "as recorded" daily stock price table - populate it with stock data upon resetting. only daily stock prices 
   get reset - premarket prices remain
 *  

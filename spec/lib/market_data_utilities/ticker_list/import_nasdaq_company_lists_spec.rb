@@ -17,7 +17,13 @@ describe MarketDataUtilities::TickerList::ImportNasdaqCompanyLists do
       { symbol: 'PIH', company_name: '1347 Property Insurance Holdings, Inc.', market_cap: BigDecimal.new('43480000'), sector: 'Finance', industry: 'Property-Casualty Insurers', scrape_data: false, on_nasdaq_list: true },
       { symbol: 'TURN', company_name: '180 Degree Capital Corp.', market_cap: BigDecimal.new('44500000'), sector: 'Finance', industry: 'Finance/Investors Services', scrape_data: true, on_nasdaq_list: true },
       { symbol: 'FLWS', company_name:	'1-800 FLOWERS.COM, Inc.', market_cap: BigDecimal.new('704870000'), sector: 'Consumer Services', industry: 'Other Specialty Stores', scrape_data: true, on_nasdaq_list: true },
+      { symbol: 'TRVG', company_name: 'trivago N.V.', market_cap: BigDecimal.new('4090000000'), sector: 'n/a', industry: 'n/a', scrape_data: true, on_nasdaq_list: true },
+      { symbol: 'AHT', company_name: 'Ashford Hospitality Trust Inc', market_cap: BigDecimal.new('606370000'), sector: 'Consumer Services', industry: 'Real Estate Investment Trusts', scrape_data: true, on_nasdaq_list: true },
     ]
+  end
+
+  def extra_db_records
+    Ticker.where.not(symbol: expected_database_records.map { |h| h[:symbol] }).pluck(:symbol, :company_name)
   end
 
   before do
@@ -29,6 +35,7 @@ describe MarketDataUtilities::TickerList::ImportNasdaqCompanyLists do
   it 'updates the database' do
     subject
 
+    expect(Ticker.count).to eql(expected_database_records.size), "Extras: #{extra_db_records}"
     expected_database_records.each do |attrs|
       expect(Ticker.find_by(attrs)).to be_present,
         "Expected:\n#{attrs}\n\nDB has:\n#{Ticker.find_by(symbol:attrs[:symbol]).try(:attributes).try(:symbolize_keys).try(:slice, *attrs.keys)}"
