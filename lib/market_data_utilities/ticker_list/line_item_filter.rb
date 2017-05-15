@@ -17,6 +17,8 @@ module MarketDataUtilities
           /\bPortfolio$/
         ]
 
+        SHELL_COMPANY_WHITELIST=%w(CMCSA)
+
         def convert_market_caps(line_items)
           line_items.each do |line_item|
             if line_item[:market_cap] == 'n/a'
@@ -41,7 +43,7 @@ module MarketDataUtilities
 
         def remove_shell_companies(line_items)
           # line_items.reject { |li| li[:symbol] =~ /[A-Z]{4}(W|U|X)/ }
-          line_items.reject { |li| li[:symbol].size > 4 }
+          line_items.reject { |li| (li[:symbol].size > 4) && SHELL_COMPANY_WHITELIST.none? { |symbol| li[:symbol]==symbol} }
         end
 
         def run_all(line_items)
