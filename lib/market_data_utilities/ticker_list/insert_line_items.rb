@@ -27,7 +27,7 @@ module MarketDataUtilities
         end
 
         # Stop scraping defunct symbols
-        Ticker.where(on_nasdaq_list: false, scrape_data: true).update(scrape_data: false)
+        Ticker.where(on_nasdaq_list: false, scrape_data: true).update_all(scrape_data: false)
 
         @change_report[:tickers_dropped] = tickers_dropped(ticker_list_before)
         @change_report

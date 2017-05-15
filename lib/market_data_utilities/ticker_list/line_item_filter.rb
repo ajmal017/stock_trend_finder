@@ -9,11 +9,11 @@ module MarketDataUtilities
         COMPANY_NAME_BLACKLIST_TEXT=[
           /\bFund\b/,
           /(Anywhere|Bond|Credit|Dividend|Income|Investment|Municipal|Opportunity|Quality|Tax-Exempt|Term|Value) Trust\b/,
-          /(BlackRock|Eaton Vance|Franklin|John Hancock|KKR|Pioneer|Putnam|Royce) .+ Trust$/,
-          /(Gabelli|Invesco|Sprott) .+ Trust/,
+          /(BlackRock|Eaton Vance|Franklin|John Hancock|KKR|Pioneer|Putnam) .+ Trust$/,
+          /(Gabelli|Invesco|Royce|Sprott) .+ Trust/,
           /\bETF\b/,
           /\bIndex$/,
-          /\b(PowerShares|ProShares)\b/,
+          /\b(iShares|PowerShares|ProShares|Proshares|Western Asset\/Claymore|WisdomTree Barclays)\b/,
           /\bPortfolio$/
         ]
 
