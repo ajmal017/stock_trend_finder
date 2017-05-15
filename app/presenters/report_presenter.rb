@@ -51,7 +51,7 @@ class ReportPresenter
   end
 
   def self.display_percent(value, round=2)
-    display_number(value, round) + '%'
+    display_number(value, round).try(:+, '%')
   end
 
   def self.display_short(days_to_cover, float_pct)

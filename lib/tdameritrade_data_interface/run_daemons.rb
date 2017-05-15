@@ -7,6 +7,7 @@ module TDAmeritradeDataInterface
       if is_market_day? Date.today
         ActiveRecord::Base.connection_pool.with_connection do
           import_realtime_quotes
+          puts "Copying from real time quotes cache to daily_stock_prices... #{Time.now}"
           copy_realtime_quotes_to_daily_stock_prices
         end
         puts "Done #{Time.now}\n\n"
@@ -19,7 +20,7 @@ module TDAmeritradeDataInterface
       scheduler = Rufus::Scheduler.new
       scheduler.cron('15,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
       scheduler2 = Rufus::Scheduler.new
-      scheduler2.cron('45 9 * * MON-FRI') { realtime_quote_daemon_block }
+      scheduler2.cron('32,50 9 * * MON-FRI') { realtime_quote_daemon_block }
       puts "#{Time.now} Beginning realtime quote import daemon..."
       [scheduler, scheduler2]
     end
