@@ -33,6 +33,7 @@ describe MarketDataUtilities::TickerList::InsertLineItems do
       {symbol: "SLB", company_name: "Schlumberger N.V.", exchange: "nyse", sector: "Energy", industry: "Oilfield Services/Equipment", scrape_data: true, market_cap: BigDecimal.new('117884953486.44'), on_nasdaq_list: true},
       {symbol: "AFCE", company_name: "AFC Enterprises, Inc.", exchange: "nasdaq", sector: "Consumer Services", industry: "Restaurants", scrape_data: false, market_cap: 1031814543.0, on_nasdaq_list: false},
       {symbol: "NCLH", company_name: "Norwegian Cruise Line Holdings Ltd.", exchange: "nasdaq", sector: "Consumer Services", industry: "Marine Transportation", scrape_data: true, market_cap: nil, on_nasdaq_list: true},
+      {symbol: "OLDT", company_name: "An Old Defunct Ticker Symbol", exchange: "nasdaq", sector: "Entertainment", industry: "Games", scrape_data: false, market_cap: nil, on_nasdaq_list: false},
       ]
     end
 
@@ -40,6 +41,7 @@ describe MarketDataUtilities::TickerList::InsertLineItems do
       [
       {symbol: "AAON", company_name: "AAON, Inc.", exchange: "nasdaq", sector: "Capital Goods", industry: "Industrial Machinery/Components", market_cap: 900000000.0},
       {symbol: "SLB", company_name: "Schlumberger Corporation", exchange: "nyse", sector: "Energy", industry: "Oil Services", market_cap: nil},
+      {symbol: "OLDT", company_name: "Ticker Reused Under a New Name", exchange: "nasdaq", sector: "Energy", industry: "Oil Services", market_cap: nil},
       ]
     end
 
@@ -48,7 +50,8 @@ describe MarketDataUtilities::TickerList::InsertLineItems do
       {symbol: "AAON", company_name: "AAON, Inc.", exchange: "nasdaq", sector: "Capital Goods", industry: "Industrial Machinery/Components", scrape_data: true, market_cap: 900000000.0, on_nasdaq_list: true},
       {symbol: "SLB", company_name: "Schlumberger Corporation", exchange: "nyse", sector: "Energy", industry: "Oil Services", scrape_data: true, market_cap: BigDecimal.new('117884953486.44'), on_nasdaq_list: true},
       {symbol: "AFCE", company_name: "AFC Enterprises, Inc.", exchange: "nasdaq", sector: "Consumer Services", industry: "Restaurants", scrape_data: false, market_cap: 1031814543.0, on_nasdaq_list: false},
-      {symbol: "NCLH", company_name: "Norwegian Cruise Line Holdings Ltd.", exchange: "nasdaq", sector: "Consumer Services", industry: "Marine Transportation", scrape_data: true, market_cap: nil, on_nasdaq_list: false},
+      {symbol: "NCLH", company_name: "Norwegian Cruise Line Holdings Ltd.", exchange: "nasdaq", sector: "Consumer Services", industry: "Marine Transportation", scrape_data: false, market_cap: nil, on_nasdaq_list: false},
+      {symbol: "OLDT", company_name: "Ticker Reused Under a New Name", exchange: "nasdaq", sector: "Energy", industry: "Oil Services", scrape_data: true, market_cap: nil, on_nasdaq_list: true},
       ]
     end
 

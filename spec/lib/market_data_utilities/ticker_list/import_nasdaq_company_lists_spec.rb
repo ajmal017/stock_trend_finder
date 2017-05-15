@@ -13,7 +13,7 @@ describe MarketDataUtilities::TickerList::ImportNasdaqCompanyLists do
 
   let(:expected_database_records) do
     [
-      { symbol: 'MBLY', company_name: 'Mobileye', sector: 'Electronics', industry: 'Gadgets', market_cap: 1000000000.0, scrape_data: true, on_nasdaq_list: false },
+      { symbol: 'MBLY', company_name: 'Mobileye', sector: 'Electronics', industry: 'Gadgets', market_cap: BigDecimal.new('1000000000.0'), scrape_data: false, on_nasdaq_list: false },
       { symbol: 'PIH', company_name: '1347 Property Insurance Holdings, Inc.', market_cap: BigDecimal.new('43480000'), sector: 'Finance', industry: 'Property-Casualty Insurers', scrape_data: false, on_nasdaq_list: true },
       { symbol: 'TURN', company_name: '180 Degree Capital Corp.', market_cap: BigDecimal.new('44500000'), sector: 'Finance', industry: 'Finance/Investors Services', scrape_data: true, on_nasdaq_list: true },
       { symbol: 'FLWS', company_name:	'1-800 FLOWERS.COM, Inc.', market_cap: BigDecimal.new('704870000'), sector: 'Consumer Services', industry: 'Other Specialty Stores', scrape_data: true, on_nasdaq_list: true },

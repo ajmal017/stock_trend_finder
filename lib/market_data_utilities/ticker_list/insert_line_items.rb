@@ -58,7 +58,10 @@ module MarketDataUtilities
           }
         end
 
-        ticker.update(new_attributes.merge(on_nasdaq_list: true).reject{ |_k,v| v.nil? })
+        # Only set it to scrapable from unscrapable if the company name changed (i.e. ticker gets recycled under new company)
+        scrape_data = ticker.scrape_data? || (new_attributes[:company_name] != ticker.company_name)
+
+        ticker.update(new_attributes.merge(on_nasdaq_list: true, scrape_data: scrape_data).reject{ |_k,v| v.nil? })
       end
 
     end
