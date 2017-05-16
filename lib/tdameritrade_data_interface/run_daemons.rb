@@ -18,9 +18,9 @@ module TDAmeritradeDataInterface
 
     def run_realtime_quotes_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('15,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
+      scheduler.cron('0,15,30,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
       scheduler2 = Rufus::Scheduler.new
-      scheduler2.cron('32,50 9 * * MON-FRI') { realtime_quote_daemon_block }
+      scheduler2.cron('32,44,53 9 * * MON-FRI') { realtime_quote_daemon_block }
       puts "#{Time.now} Beginning realtime quote import daemon..."
       [scheduler, scheduler2]
     end
