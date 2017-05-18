@@ -1,18 +1,19 @@
 require 'htmlentities'
 
 module StocktwitsHelper
+
+  def format_setup_nav_link(setup)
+    "#{link_to(setup[0], "#", :class=>"setup-filter-link", "data-setup"=>setup[0])} (#{setup[1]})"
+  end
+
   def format_stocktwits_message(message_text)
-    coder = HTMLEntities.new
-    raw(convert_links(coder.decode(message_text)))
+    format_links(message_text)
   end
 
   def format_ticker_nav_link(ticker)
     last_updated = ticker['last_updated'] == '00:00:00' ? 'Today' : ticker['last_updated']
-    "#{link_to(ticker['ticker_symbol'], "#", :class=>"symbol-filter-link", "data-symbol"=>ticker['ticker_symbol'])} (#{ticker['count']}) - #{last_updated}"
-  end
-
-  def format_setup_nav_link(setup)
-    "#{link_to(setup[0], "#", :class=>"setup-filter-link", "data-setup"=>setup[0])} (#{setup[1]})"
+    watching_icon = ticker['watching']=='t' ? "\u2606" : ''
+    "#{link_to(ticker['ticker_symbol'], "#", :class=>"symbol-filter-link", "data-symbol"=>ticker['ticker_symbol'])} #{watching_icon}(#{ticker['count']}) - #{last_updated}"
   end
 
   def message_call_result_class(call)
@@ -30,7 +31,9 @@ module StocktwitsHelper
     end
   end
 
-private
+  private
+
+
   def convert_links(s)
     # convert link text to links
     m = s.match /\bhttp:\/\/.*\b/
@@ -48,7 +51,11 @@ private
     else
       s
     end
+  end
 
+  def format_links(message_text)
+    coder = HTMLEntities.new
+    raw(convert_links(coder.decode(message_text)))
   end
 
 end

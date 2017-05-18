@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170512195850) do
+ActiveRecord::Schema.define(version: 20170518180119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20170512195850) do
 
   add_index "daily_stock_prices", ["price_date"], name: "index_daily_stock_prices_on_price_date", using: :btree
   add_index "daily_stock_prices", ["ticker_symbol", "price_date"], name: "index_daily_stock_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
+  add_index "daily_stock_prices", ["ticker_symbol"], name: "index_daily_stock_prices_on_ticker_symbol", using: :btree
 
   create_table "dividends", force: :cascade do |t|
     t.integer  "ticker_id"
@@ -174,6 +175,7 @@ ActiveRecord::Schema.define(version: 20170512195850) do
     t.datetime "updated_at"
   end
 
+  add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_and_price_date", unique: true, using: :btree
   add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_price_date", unique: true, using: :btree
 
   create_table "price_dates", force: :cascade do |t|
@@ -309,7 +311,6 @@ ActiveRecord::Schema.define(version: 20170512195850) do
     t.boolean  "hide"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "watching"
     t.string   "stocktwits_user_name", limit: 255
     t.integer  "call_result"
     t.string   "note"
