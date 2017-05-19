@@ -17,12 +17,14 @@ module TDAmeritradeDataInterface
     end
 
     def run_realtime_quotes_daemon
-      scheduler = Rufus::Scheduler.new
-      scheduler.cron('15,45 10-15 * * MON-FRI') { realtime_quote_daemon_block }
-      scheduler2 = Rufus::Scheduler.new
-      scheduler2.cron('32,50 9 * * MON-FRI') { realtime_quote_daemon_block }
+      schedulers = [
+        '15,45 10-15 * * MON-FRI',
+        '32,50 9 * * MON-FRI',
+      ].map do |scheduled_time|
+        scheduler.cron(scheduled_time) { realtime_quote_daemon_block }
+      end
       puts "#{Time.now} Beginning realtime quote import daemon..."
-      [scheduler, scheduler2]
+      schedulers
     end
 
     def run_daily_quotes_daemon
@@ -54,19 +56,23 @@ module TDAmeritradeDataInterface
     end
 
     def run_premarket_quotes_daemon
-      scheduler = Rufus::Scheduler.new
-      scheduler.cron('4,25,40,59 8 * * MON-FRI') do
-        puts "Premarket Quote Import: #{Time.now}"
-        if is_market_day? Date.today
-          ActiveRecord::Base.connection_pool.with_connection do
-            import_premarket_quotes(date: Date.today)
+      schedulers = [
+        '4,25,40,59 8 * * MON-FRI',
+        '8,15,24 9 * * MON-FRI',
+      ].map  do |scheduled_time|
+        scheduler = Rufus::Scheduler.new
+        scheduler.cron(scheduled_time) do
+          puts "Premarket Quote Import: #{Time.now}"
+          if is_market_day? Date.today
+            ActiveRecord::Base.connection_pool.with_connection do
+              import_premarket_quotes(date: Date.today)
+            end
+          else
+            puts "Market closed today, no real time quote download necessary"
           end
-        else
-          puts "Market closed today, no real time quote download necessary"
         end
       end
       puts "#{Time.now} Beginning premarket quotes update daemon..."
-      scheduler
     end
 
     def run_premarket_memoization_daemon
@@ -149,14 +155,32 @@ module TDAmeritradeDataInterface
       scheduler
     end
 
-    def run_evernote_watchlist_daemon
+    # Not currently being used
+    # def run_evernote_watchlist_daemon
+    #   scheduler = Rufus::Scheduler.new
+    #   scheduler.cron('45 1 * * *') do
+    #     puts "Building Evernote Watchlist #{Time.now}"
+    #     Evernote::EvernoteWatchList.build_evernote_watchlist
+    #     puts "Done building Evernote Watchlist"
+    #   end
+    #   puts "#{Time.now} Beginning Evernote watchlist daemon..."
+    #   scheduler
+    # end
+
+    def run_institutional_ownership_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('45 1 * * *') do
-        puts "Building Evernote Watchlist #{Time.now}"
-        Evernote::EvernoteWatchList.build_evernote_watchlist
-        puts "Done building Evernote Watchlist"
+      # See http://stackoverflow.com/questions/11683387/run-every-2nd-and-4th-saturday-of-the-month for explanation
+      # of the Cron line
+      # This is set to run the second and fourth Friday of the month at 7pm
+      scheduler.cron('0 19 8-14,22-28 * *') do
+        if Date.today.wday == 5
+          t = Time.now
+          MarketDataUtilities::InstitutionalOwnership::ScrapeAll.call
+          puts "Done (began at #{t}, now #{Time.now})"
+        end
       end
-      puts "#{Time.now} Beginning Evernote watchlist daemon..."
+      puts "#{} Beginning download of institutional ownership..."
+
       scheduler
     end
 
