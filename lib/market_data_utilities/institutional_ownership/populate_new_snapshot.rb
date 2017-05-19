@@ -7,7 +7,10 @@ module MarketDataUtilities
 
       def call
         if values[:institutional_ownership_pct] > 0
-          Ticker.find_by(symbol: symbol).update(institutional_holdings_percent: values[:institutional_ownership_pct])
+          Ticker.find_by(symbol: symbol).update(
+            institutional_holdings_percent: values[:institutional_ownership_pct],
+            float: (values[:total_shares] / 1000)
+          )
         end
 
         InstitutionalOwnershipSnapshot.create(
