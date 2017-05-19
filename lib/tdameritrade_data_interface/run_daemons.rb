@@ -21,7 +21,9 @@ module TDAmeritradeDataInterface
         '15,45 10-15 * * MON-FRI',
         '32,50 9 * * MON-FRI',
       ].map do |scheduled_time|
+        scheduler = Rufus::Scheduler.new
         scheduler.cron(scheduled_time) { realtime_quote_daemon_block }
+        scheduler
       end
       puts "#{Time.now} Beginning realtime quote import daemon..."
       schedulers
@@ -71,6 +73,7 @@ module TDAmeritradeDataInterface
             puts "Market closed today, no real time quote download necessary"
           end
         end
+        scheduler
       end
       puts "#{Time.now} Beginning premarket quotes update daemon..."
     end
@@ -173,13 +176,14 @@ module TDAmeritradeDataInterface
       # of the Cron line
       # This is set to run the second and fourth Friday of the month at 7pm
       scheduler.cron('0 19 8-14,22-28 * *') do
+        puts "#{Time.now} - Beginning download of institutional ownership..."
         if Date.today.wday == 5
           t = Time.now
           MarketDataUtilities::InstitutionalOwnership::ScrapeAll.call
           puts "Done (began at #{t}, now #{Time.now})"
         end
       end
-      puts "#{} Beginning download of institutional ownership..."
+      puts "#{Time.now} Beginning institutional ownership daemon..."
 
       scheduler
     end
