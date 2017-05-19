@@ -47,7 +47,7 @@ module StocktwitsHelper
     m = s.match /^\$*[A-Z]+/
     if m
       symbol = m[0].gsub('$', '')
-      s.sub(m[0], link_to(m[0], stocktwits_path(symbol: symbol), class: 'no-decoration'))
+      s.sub(m[0], link_to(m[0], "#", class: 'no-decoration symbol-filter-link', 'data-symbol'=>m[0]))
     else
       s
     end

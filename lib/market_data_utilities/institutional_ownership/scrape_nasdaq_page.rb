@@ -31,7 +31,7 @@ module MarketDataUtilities
       end
 
       def save_page_html
-        File.open(save_page_html_file, 'w') { |f| f.write(page_contents) }
+        File.open(save_page_html_file, 'w') { |f| f.write(page_contents.body) }
       end
     end
   end

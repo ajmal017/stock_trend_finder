@@ -121,10 +121,10 @@ private
 
   def self.ticker_list_sql(order_by, user_id)
     <<SQL
-    select tx.ticker_symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(st.symbol) as count, watching
+    select tx.ticker_symbol, current_date - date_trunc('day', max(stocktwit_time)) as last_updated, max(stocktwit_time) as last_updated_date, count(st.symbol) as count, coalesce(watching, false) as watching
     from stocktwit_tickers tx 
     inner join stocktwits st on tx.stocktwit_id=st.id
-    inner join stocktwit_watch_tickers tw on tw.ticker_symbol=tx.ticker_symbol
+    left join stocktwit_watch_tickers tw on tw.ticker_symbol=tx.ticker_symbol
     where
     stocktwits_user_name='#{user_id}' and
     st.hide=false

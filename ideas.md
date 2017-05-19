@@ -1,3 +1,8 @@
+### TODOs
+
+* Short interest from Nasdaq
+* Reset ticker symbol
+
 ### Ideas for new features
 
 * Dividend yield scanner
