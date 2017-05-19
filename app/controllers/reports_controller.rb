@@ -77,42 +77,10 @@ class ReportsController < ApplicationController
     )
   end
 
-  # def range
-  #   @report = run_query(TDAmeritradeDataInterface.select_big_range(@report_date))
-  # end
-  #
-  # def ipo_list
-  #   @report = run_query(TDAmeritradeDataInterface.select_ipo_list)
-  # end
-  #
-  # def ema13_breaks
-  #   @report = run_query(TDAmeritradeDataInterface.select_ema13_bullish_breaks)
-  # end
-  #
-  # def sma50_breaks
-  #   @report_bull50sma = run_query(TDAmeritradeDataInterface.select_sma50_bull_cross(@report_date))
-  #   @report_bear50sma = run_query(TDAmeritradeDataInterface.select_sma50_bear_cross(@report_date))
-  # end
-  #
-  # def sma200_breaks
-  #   @report_bull200sma = run_query(TDAmeritradeDataInterface.select_sma200_bull_cross(@report_date))
-  #   @report_bear200sma = run_query(TDAmeritradeDataInterface.select_sma200_bear_cross(@report_date))
-  # end
-
   def ticker_list
     @report = Ticker.watching.order(id: :desc)
   end
 
-  # def hammers
-  #   @report = run_query(TDAmeritradeDataInterface.select_hammers)
-  # end
-
-  # def candle_row
-  #   @report_winners = run_query(TDAmeritradeDataInterface.select_4_green_candles(@report_date))
-  #   @report_losers = run_query(TDAmeritradeDataInterface.select_4_red_candles(@report_date))
-  #
-  # end
-  #
   def pctgainloss
     @report_winners = run_query(TDAmeritradeDataInterface.select_10pct_gainers(@report_date))
     @report_losers = run_query(TDAmeritradeDataInterface.select_10pct_losers(@report_date))

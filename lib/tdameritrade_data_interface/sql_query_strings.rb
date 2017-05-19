@@ -438,7 +438,8 @@ select
   price_date,
   p.updated_at,
   t.float,
-  t.institutional_holdings_percent as institutional_ownership_percent
+  t.institutional_holdings_percent as institutional_ownership_percent,
+  t.hide_from_reports_until > current_date as gray_symbol
 from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -450,7 +451,6 @@ previous_close is not null and
 average_volume_50day is not null and
 average_volume_50day > 0 and
 (((last_trade / previous_close) - 1) * 100 < -2 or ((last_trade / previous_close) - 1) * 100 > 2) and
-(t.hide_from_reports_until is null or t.hide_from_reports_until <= current_date) and
 price_date = '#{report_date.strftime('%Y-%m-%d')}'
 order by volume_ratio desc
 SQL

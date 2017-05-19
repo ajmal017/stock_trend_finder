@@ -17,22 +17,27 @@ module ReportHelper
   # TODO move this method into the presenter
   def set_css_class(report, field)
     css_class = "monospaced "
-    if report[:pct_change].to_f > 0
-      css_class << "green "
-    elsif report[:pct_change].to_f < 0
-      css_class << "red "
-    end
 
-    if report[:gap_pct].to_f > 0
-      css_class << "green "
-    elsif report[:gap_pct].to_f < 0
-      css_class << "red "
-    end
+    if report[:gray_symbol]
+      css_class << "gray "
+    else
+      if report[:pct_change].to_f > 0
+        css_class << "green "
+      elsif report[:pct_change].to_f < 0
+        css_class << "red "
+      end
 
-    if report[:pct_above_52].to_f > 0
-      css_class << "green "
-    elsif report[:pct_above_52].to_f < 0
-      css_class << "red "
+      if report[:gap_pct].to_f > 0
+        css_class << "green "
+      elsif report[:gap_pct].to_f < 0
+        css_class << "red "
+      end
+
+      if report[:pct_above_52].to_f > 0
+        css_class << "green "
+      elsif report[:pct_above_52].to_f < 0
+        css_class << "red "
+      end
     end
 
     css_class << "rjust " if RJUST_FIELDS.include?(field)

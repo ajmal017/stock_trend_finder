@@ -22,6 +22,7 @@ class ReportPresenter
       new_report << {
         snapshot_time: row['snapshot_time'],
         updated_at: row['updated_at'],
+        gray_symbol: row['gray_symbol']=='t',
 
         ticker_symbol: row['ticker_symbol'],
         company_name: row['company_name'],
@@ -37,7 +38,7 @@ class ReportPresenter
         institutional_ownership_percent: display_percent(row['institutional_ownership_percent'], 0),
         float: row['float'],
         float_pct: (row['volume'].to_f > 0 && row['float'].to_f > 0) ? display_percent(row['volume'].to_f / (row['float'].to_f) * 100) : ''
-      }.slice(*(fields_filter + [:snapshot_time, :updated_at]))
+      }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))
     end
     new_report
   end

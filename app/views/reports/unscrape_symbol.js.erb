@@ -1,5 +1,3 @@
-//alert('Unscraped Symbol: <%= @symbol %>');
-
 symbol_note = function(symbol) {
     reason_text = window.prompt('Unscrape ' + symbol + ' reason');
     $.ajax(
@@ -13,5 +11,5 @@ symbol_note = function(symbol) {
             }
     );
 };
-$('table tr#<%= @symbol %>').slideUp();
 symbol_note('<%= @symbol %>');
+Turbolinks.visit(location.toString());
