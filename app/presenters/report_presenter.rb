@@ -57,7 +57,7 @@ class ReportPresenter
 
   def self.display_short(days_to_cover, float_pct)
     if days_to_cover && float_pct
-      days_to_cover.rjust(5) + " | " + ("%.1f" % float_pct).rjust(3).gsub(' ', '&nbsp;') + "%"
+      display_number(days_to_cover).rjust(5) + " | " + ("%.1f" % float_pct).rjust(3).gsub(' ', '&nbsp;') + "%"
     else
       ""
     end
