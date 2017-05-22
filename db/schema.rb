@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170519221133) do
+ActiveRecord::Schema.define(version: 20170522222612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,7 +164,6 @@ ActiveRecord::Schema.define(version: 20170519221133) do
     t.float    "last_trade"
     t.float    "high"
     t.float    "low"
-    t.float    "close"
     t.float    "previous_high"
     t.float    "previous_low"
     t.float    "previous_close"
