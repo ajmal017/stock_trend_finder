@@ -46,7 +46,8 @@ module MarketDataUtilities
                   short_pct_float: short_pct_float,
                   shares_short: shares_short,
                   short_interest_date: short_as_of_date,
-                  float: float
+                  float: float,
+                  source: 'yahoo',
                 )
               end
             end
