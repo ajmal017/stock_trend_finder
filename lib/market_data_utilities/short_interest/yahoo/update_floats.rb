@@ -4,7 +4,7 @@
 require 'ystock'
 
 module MarketDataUtilities
-  module Short Interest
+  module ShortInterest
     module Yahoo
       class UpdateFloats
 
