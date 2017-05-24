@@ -279,6 +279,7 @@ with ticker_list as
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
+    volume > 20 and
     close > high_52_week and
     close > 1 and 
     t.scrape_data
