@@ -4,10 +4,10 @@ module MarketDataUtilities
       include Verbalize::Action
 
       def call
-        MarketDataUtilities::Yahoo::UpdateFloats.update_floats
-        MarketDataUtilities::Nasdaq::ScrapeAll.call
+        MarketDataUtilities::ShortInterest::Yahoo::UpdateFloats.update_floats
+        MarketDataUtilities::ShortInterest::Nasdaq::ScrapeAll.call
 
-        MarketDataUtilities::Yahoo::UpdateFloats.update_floats
+        MarketDataUtilities::ShortInterest::Yahoo::UpdateFloats.update_all_floats_and_short_ratio(symbols: ticker_symbols_not_updated_by_nasdaq)
       end
 
       def most_recent_short_nasdaq_interest_history_date
