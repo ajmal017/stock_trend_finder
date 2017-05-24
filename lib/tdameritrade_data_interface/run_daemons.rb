@@ -18,7 +18,7 @@ module TDAmeritradeDataInterface
 
     def run_realtime_quotes_daemon
       schedulers = [
-        '15,45 10-15 * * MON-FRI',
+        '0,10,18,32,45,53 10-15 * * MON-FRI',
         '32,50 9 * * MON-FRI',
       ].map do |scheduled_time|
         scheduler = Rufus::Scheduler.new
