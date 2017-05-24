@@ -21,8 +21,10 @@ module MarketDataUtilities
           update_all_floats_and_short_ratio(short_as_of_date: short_as_of_date || calculate_short_as_of_date)
         end
 
-        def self.update_all_floats_and_short_ratio(short_as_of_date: Date.today)
-          Ticker.watching.pluck(:symbol).each_slice(200) do |tickers|
+        def self.update_all_floats_and_short_ratio(short_as_of_date: Date.today, symbols: tickers)
+          ticker_list = symbols || Ticker.watching.pluck(:symbol)
+
+          ticker_list.each_slice(200) do |tickers|
             quotes = Ystock.quote(tickers)
             quotes.each do |q|
               float = 0
