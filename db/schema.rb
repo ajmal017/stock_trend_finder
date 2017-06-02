@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170522222612) do
+ActiveRecord::Schema.define(version: 20170525150351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -340,7 +340,6 @@ ActiveRecord::Schema.define(version: 20170522222612) do
     t.boolean  "track_gap_up"
     t.string   "gap_up_note",                    limit: 255
     t.boolean  "adr"
-    t.datetime "date_removed"
     t.string   "note",                           limit: 255
     t.float    "float"
     t.float    "institutional_holdings_percent"
@@ -350,6 +349,7 @@ ActiveRecord::Schema.define(version: 20170522222612) do
     t.float    "short_pct_float"
     t.boolean  "on_nasdaq_list"
     t.date     "unscrape_date"
+    t.date     "date_added"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", unique: true, using: :btree

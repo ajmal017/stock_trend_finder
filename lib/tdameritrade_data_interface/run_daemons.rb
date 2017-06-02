@@ -96,7 +96,7 @@ module TDAmeritradeDataInterface
 
     def run_afterhours_quotes_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('5,15,25,45 17,18,19,21 * * MON-FRI') do
+      scheduler.cron('12,25,45,58 17,18,19,21 * * MON-FRI') do
         puts "Afterhours Quote Import: #{Time.now}"
         if is_market_day? Date.today
           ActiveRecord::Base.connection_pool.with_connection do
@@ -187,6 +187,23 @@ module TDAmeritradeDataInterface
 
       scheduler
     end
+
+    def run_short_interest_daemon
+      scheduler = Rufus::Scheduler.new
+      # This is set to run the 2nd and 17th of every month
+      scheduler.cron('0 19 2,17 * *') do
+        puts "#{Time.now} - Beginning download of short interest..."
+        if Date.today.wday == 5
+          t = Time.now
+          MarketDataUtilities::ShortInterest::Update.call
+          puts "Done (began at #{t}, now #{Time.now})"
+        end
+      end
+      puts "#{Time.now} Beginning short interest daemon..."
+
+      scheduler
+    end
+
 
   end
 end

@@ -78,7 +78,19 @@ class ReportsController < ApplicationController
   end
 
   def ticker_list
-    @report = Ticker.watching.order(id: :desc)
+    @report = Ticker
+      .watching
+      .order(date_added: :desc)
+      .to_a
+      .map do |ar|
+        {
+          symbol: ar.symbol,
+          company_name: ar.company_name,
+          exchange: ar.exchange,
+          float: ar.float.to_s,
+          institutional_ownership_pct: ar.institutional_holdings_percent.to_s,
+        }.stringify_keys
+      end
   end
 
   def pctgainloss

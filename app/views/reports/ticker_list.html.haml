@@ -9,17 +9,15 @@
   %table.table-bordered#ticker_list{ style: "width: 700px;"}
     %thead
       %th#index
-      %th#ticker-id ID
       %th#symbol{ style: "width: 100px;"} Ticker Symbol
-      %th#company-name{ style: "width: 100px;"} Company Name
+      %th#company-name{ style: "width: 250px;"} Company Name
       %th#exchange{ style: "width: 100px;"} Exchange
-      %th#float{ style: "width: 100px;"} Float
+      %th#float{ style: "width: 100px;", class: 'rjust' } Float
       %th#hide{ style: "width: 100px;"} Hide
       %th#unscrape{ style: "width: 100px;"} Unscrape
     -@report.each_with_index do |r, i|
       %tr{ id: r['symbol'] }
         %td= i+1
-        %td{ class: set_css_class(r, :ticker_id) }= r['id']
         %td{ class: set_css_class(r, :symbol) }= r['symbol']
         %td{ class: set_css_class(r, :company_name) }= r['company_name']
         %td{ class: set_css_class(r, :exchange) }= r['exchange']
