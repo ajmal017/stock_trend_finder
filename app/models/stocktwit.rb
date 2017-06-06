@@ -22,7 +22,7 @@ class Stocktwit < ActiveRecord::Base
   end
 
   def self.setup_list
-    StocktwitHashtag.group(:tag).count(:tag).sort { |tag_a, tag_b| tag_b[1] <=> tag_a[1] }
+    StocktwitHashtag.group(:tag).count(:tag).sort { |tag_a, tag_b| tag_b[0] <=> tag_a[0] }
   end
 
   def self.watching_list
