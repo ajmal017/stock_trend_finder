@@ -61,7 +61,7 @@ class ReportsController < ApplicationController
 
   def hide_symbol
     @symbol = params[:symbol]
-    Ticker.find_by(symbol: @symbol).hide_from_reports(3)
+    Ticker.find_by(symbol: @symbol).hide_from_reports(1)
   end
 
   def unscrape_symbol

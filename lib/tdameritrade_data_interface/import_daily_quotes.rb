@@ -435,7 +435,7 @@ module TDAmeritradeDataInterface
   def self.import_afterhours_quotes(opts={})
     date = opts[:date]
     if !date.is_a? Date
-      puts "Invalid date submitted to import_premarket quotes"
+      puts "Invalid date submitted to import_afterhours_quotes"
       return
     end
 
