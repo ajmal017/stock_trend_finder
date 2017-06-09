@@ -16,6 +16,12 @@ module TDAmeritradeDataInterface
       )
     end
 
+    def stocktwit_recent
+      Clipboard.copy(
+        Stocktwit.ticker_list.select { |t| Date.parse(t['last_updated_date']) > (Date.today - 60)}.map { |t| t['ticker_symbol'] }.join("\n")
+      )
+    end
+
     def update_short_interest
       MarketDataUtilities::ShortInterest::Update.call
     end

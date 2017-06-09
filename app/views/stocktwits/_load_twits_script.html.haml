@@ -85,7 +85,7 @@
   $(window).scroll () ->
     if $(window).scrollTop() >= $('#stocktwits-content').height() - $(window).height() - 500
       if !loading && !nomore
-        load_next($setup_or_symbol_filter, $last_twit_id)
+        load_next($setup_or_symbol_filter(), $last_twit_id)
 
   $ ->
     symbol = getUrlParameter('symbol')

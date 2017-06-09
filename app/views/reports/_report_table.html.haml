@@ -13,7 +13,7 @@
       -if fields.include?(:pct_change)
         %th#percent-change.rjust{ style: "width: 100px;"} % Change
       -if fields.include?(:volume)
-        %th#volume.rjust{ style: "width: 100px;"} Volume (K)
+        %th#volume.rjust.no-decoration{ style: "width: 100px"}= link_to('Volume (K)',request.env['PATH_INFO'] + '?sort_field=volume', style: 'color: #FFFFFF;')
       %th#average-volume.rjust{ style: "width: 100px;"} Avg Vol (K)
       -if fields.include?(:volume_ratio)
         %th#volume-ratio.rjust{ style: "width: 100px;"} Volume Ratio

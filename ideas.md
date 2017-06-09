@@ -18,7 +18,13 @@ Stock Data
 * Reset stock history after split - this includes making volume history adjustments
 * "as recorded" daily stock price table - populate it with stock data upon resetting. only daily stock prices 
   get reset - premarket prices remain
-*  
+* On gaps report, click the symbol to find the stock's gap history
+  - Previous high
+  - Previous close
+  - % gap
+  - Volume
+  - Volume average
+  - Movement over 3 days, 5 days, 10 days, 20 days  
 
 
 VIX

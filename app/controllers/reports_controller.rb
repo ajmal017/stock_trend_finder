@@ -2,7 +2,6 @@ require 'tdameritrade_data_interface/tdameritrade_data_interface'
 
 class ReportsController < ApplicationController
   before_filter :set_report_date
-  # before_filter :set_vix_contango_reading
 
   def active_stocks
     @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
@@ -102,7 +101,8 @@ private
   def run_query(qry, fields=nil)
     ReportPresenter.format(
       ActiveRecord::Base.connection.execute(qry),
-      fields
+      fields,
+      sort_field: params[:sort_field].try(:to_sym) || :volume_ratio
     )
   end
 

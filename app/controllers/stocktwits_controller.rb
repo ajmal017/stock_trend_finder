@@ -21,7 +21,7 @@ class StocktwitsController < ApplicationController
 
   def load_twits
     @twits = Stocktwit.showing(@user_id)
-    @twits = @twits.where("id < ?", params[:max]) if params[:max].present?
+    @twits = @twits.where("stocktwits.id < ?", params[:max]) if params[:max].present?
     @twits = @twits.where(symbol: params[:symbol]) if params[:symbol].present?
     @twits = @twits.joins(:stocktwit_hashtags).where(stocktwit_hashtags: {tag: params[:setup]}).order(stocktwit_time: :desc) if params[:setup].present?
     @twits = @twits.limit(20)

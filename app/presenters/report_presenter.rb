@@ -16,7 +16,7 @@ class ReportPresenter
   ]
 
 
-  def self.format(sql_result, fields_filter=DEFAULT_FIELDS)
+  def self.format(sql_result, fields_filter=DEFAULT_FIELDS, sort_field: :volume_ratio, sort_direction: :desc)
     new_report = []
     sql_result.each do |row|
       new_report << {
@@ -40,6 +40,8 @@ class ReportPresenter
         float_pct: (row['volume'].to_f > 0 && row['float'].to_f > 0) ? display_percent(row['volume'].to_f / (row['float'].to_f) * 100) : ''
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))
     end
+
+    new_report.sort! { |a,b| sort_direction==:desc ? b[sort_field].to_f<=>a[sort_field].to_f : a[sort_field].to_f<=>b[sort_field].to_f }
     new_report
   end
 
