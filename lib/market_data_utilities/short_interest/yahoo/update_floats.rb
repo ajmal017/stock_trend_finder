@@ -21,7 +21,7 @@ module MarketDataUtilities
           update_all_floats_and_short_ratio(short_as_of_date: short_as_of_date || calculate_short_as_of_date)
         end
 
-        def self.update_all_floats_and_short_ratio(short_as_of_date: Date.today, symbols: tickers)
+        def self.update_all_floats_and_short_ratio(short_as_of_date: calculate_short_as_of_date, symbols: tickers)
           ticker_list = symbols || Ticker.watching.pluck(:symbol)
 
           ticker_list.each_slice(200) do |tickers|
@@ -48,7 +48,8 @@ module MarketDataUtilities
                   short_pct_float: short_pct_float,
                   shares_short: shares_short,
                   short_interest_date: short_as_of_date,
-                  float: float
+                  float: float,
+                  source: 'yahoo',
                 )
               end
             end

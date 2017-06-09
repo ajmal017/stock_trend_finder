@@ -61,12 +61,12 @@ module TDAmeritradeDataInterface
         next if get_history_returned_error?(prices) || prices.first.has_key?(:already_processed)
 
         of = open(cache_file, "w")
-        of.write("ticker_id,ticker_symbol,price_date,open,high,low,close,volume,created_at,updated_at\n")
+        of.write("ticker_symbol,price_date,open,high,low,close,volume,created_at,updated_at\n")
 
         price_date_list=Array.new
         prices.each do |bar|
           if price_date_list.index(bar[:timestamp]).nil?
-            of.write "#{ticker.id},#{ticker.symbol},#{bar[:timestamp].month}/#{bar[:timestamp].day}/#{bar[:timestamp].year},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:close]},#{bar[:volume]/10},'#{Time.now}','#{Time.now}'\n"
+            of.write "#{ticker.symbol},#{bar[:timestamp].month}/#{bar[:timestamp].day}/#{bar[:timestamp].year},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:close]},#{bar[:volume]/10},'#{Time.now}','#{Time.now}'\n"
             price_date_list << bar[:timestamp]
           end
         end
@@ -79,7 +79,7 @@ module TDAmeritradeDataInterface
 
       begin
         ActiveRecord::Base.connection.execute(
-            "COPY daily_stock_prices (ticker_id,ticker_symbol,price_date,open,high,low,close,volume,created_at,updated_at)
+            "COPY daily_stock_prices (ticker_symbol,price_date,open,high,low,close,volume,created_at,updated_at)
               FROM '#{cache_file}'
               WITH (FORMAT 'csv', HEADER)"
         )
@@ -278,14 +278,14 @@ module TDAmeritradeDataInterface
         end
       end
 
-      ticker_id_hash = Hash[list.collect { |i| i }]
+      # ticker_id_hash = Hash[list.collect { |i| i }]
 
       begin
         of = open(cache_file, "w")
-        of.write("ticker_id,ticker_symbol,last_trade,quote_time,open,high,low,volume\n")
+        of.write("ticker_symbol,last_trade,quote_time,open,high,low,volume\n")
         quotes.each do |bar|
           if bar[:last].present? && bar[:open].present? && bar[:high].present? && bar[:low].present?
-            of.write "#{ticker_id_hash[bar[:symbol]]},#{bar[:symbol]},#{bar[:last]},#{bar[:last_trade_time].to_s},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:volume]}\n"
+            of.write "#{bar[:symbol]},#{bar[:last]},#{bar[:last_trade_time].to_s},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:volume]}\n"
           end
         end
         of.close
@@ -297,7 +297,7 @@ module TDAmeritradeDataInterface
 
       begin
         ActiveRecord::Base.connection.execute(
-            "COPY real_time_quotes (ticker_id,ticker_symbol,last_trade,quote_time,open,high,low,volume)
+            "COPY real_time_quotes (ticker_symbol,last_trade,quote_time,open,high,low,volume)
               FROM '#{cache_file}'
               WITH (FORMAT 'csv', HEADER)"
         )
@@ -435,7 +435,7 @@ module TDAmeritradeDataInterface
   def self.import_afterhours_quotes(opts={})
     date = opts[:date]
     if !date.is_a? Date
-      puts "Invalid date submitted to import_premarket quotes"
+      puts "Invalid date submitted to import_afterhours_quotes"
       return
     end
 

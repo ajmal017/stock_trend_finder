@@ -17,7 +17,7 @@ module MarketDataUtilities
           /\bPortfolio$/
         ]
 
-        SHELL_COMPANY_WHITELIST=%w(CMCSA)
+        SHELL_COMPANY_WHITELIST=%w(CMCSA DISCA TCEHY)
 
         def convert_market_caps(line_items)
           line_items.each do |line_item|

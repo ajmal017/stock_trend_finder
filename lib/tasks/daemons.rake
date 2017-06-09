@@ -12,7 +12,7 @@ namespace :stock_trend_finder do
     $stf.run_import_vix_futures_daemon
     $stf.run_db_maintenance_daemon
     $stf.run_institutional_ownership_daemon
-    # $stf.run_evernote_watchlist_daemon
+    $stf.run_short_interest_daemon
 
     while 1 do
       # infinite loop until Ctrl+C hit

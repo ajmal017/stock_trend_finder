@@ -36,7 +36,7 @@ module MarketDataUtilities
       private
 
       def insert_new_ticker(attributes)
-        new_ticker_attrs = attributes.merge({scrape_data: true, on_nasdaq_list: true})
+        new_ticker_attrs = attributes.merge(scrape_data: true, on_nasdaq_list: true, date_added: Date.today)
         Ticker.create!(new_ticker_attrs)
         @change_report[:tickers_added] << [attributes[:symbol], attributes[:company_name]]
       end
@@ -61,7 +61,12 @@ module MarketDataUtilities
         # Only set it to scrapable from unscrapable if the company name changed (i.e. ticker gets recycled under new company)
         scrape_data = ticker.scrape_data? || (new_attributes[:company_name] != ticker.company_name)
 
-        ticker.update(new_attributes.merge(on_nasdaq_list: true, scrape_data: scrape_data).reject{ |_k,v| v.nil? })
+        ticker.update(
+          new_attributes.merge(
+            on_nasdaq_list: true,
+            scrape_data: scrape_data,
+            date_added: (scrape_data && !ticker.scrape_data? ? Date.today : ticker.date_added)
+        ).reject{ |_k,v| v.nil? })
       end
 
     end
