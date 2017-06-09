@@ -20,8 +20,10 @@ module TDAmeritradeDataInterface
       MarketDataUtilities::ShortInterest::Update.call
     end
 
-    def vix_futures_report
-      VIXFuturesReport.new.build_report
+    def vix_futures_report(date=Date.today)
+      VIXFuturesReport.new.build_report(
+        vix_futures_history_id: VIXFuturesHistory.where('snapshot_time BETWEEN ? and ?', date, date + 1).to_a.last.try(:id)
+      )
     end
   end
 
