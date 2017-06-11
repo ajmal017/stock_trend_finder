@@ -31,3 +31,5 @@
 /lib/old
 gitignore/
 
+.env
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525150351) do
+ActiveRecord::Schema.define(version: 20170611151434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,13 +185,11 @@ ActiveRecord::Schema.define(version: 20170525150351) do
   end
 
   create_table "real_time_quotes", force: :cascade do |t|
-    t.integer  "ticker_id"
     t.string   "ticker_symbol", limit: 255
     t.float    "last_trade"
     t.datetime "quote_time"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "run_time",      limit: 255
     t.float    "open"
     t.float    "low"
     t.float    "high"
