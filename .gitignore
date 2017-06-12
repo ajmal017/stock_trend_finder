@@ -32,4 +32,5 @@
 gitignore/
 
 .env
+.env.production
 
