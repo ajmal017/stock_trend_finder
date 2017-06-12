@@ -106,7 +106,7 @@ volume > 10 and
 intraday_close is not null and
 average_volume_50day = 0 and
 price_date = '#{report_date.strftime('%Y-%m-%d')}'
-order by pct_change desc
+order by change_percent desc
 limit 50
 SQL
       end
