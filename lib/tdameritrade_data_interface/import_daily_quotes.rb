@@ -309,6 +309,10 @@ module TDAmeritradeDataInterface
     end while list != []
 
     puts log if log && log != ""
+
+    MomoStocks::PostReport.(report_type: 'report_type_active')
+    MomoStocks::PostReport.(report_type: 'report_type_gaps')
+    MomoStocks::PostReport.(report_type: 'report_type_52_week_highs')
   end
 
   def self.prepopulate_daily_stock_prices(prepopulate_date)
@@ -430,6 +434,8 @@ module TDAmeritradeDataInterface
     populate_premarket_average_volume_50day(date)
 
     puts "Done"
+
+    MomoStocks::PostReport.(report_type: 'report_type_premarket')
   end
 
   def self.import_afterhours_quotes(opts={})
@@ -520,6 +526,8 @@ module TDAmeritradeDataInterface
     populate_afterhours_average_volume_50day(NEW_TICKER_BEGIN_DATE)
 
     puts "Done"
+
+    MomoStocks::PostReport.(report_type: 'report_type_after_hours')
   end
 
 

@@ -1,59 +1,41 @@
-require "net/http"
-require "uri"
-
 module MomoStocks
   class PostReport
-    include MomoStocks::Common
     include Verbalize::Action
 
-    LINE_ITEM_FIELD_FILTER=[
-      :ticker_symbol,
-      :last_trade,
-      :change_percent,
-      :volume,
-      :volume_average,
-      :volume_ratio,
-      :short_days_to_cover,
-      :short_percent_of_float,
-      :float,
-      :float_percent_traded,
-      :institutional_ownership_percent,
-      :volume_average_premarket,
-      :volume_ratio_premarket,
-    ]
-
-    input :built_at, :report_type, :line_items
+    input :report_type, optional: [:report_date]
 
     def call
-      send_report
+      PostReportLineItems.(
+        built_at: Time.now,
+        report_date: report_date,
+        report_type: report_type,
+        line_items: line_items
+      )
     end
 
     private
 
-    def report_hash
-      binding.pry
-      @report_hash ||= {
-        api_key: ENV['MOMO_STOCKS_API_KEY'],
-        report_snapshot: {
-          built_at: built_at,
-          report_type: report_type,
-          institutional_ownership_as_of: institutional_ownership_date,
-          short_interest_as_of: short_interest_date,
-          line_items: line_items.map { |li| li.slice(*LINE_ITEM_FIELD_FILTER) },
-        }
-      }
+    def build_class
+      @build_class ||= case report_type
+        when 'report_type_after_hours'
+          'AfterHours'
+        when 'report_type_active'
+          'Active'
+        when 'report_type_52_week_highs'
+          'FiftyTwoWeekHigh'
+        when 'report_type_gaps'
+          'Gaps'
+        when 'report_type_premarket'
+          'Premarket'
+      end
     end
 
-    def send_report
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Post.new(uri.request_uri, 'Content-Type' => 'application/json')
-      request.body = report_hash.to_json
-
-      response = http.request(request)
+    def line_items
+      @line_items ||= eval("Reports::Build::#{build_class}").call(report_date: report_date).value
     end
 
-    def uri
-      @uri ||= URI.parse(ENV['MOMO_STOCKS_API_POST_REPORT_URL'])
+    def report_date
+      @report_date || Date.today
     end
 
   end
