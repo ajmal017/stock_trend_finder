@@ -159,7 +159,7 @@ select
   t.float,
   case when volume > 0 and t.float > 0 then volume / t.float * 100 end as float_percent_traded,
   snapshot_time,
-  (open / previous_high-1)*100 as gap_pct,
+  (open / previous_high-1)*100 as gap_percent,
   t.short_ratio as short_days_to_cover,
   t.short_pct_float * 100 as short_percent_of_float,
   t.institutional_holdings_percent as institutional_ownership_percent,  
