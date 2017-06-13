@@ -5,13 +5,16 @@ class ReportPresenter
   DEFAULT_FIELDS=[
     :ticker_symbol,
     :last_trade,
-    :pct_change,
+    :change_percent,
     :volume,
     :average_volume,
+    :volume_average,
     :volume_ratio,
-    :short_ratio,
+    :short_days_to_cover,
+    :short_percent_of_float,
     :float,
-    :float_pct,
+    :float_percent_traded,
+    :institutional_ownership_percent,
     :actions
   ]
 
@@ -20,28 +23,29 @@ class ReportPresenter
     new_report = []
     sql_result.each do |row|
       new_report << {
-        snapshot_time: row['snapshot_time'],
-        updated_at: row['updated_at'],
-        gray_symbol: row['gray_symbol']=='t',
+        snapshot_time: row[:snapshot_time],
+        updated_at: row[:updated_at],
+        gray_symbol: row[:gray_symbol]=='t',
 
-        ticker_symbol: row['ticker_symbol'],
-        company_name: row['company_name'],
-        last_trade: display_number(row['last_trade'], 2),
-        high: display_number(row['high'], 2),
-        gap_percent: display_number(row['gap_pct'], 1),
-        pct_above_52: display_number(row['pct_above_52_week'], 1),
-        pct_change: display_number(row['pct_change'], 1),
-        volume: display_number(row['volume'], 0),
-        average_volume: display_number(row['average_volume'], 0),
-        volume_ratio: display_number(row['volume_ratio'], 1),
-        short_ratio: display_short(row['short_ratio'], row['short_pct_float']),
-        institutional_ownership_percent: display_percent(row['institutional_ownership_percent'], 0),
-        float: row['float'],
-        float_pct: (row['volume'].to_f > 0 && row['float'].to_f > 0) ? display_percent(row['volume'].to_f / (row['float'].to_f) * 100) : ''
+        ticker_symbol: row[:ticker_symbol],
+        company_name: row[:company_name],
+        last_trade: display_number(row[:last_trade], 2),
+        high: display_number(row[:high], 2),
+        gap_percent: display_number(row[:gap_percent], 1),
+        percent_above_52_week_high: display_number(row[:percent_above_52_week_high], 1),
+        change_percent: display_number(row[:change_percent], 1),
+        volume: display_number(row[:volume], 0),
+        volume_average: display_number(row[:volume_average], 0),
+        volume_ratio: display_number(row[:volume_ratio], 1),
+        short_days_to_cover: display_number(row[:short_days_to_cover], 1),
+        short_percent_of_float: display_percent(row[:short_percent_of_float], 0),
+        institutional_ownership_percent: display_percent(row[:institutional_ownership_percent], 0),
+        float: display_number(row[:float], 0),
+        float_percent_traded: display_percent(row[:float_percent_traded], 0)
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))
     end
 
-    new_report.sort! { |a,b| sort_direction==:desc ? b[sort_field].to_f<=>a[sort_field].to_f : a[sort_field].to_f<=>b[sort_field].to_f }
+    # new_report.sort! { |a,b| sort_direction==:desc ? b[sort_field].to_f<=>a[sort_field].to_f : a[sort_field].to_f<=>b[sort_field].to_f }
     new_report
   end
 

@@ -14,7 +14,7 @@ module Reports
             # high:             row['high'].try(:to_f),
             # gap_percent:      row['gap_percent'].try(:to_f),
             # pct_above_52:     row['percent_above_52_week'].try(:to_f),
-            pct_change:       row['change_percent'].try(:to_f),
+            change_percent:   row['change_percent'].try(:to_f),
             volume:           row['volume'].try(:to_f),
             volume_average:   row['volume_average'].try(:to_f),
             volume_ratio:     row['volume_ratio'].try(:to_f),

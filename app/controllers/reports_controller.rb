@@ -1,17 +1,24 @@
 require 'tdameritrade_data_interface/tdameritrade_data_interface'
 
 class ReportsController < ApplicationController
+  include Reports::Build::SQL
   before_filter :set_report_date
 
   def active_stocks
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
-    @report = run_query(
-      TDAmeritradeDataInterface.select_active_stocks(@report_date),
-      @fields
-    )
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    # @report = run_query(
+    #   select_active(@report_date),
+    #   @fields
+    # )
+    #
+    # @report_up   = @report.select { |r| r[:change_percent].to_f >= 0 }
+    # @report_down = @report.select { |r| r[:change_percent].to_f < 0  }
 
-    @report_up   = @report.select { |r| r[:pct_change].to_f >= 0 }
-    @report_down = @report.select { |r| r[:pct_change].to_f < 0  }
+    line_items = Reports::Build::Active.call(report_date: @report_date).value
+    @report = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
+
+    @report_up   = ReportPresenter.format(@report.select { |r| r[:change_percent] >= 0.0 })
+    @report_down = ReportPresenter.format(@report.select { |r| r[:change_percent] < 0.0  })
   end
 
   def afterhours
@@ -26,8 +33,8 @@ class ReportsController < ApplicationController
       @fields
     )
 
-    @report_volume_up = @report_volume.select { |r| r[:pct_change].to_f >= 0 }
-    @report_volume_down = @report_volume.select { |r| r[:pct_change].to_f < 0 }
+    @report_volume_up = @report_volume.select { |r| r[:pct_change].to_f >= 0.0 }
+    @report_volume_down = @report_volume.select { |r| r[:pct_change].to_f < 0.0 }
   end
 
   def gaps
@@ -98,6 +105,8 @@ class ReportsController < ApplicationController
   end
 
 private
+  
+
   def run_query(qry, fields=nil)
     ReportPresenter.format(
       ActiveRecord::Base.connection.execute(qry),
