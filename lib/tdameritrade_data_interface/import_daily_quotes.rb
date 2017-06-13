@@ -472,7 +472,8 @@ module TDAmeritradeDataInterface
         quote_bunch.each do |quotes|
           next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
           ticker_symbol = quotes[:symbol].to_s
-          prices = quotes[:bars].select { |bar| bar[:timestamp] > Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:10:00')) }
+          binding.pry if ticker_symbol=='HRB'
+          prices = quotes[:bars].select { |bar| bar[:timestamp] >= Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:05:00')) }
 
           if prices.empty?
             puts "#{date} Skipping #{i}: #{ticker_symbol} - no AH prints"
