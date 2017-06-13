@@ -10,6 +10,8 @@ module MomoStocks
       :ticker_symbol,
       :last_trade,
       :change_percent,
+      :gap_percent,
+      :percent_above_52_week_high,
       :volume,
       :volume_average,
       :volume_ratio,
