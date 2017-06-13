@@ -38,31 +38,37 @@ class ReportsController < ApplicationController
   end
 
   def gaps
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :gap_percent, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :gap_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
 
-    @report_bullgaps = run_query(
-      TDAmeritradeDataInterface.select_bullish_gaps(@report_date),
-      @fields,
-    )
-    @report_beargaps = run_query(
-      TDAmeritradeDataInterface.select_bearish_gaps(@report_date),
-      @fields,
-    )
+    line_items = Reports::Build::Gaps.call(report_date: @report_date).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
+
+    @report = {
+      title: 'Gap Up / Gap Down Report',
+      last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
+      item_count: sorted_line_items.size,
+      sections: Reports::Build::Sections::Gaps.(report: sorted_line_items).value,
+      route: :gaps,
+    }
+
+    render :report
   end
 
   def premarket
     @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
-    @report_volume = run_query(
-      TDAmeritradeDataInterface.select_premarket_by_volume(@report_date),
-      @fields,
-    )
-    @report_percent = run_query(
-      TDAmeritradeDataInterface.select_premarket_by_percent(@report_date),
-      @fields,
-    )
 
-    @report_volume_up = @report_volume.select { |r| r[:pct_change].to_f >= 0 }.first(50)
-    @report_volume_down = @report_volume.select { |r| r[:pct_change].to_f < 0 }.first(50)
+    line_items = Reports::Build::Premarket.call(report_date: @report_date).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
+
+    @report = {
+      title: 'Premarket Report',
+      last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
+      item_count: sorted_line_items.size,
+      sections: Reports::Build::Sections::Premarket.(report: sorted_line_items).value,
+      route: :premarket,
+    }
+
+    render :report
   end
 
   def hide_symbol
@@ -76,7 +82,7 @@ class ReportsController < ApplicationController
   end
 
   def week52_highs
-    @fields = [:ticker_symbol, :last_trade, :change_percent, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
 
     line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: @report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
@@ -89,7 +95,6 @@ class ReportsController < ApplicationController
       route: :week52_highs,
     }
 
-    binding.pry
     render :report
   end
 

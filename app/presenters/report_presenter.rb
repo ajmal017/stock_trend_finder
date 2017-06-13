@@ -6,6 +6,8 @@ class ReportPresenter
     :ticker_symbol,
     :last_trade,
     :change_percent,
+    :gap_percent,
+    :percent_above_52_week_high,
     :volume,
     :average_volume,
     :volume_average,
