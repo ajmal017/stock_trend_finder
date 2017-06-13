@@ -156,8 +156,6 @@ module TDAmeritradeDataInterface
               quote_bunch = c.get_price_history(tickers, intervaltype: :daily, intervalduration: 1, startdate: price_date, enddate: price_date)
               break
             rescue Exception => e
-              #binding.pry
-
               #TODO figure out what causes it - why we trying to get records that dont exist
               puts "Error processing - #{e.message} - attempt (#{error_count + 1})"
               log = log + "Error processing - #{e.message} - attempt (#{error_count + 1})\n"
@@ -472,7 +470,6 @@ module TDAmeritradeDataInterface
         quote_bunch.each do |quotes|
           next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
           ticker_symbol = quotes[:symbol].to_s
-          binding.pry if ticker_symbol=='HRB'
           prices = quotes[:bars].select { |bar| bar[:timestamp] >= Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:05:00')) }
 
           if prices.empty?
