@@ -6,35 +6,35 @@ class ReportsController < ApplicationController
 
   def active_stocks
     @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
-    # @report = run_query(
-    #   select_active(@report_date),
-    #   @fields
-    # )
-    #
-    # @report_up   = @report.select { |r| r[:change_percent].to_f >= 0 }
-    # @report_down = @report.select { |r| r[:change_percent].to_f < 0  }
-
     line_items = Reports::Build::Active.call(report_date: @report_date).value
-    @report = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
 
-    @report_up   = ReportPresenter.format(@report.select { |r| r[:change_percent] >= 0.0 })
-    @report_down = ReportPresenter.format(@report.select { |r| r[:change_percent] < 0.0  })
+    @report = {
+      title: 'Active Stocks Report',
+      last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
+      item_count: sorted_line_items.size,
+      sections: Reports::Build::Sections::Active.(report: sorted_line_items).value,
+      route: :active_stocks,
+    }
+
+    render :report
   end
 
   def afterhours
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
 
-    @report_volume = run_query(
-      TDAmeritradeDataInterface.select_afterhours_by_volume(@report_date),
-      @fields,
-    )
-    @report_percent = run_query(
-      TDAmeritradeDataInterface.select_afterhours_by_percent(@report_date),
-      @fields
-    )
+    line_items = Reports::Build::AfterHours.call(report_date: @report_date).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
 
-    @report_volume_up = @report_volume.select { |r| r[:pct_change].to_f >= 0.0 }
-    @report_volume_down = @report_volume.select { |r| r[:pct_change].to_f < 0.0 }
+    @report = {
+      title: 'After Hours Report',
+      last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
+      item_count: sorted_line_items.size,
+      sections: Reports::Build::Sections::AfterHours.(report: sorted_line_items).value,
+      route: :afterhours,
+    }
+
+    render :report
   end
 
   def gaps
@@ -51,7 +51,7 @@ class ReportsController < ApplicationController
   end
 
   def premarket
-    @fields = [:ticker_symbol, :last_trade, :pct_change, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
     @report_volume = run_query(
       TDAmeritradeDataInterface.select_premarket_by_volume(@report_date),
       @fields,
@@ -76,11 +76,21 @@ class ReportsController < ApplicationController
   end
 
   def week52_highs
-    @fields = [:ticker_symbol, :last_trade, :pct_above_52, :volume, :average_volume, :volume_ratio, :short_ratio, :float, :float_pct, :institutional_ownership_percent, :actions]
-    @report = run_query(
-      TDAmeritradeDataInterface.select_52week_highs(@report_date),
-      @fields,
-    )
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+
+    line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: @report_date).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: :volume_ratio, sort_direction: :desc).value
+
+    @report = {
+      title: '52 Week High List',
+      last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
+      item_count: sorted_line_items.size,
+      sections: Reports::Build::Sections::FiftyTwoWeekHigh.(report: sorted_line_items).value,
+      route: :week52_highs,
+    }
+
+    binding.pry
+    render :report
   end
 
   def ticker_list

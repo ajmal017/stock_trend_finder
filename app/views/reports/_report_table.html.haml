@@ -1,17 +1,17 @@
 .report-container
-  %table.table-bordered{ id: report_name, style: "width: 1000px;" }
+  %table.table-bordered{ style: "width: 1000px;" }
     %thead
       %th#index{ style: "width: 25px;"}
       %th#ticker-symbol{ style: "width: 75px;"} Symbol
       -if fields.include?(:company_name)
         %th#company-name.rjust{ style: "width: 100px;"}
       %th#last-trade.rjust{ style: "width: 50px;"} Last
-      -if fields.include?(:pct_above_52)
-        %th#pct-above-52.rjust{ style: "width: 100px;"} % 52+
       -if fields.include?(:gap_percent)
         %th#gap-percent.rjust{ style: "width: 100px;"} % Gap
       -if fields.include?(:change_percent)
-        %th#percent-change.rjust{ style: "width: 100px;"} % Change
+        %th#percent-change.rjust{ style: "width: 90px;"} % Change
+      -if fields.include?(:percent_above_52_week_high)
+        %th#percent-above-52-week-high.rjust{ style: "width: 90px;"} % 52+
       -if fields.include?(:volume)
         %th#volume.rjust.no-decoration{ style: "width: 100px"}= link_to('Volume (K)',request.env['PATH_INFO'] + '?sort_field=volume', style: 'color: #FFFFFF;')
       %th#average-volume.rjust{ style: "width: 100px;"} Avg Vol (K)
@@ -31,12 +31,12 @@
         -if fields.include?(:company_name)
           %td{ class: set_css_class(r, :company_name) }= r[:company_name]
         %td{ class: set_css_class(r, :last_trade) }= r[:last_trade]
-        -if fields.include?(:pct_above_52)
-          %td{ class: set_css_class(r, :percent_above_52_week_high)}= r[:pct_above_52]
         -if fields.include?(:gap_percent)
           %td{ class: set_css_class(r, :gap_percent)}= r[:gap_percent]
         -if fields.include?(:change_percent)
           %td{ class: set_css_class(r, :change_percent) }= r[:change_percent]
+        -if fields.include?(:percent_above_52_week_high)
+          %td{ class: set_css_class(r, :percent_above_52_week_high)}= r[:percent_above_52_week_high]
         -if fields.include?(:volume)
           %td{ class: set_css_class(r, :volume) }= r[:volume]
         %td{ class: set_css_class(r, :volume_average) }= r[:volume_average]

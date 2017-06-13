@@ -1,0 +1,13 @@
+%h1= @report[:title]
+
+-if @report.count > 0
+  %div Last Updated: #{@report[:last_updated]}
+  %div Items: #{@report[:item_count]}
+
+.report_date_form
+  =report_date_form @report[:route]
+
+-@report[:sections].each do |section|
+  -if section[:title].present?
+    %h2= section[:title]
+  =render partial: 'report_table', locals: { report: section[:line_items], fields: @fields}

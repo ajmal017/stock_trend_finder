@@ -71,7 +71,7 @@ select
 from daily_stock_prices d inner join tickers t on t.symbol=d.ticker_symbol
 where
 t.scrape_data=true and
-abs((((close / previous_close) - 1) * 100)) > 4 and
+abs((((close / previous_close) - 1) * 100)) > 1 and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 (close * volume > 5000)
 order by volume_ratio desc
@@ -120,7 +120,7 @@ select
   intraday_close,
   volume as volume,
   average_volume_50day as volume_average,
-  '---' as volume_ratio,
+  volume / average_volume_50day as volume_ratio,
   price_date,
   p.updated_at as snapshot_time,
   t.float,
