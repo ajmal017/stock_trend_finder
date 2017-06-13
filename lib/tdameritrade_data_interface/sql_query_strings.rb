@@ -782,8 +782,8 @@ SQL
 
       def insert_daily_stock_prices_from_realtime_quotes
         <<SQL
-insert into daily_stock_prices (ticker_id, ticker_symbol, price_date, open, high, low, close, volume, created_at, updated_at, snapshot_time)
-select ticker_id, ticker_symbol, date(quote_time), open, high, low, last_trade, volume/1000, current_timestamp, current_timestamp, quote_time
+insert into daily_stock_prices (ticker_symbol, price_date, open, high, low, close, volume, created_at, updated_at, snapshot_time)
+select ticker_symbol, date(quote_time), open, high, low, last_trade, volume/1000, current_timestamp, current_timestamp, quote_time
 from real_time_quotes rtq
 where ticker_symbol not in (select ticker_symbol from daily_stock_prices dsp where dsp.price_date=date(rtq.quote_time))
 SQL
