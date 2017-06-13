@@ -96,7 +96,7 @@ module TDAmeritradeDataInterface
 
     def run_afterhours_quotes_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('12,25,45,58 17,18,19,21 * * MON-FRI') do
+      scheduler.cron('11,25,45,58 17,18,19,21 * * MON-FRI') do
         puts "Afterhours Quote Import: #{Time.now}"
         if is_market_day? Date.today
           ActiveRecord::Base.connection_pool.with_connection do
