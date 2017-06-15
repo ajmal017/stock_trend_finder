@@ -14,7 +14,7 @@ module TDAmeritradeDataInterface
         puts "Posting reports to Momo Scans"
         MomoStocks::PostReport.(report_type: 'report_type_active')
         MomoStocks::PostReport.(report_type: 'report_type_gaps')
-        MomoStocks::PostReport.(report_type: 'report_type_52_week_highs')
+        MomoStocks::PostReport.(report_type: 'report_type_fifty_two_week_high')
 
         puts "Done #{Time.now}\n\n"
       else
