@@ -27,7 +27,7 @@ class ReportPresenter
       new_report << {
         snapshot_time: row[:snapshot_time],
         updated_at: row[:updated_at],
-        gray_symbol: row[:gray_symbol]=='t',
+        gray_symbol: row[:gray_symbol]==true,
 
         ticker_symbol: row[:ticker_symbol],
         company_name: row[:company_name],
@@ -35,7 +35,7 @@ class ReportPresenter
         high: display_number(row[:high], 2),
         gap_percent: display_number(row[:gap_percent], 1),
         percent_above_52_week_high: display_number(row[:percent_above_52_week_high], 1),
-        change_percent: display_number(row[:change_percent], 1),
+        change_percent: display_percent(row[:change_percent], 1),
         volume: display_number(row[:volume], 0),
         volume_average: display_number(row[:volume_average], 0),
         volume_ratio: display_number(row[:volume_ratio], 1),

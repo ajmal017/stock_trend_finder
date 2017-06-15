@@ -14,11 +14,12 @@ with ticker_list as
     average_volume_50day as average_volume,
     volume / average_volume_50day as volume_ratio,
     float,
+    case when volume > 0 and t.float > 0 then volume / t.float * 100 end as float_percent_traded, 
     high_52_week,
     (close/high_52_week-1)*100 as pct_above_52_week,
     snapshot_time,
     t.short_ratio as short_ratio,
-    t.short_pct_float * 100 as short_pct_float,
+    t.short_pct_float * 100 as short_percent_of_float,
     t.institutional_holdings_percent as institutional_ownership_percent,  
     t.hide_from_reports_until > current_date as gray_symbol
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
@@ -37,10 +38,11 @@ select
   average_volume as volume_average,
   volume_ratio,
   float,
+  float_percent_traded,
   pct_above_52_week as percent_above_52_week_high,
   snapshot_time,
   short_ratio as short_days_to_cover,
-  short_pct_float as short_percent_of_float,
+  short_percent_of_float,
   institutional_ownership_percent,
   gray_symbol
 from ticker_list
@@ -71,7 +73,7 @@ select
 from daily_stock_prices d inner join tickers t on t.symbol=d.ticker_symbol
 where
 t.scrape_data=true and
-abs((((close / previous_close) - 1) * 100)) > 1 and
+abs((((close / previous_close) - 1) * 100)) > 2 and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
 (close * volume > 5000)
 order by volume_ratio desc
@@ -105,7 +107,8 @@ last_trade > 1 and
 volume > 10 and
 intraday_close is not null and
 average_volume_50day = 0 and
-price_date = '#{report_date.strftime('%Y-%m-%d')}'
+price_date = '#{report_date.strftime('%Y-%m-%d')}' and
+((last_trade / intraday_close) - 1) * 100 > 1
 order by change_percent desc
 limit 50
 SQL
