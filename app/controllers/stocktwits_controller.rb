@@ -35,7 +35,10 @@ class StocktwitsController < ApplicationController
 
   def add_twit
     head :bad_request  if params[:message].nil?
-    outcome, @twit = LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(note: params[:message])
+    outcome, @twit = LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(
+      note: params[:message],
+      stocktwit_time: params[:followup_id].present? ? Stocktwit.find(params[:followup_id]).stocktwit_time + 60 : Time.now
+    )
     if outcome == :ok
       render 'twit_result_ok'
     else

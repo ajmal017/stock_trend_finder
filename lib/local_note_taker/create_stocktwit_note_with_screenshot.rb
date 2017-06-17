@@ -3,12 +3,12 @@ module LocalNoteTaker
     include ParseTags
     include Verbalize::Action
 
-    input :note
+    input :note, optional: [:stocktwit_time]
 
     def call
       raise "You forgot to add ticker symbol" if symbols.empty?
       outcome, result = Stocktwits::Create.call(
-        stocktwit_time: Time.now,
+        stocktwit_time: @stocktwit_time || Time.now,
         message: note,
         user_name: 'greenspud',
         symbols: symbols,
