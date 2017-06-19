@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613125828) do
+ActiveRecord::Schema.define(version: 20170619131629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -311,7 +311,10 @@ ActiveRecord::Schema.define(version: 20170613125828) do
     t.string   "stocktwits_user_name", limit: 255
     t.integer  "call_result"
     t.string   "note"
+    t.date     "stocktwit_date"
   end
+
+  add_index "stocktwits", ["stocktwit_date"], name: "index_stocktwits_on_stocktwit_date", using: :btree
 
   create_table "ticker_notes", force: :cascade do |t|
     t.integer  "ticker_id"

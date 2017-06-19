@@ -20,6 +20,7 @@ module Stocktwits
       twit = Stocktwit.create(
         stocktwit_id: stocktwit_id,
         stocktwit_time: stocktwit_time,
+        stocktwit_date: stocktwit_time.to_date,
         stocktwit_url: stocktwit_url,
         symbol: symbols.first,
         message: message,
