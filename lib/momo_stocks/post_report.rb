@@ -21,7 +21,7 @@ module MomoStocks
           'AfterHours'
         when 'report_type_active'
           'Active'
-        when 'report_type_52_week_highs'
+        when 'report_type_fifty_two_week_high'
           'FiftyTwoWeekHigh'
         when 'report_type_gaps'
           'Gaps'
