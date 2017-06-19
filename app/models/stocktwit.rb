@@ -9,7 +9,7 @@ class Stocktwit < ActiveRecord::Base
 
   enum call_result: { no_call: 0, correct: 1, incorrect: 2, partial: 3 }
 
-  scope :showing, -> (user_id='greenspud') { where(hide: false, stocktwits_user_name: user_id).order(id: :desc) }
+  scope :showing, -> (user_id='greenspud') { where(hide: false, stocktwits_user_name: user_id) }
 
   def self.rename_symbol(old_symbol, new_symbol)
     Stocktwit.where(symbol: old_symbol).update_all(symbol: new_symbol)

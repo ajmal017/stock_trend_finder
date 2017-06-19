@@ -12,6 +12,11 @@ module TDAmeritradeDataInterface
     scrape.select { |ticker| DailyStockPrice.where("ticker_symbol=? AND price_date=?", ticker, Date.today-20).count == 0 }
   end
 
+  def self.quick_reset_ticker_symbol(symbol)
+    DailyStockPrice.where(ticker_symbol: symbol).delete_all
+    import_quotes(symbols: [symbol])
+  end
+
   def self.import_quotes(opts={})
     begin_date = (opts.has_key? :begin_date) && (opts[:begin_date].is_a? Date) ? opts[:begin_date] : nil
     end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date] : Date.today
@@ -25,14 +30,13 @@ module TDAmeritradeDataInterface
     log = ""
     #c.session_id = "128459556EEA989391FBAAA5E2BF8EB4.cOr5v8xckaAXQxWmG7bn2g"
 
-    Ticker.watching.each.with_index(1) do |ticker, i|
-      #Ticker.watching.where("symbol='AAOI'").each.with_index(1) do |ticker, i|
-
-      puts "Processing #{i}: #{ticker.symbol}"
+    symbols = opts[:symbols] || Ticker.watching.map(&:symbol)
+    symbols.each.with_index(1) do |symbol, i|
+      puts "Processing #{i}: #{symbol}"
       begin
         error_count = 0
         prices = Array.new
-        last_dsp = DailyStockPrice.where(ticker_symbol: ticker.symbol).order(price_date: :desc).first
+        last_dsp = DailyStockPrice.where(ticker_symbol: symbol).order(price_date: :desc).first
 
         while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
           if last_dsp.present?
@@ -40,19 +44,19 @@ module TDAmeritradeDataInterface
               prices = [{already_processed: true}]
             else
               if begin_date.nil?
-                prices = c.get_daily_price_history(ticker.symbol, (last_dsp.price_date+1), end_date)
+                prices = c.get_daily_price_history(symbol, (last_dsp.price_date+1), end_date)
               else
-                prices = c.get_daily_price_history(ticker.symbol, begin_date, end_date)
+                prices = c.get_daily_price_history(symbol, begin_date, end_date)
               end
             end
           else
-            prices = c.get_daily_price_history(ticker.symbol, NEW_TICKER_BEGIN_DATE, end_date)
+            prices = c.get_daily_price_history(symbol, NEW_TICKER_BEGIN_DATE, end_date)
           end
           if get_history_returned_error?(prices)
             # TODO Change this so that it handles an exception rather than checks for error condition
             error_count += 1
-            puts "Error processing #{ticker.symbol} - (attempt ##{error_count}) #{prices.first[:error]}"
-            log = log + "Error processing #{ticker.symbol} - (attempt ##{error_count}) #{prices.first[:error]}\n"
+            puts "Error processing #{symbol} - (attempt ##{error_count}) #{prices.first[:error]}"
+            log = log + "Error processing #{symbol} - (attempt ##{error_count}) #{prices.first[:error]}\n"
           else
             error_count = -1
           end
@@ -66,14 +70,14 @@ module TDAmeritradeDataInterface
         price_date_list=Array.new
         prices.each do |bar|
           if price_date_list.index(bar[:timestamp]).nil?
-            of.write "#{ticker.symbol},#{bar[:timestamp].month}/#{bar[:timestamp].day}/#{bar[:timestamp].year},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:close]},#{bar[:volume]/10},'#{Time.now}','#{Time.now}'\n"
+            of.write "#{symbol},#{bar[:timestamp].month}/#{bar[:timestamp].day}/#{bar[:timestamp].year},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:close]},#{bar[:volume]/10},'#{Time.now}','#{Time.now}'\n"
             price_date_list << bar[:timestamp]
           end
         end
         of.close
       rescue => e
-        puts "Error processing #{ticker.symbol} - #{e.message}"
-        log = log + "Error processing #{ticker.symbol} - #{e.message}\n"
+        puts "Error processing #{symbol} - #{e.message}"
+        log = log + "Error processing #{symbol} - #{e.message}\n"
         next
       end
 
@@ -156,8 +160,6 @@ module TDAmeritradeDataInterface
               quote_bunch = c.get_price_history(tickers, intervaltype: :daily, intervalduration: 1, startdate: price_date, enddate: price_date)
               break
             rescue Exception => e
-              #binding.pry
-
               #TODO figure out what causes it - why we trying to get records that dont exist
               puts "Error processing - #{e.message} - attempt (#{error_count + 1})"
               log = log + "Error processing - #{e.message} - attempt (#{error_count + 1})\n"
@@ -466,7 +468,7 @@ module TDAmeritradeDataInterface
         quote_bunch.each do |quotes|
           next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
           ticker_symbol = quotes[:symbol].to_s
-          prices = quotes[:bars].select { |bar| bar[:timestamp] > Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:10:00')) }
+          prices = quotes[:bars].select { |bar| bar[:timestamp] >= Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:05:00')) }
 
           if prices.empty?
             puts "#{date} Skipping #{i}: #{ticker_symbol} - no AH prints"

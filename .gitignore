@@ -31,3 +31,6 @@
 /lib/old
 gitignore/
 
+.env
+.env.production
+

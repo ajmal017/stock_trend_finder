@@ -1,5 +1,5 @@
 :coffee
-  add_twit = () ->
+  add_twit = (followup_id=null) ->
     note_text = window.prompt('New Local Twit Text')
     if note_text
       $.ajax
@@ -7,8 +7,12 @@
         method: 'post',
         context: document.body,
         data:
+          followup_id: followup_id,
           message: note_text,
 
   $(document).on("click", 'button#add-twit-button', () ->
     add_twit()
   )
+
+  $(document).on("click", 'img.icon-followup', () ->
+    add_twit($(this).parent().attr('data-twit-id')))

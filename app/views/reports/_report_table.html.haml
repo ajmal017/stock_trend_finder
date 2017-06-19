@@ -1,26 +1,26 @@
 .report-container
-  %table.table-bordered{ id: report_name, style: "width: 1000px;" }
+  %table.table-bordered{ style: "width: 1000px;" }
     %thead
       %th#index{ style: "width: 25px;"}
       %th#ticker-symbol{ style: "width: 75px;"} Symbol
       -if fields.include?(:company_name)
-        %th#last-trade.rjust{ style: "width: 100px;"}
-      %th#pct_above_52.rjust{ style: "width: 50px;"} Last
-      -if fields.include?(:pct_above_52)
-        %th#pct-above-52.rjust{ style: "width: 100px;"} % 52+
+        %th#company-name.rjust{ style: "width: 100px;"}
+      %th#last-trade.rjust{ style: "width: 50px;"} Last
+      -if fields.include?(:change_percent)
+        %th#percent-change.rjust{ style: "width: 90px;"} % Change
       -if fields.include?(:gap_percent)
-        %th#gap-percent.rjust{ style: "width: 100px;"} % Gap
-      -if fields.include?(:pct_change)
-        %th#percent-change.rjust{ style: "width: 100px;"} % Change
+        %th#gap-percent.rjust{ style: "width: 90px;"} % Gap
+      -if fields.include?(:percent_above_52_week_high)
+        %th#percent-above-52-week-high.rjust{ style: "width: 90px;"} % 52+
       -if fields.include?(:volume)
         %th#volume.rjust.no-decoration{ style: "width: 100px"}= link_to('Volume (K)',request.env['PATH_INFO'] + '?sort_field=volume', style: 'color: #FFFFFF;')
       %th#average-volume.rjust{ style: "width: 100px;"} Avg Vol (K)
       -if fields.include?(:volume_ratio)
         %th#volume-ratio.rjust{ style: "width: 100px;"} Volume Ratio
-      %th#short-ratio.rjust{ style: "width: 125px;"} Short Ratio
-      %th#float.rjust{ style: "width: 100px;"} Float (M)
-      -if fields.include?(:float_pct)
-        %th#float-percent.rjust{ style: "width: 75px;"} Float %
+      %th#short-days-to-cover.rjust.divider-left{ style: "width: 65px;"}= "Short<br />Ratio".html_safe
+      %th#short-percent-of-float.rjust.divider-right{ style: "width: 65px;"}= "Short %<br />of Float".html_safe
+      %th#float.rjust{ style: "width: 65px;"} Float (M)
+      %th#float-percent-traded.divider-right.rjust{ style: "width: 65px;"} Float %
       -if fields.include?(:institutional_ownership_percent)
         %th#institutional-ownership-percent.rjust{ style: "width: 75px;"} IO %
       %th#actions{ style: "width: 100px; padding-left: 15px;"} Actions
@@ -31,21 +31,21 @@
         -if fields.include?(:company_name)
           %td{ class: set_css_class(r, :company_name) }= r[:company_name]
         %td{ class: set_css_class(r, :last_trade) }= r[:last_trade]
-        -if fields.include?(:pct_above_52)
-          %td{ class: set_css_class(r, :pct_above_52)}= r[:pct_above_52]
+        -if fields.include?(:change_percent)
+          %td{ class: set_css_class(r, :change_percent) }= r[:change_percent]
         -if fields.include?(:gap_percent)
           %td{ class: set_css_class(r, :gap_percent)}= r[:gap_percent]
-        -if fields.include?(:pct_change)
-          %td{ class: set_css_class(r, :pct_change) }= r[:pct_change]
+        -if fields.include?(:percent_above_52_week_high)
+          %td{ class: set_css_class(r, :percent_above_52_week_high)}= r[:percent_above_52_week_high]
         -if fields.include?(:volume)
           %td{ class: set_css_class(r, :volume) }= r[:volume]
-        %td{ class: set_css_class(r, :average_volume) }= r[:average_volume]
+        %td{ class: set_css_class(r, :volume_average) }= r[:volume_average]
         -if fields.include?(:volume_ratio)
           %td{ class: set_css_class(r, :volume_ratio) }= r[:volume_ratio]
-        %td{ class: set_css_class(r, :short_ratio) }= r[:short_ratio]
+        %td.divider-left{ class: set_css_class(r, :short_days_to_cover) }= r[:short_days_to_cover]
+        %td.divider-right{ class: set_css_class(r, :short_percent_of_float) }= r[:short_percent_of_float]
         %td{ class: set_css_class(r, :float) }= r[:float]
-        -if fields.include?(:float_pct)
-          %td{ class: set_css_class(r, :float_percent) }= r[:float_pct]
+        %td.divider-right{ class: set_css_class(r, :float_percent_traded) }= r[:float_percent_traded]
         -if fields.include?(:institutional_ownership_percent)
           %td{ class: set_css_class(r, :institutional_ownership_percent) }= r[:institutional_ownership_percent]
         %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to("H", reports_hide_symbol_path(r[:ticker_symbol]), remote: true, method: :patch) + " " + link_to("U", reports_unscrape_symbol_path(r[:ticker_symbol]), remote: true, method: :patch)

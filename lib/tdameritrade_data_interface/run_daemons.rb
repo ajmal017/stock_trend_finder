@@ -10,6 +10,12 @@ module TDAmeritradeDataInterface
           puts "Copying from real time quotes cache to daily_stock_prices... #{Time.now}"
           copy_realtime_quotes_to_daily_stock_prices
         end
+
+        puts "Posting reports to Momo Scans"
+        MomoStocks::PostReport.(report_type: 'report_type_active')
+        MomoStocks::PostReport.(report_type: 'report_type_gaps')
+        MomoStocks::PostReport.(report_type: 'report_type_fifty_two_week_high')
+
         puts "Done #{Time.now}\n\n"
       else
         puts "Market closed today, no real time quote download necessary"
@@ -69,6 +75,9 @@ module TDAmeritradeDataInterface
             ActiveRecord::Base.connection_pool.with_connection do
               import_premarket_quotes(date: Date.today)
             end
+            puts "Posting reports to Momo Scans - #{Time.now}"
+            MomoStocks::PostReport.(report_type: 'report_type_premarket')
+            puts "Done"
           else
             puts "Market closed today, no real time quote download necessary"
           end
@@ -96,12 +105,16 @@ module TDAmeritradeDataInterface
 
     def run_afterhours_quotes_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('12,25,45,58 17,18,19,21 * * MON-FRI') do
+      scheduler.cron('11,25,45,58 17,18,19,21 * * MON-FRI') do
         puts "Afterhours Quote Import: #{Time.now}"
         if is_market_day? Date.today
           ActiveRecord::Base.connection_pool.with_connection do
             import_afterhours_quotes(date: Date.today)
           end
+
+          puts "Posting reports to Momo Scans - #{Time.now}"
+          MomoStocks::PostReport.(report_type: 'report_type_after_hours')
+          puts "Done"
         else
           puts "Market closed today, no real time quote download necessary"
         end
@@ -190,13 +203,11 @@ module TDAmeritradeDataInterface
 
     def run_short_interest_daemon
       scheduler = Rufus::Scheduler.new
-      # This is set to run the 2nd and 17th of every month
-      scheduler.cron('0 19 2,17 * *') do
+      # This is set to run the 2nd, 13th, 17th,28th of every month
+      scheduler.cron('0 19 2,13,17,28 * *') do
         puts "#{Time.now} - Beginning download of short interest..."
-        if Date.today.wday == 5
-          t = Time.now
-          MarketDataUtilities::ShortInterest::Update.call
-          puts "Done (began at #{t}, now #{Time.now})"
+        t = Time.now
+        MarketDataUtilities::ShortInterest::Update.call
         end
       end
       puts "#{Time.now} Beginning short interest daemon..."
