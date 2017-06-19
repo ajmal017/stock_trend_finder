@@ -208,13 +208,11 @@ module TDAmeritradeDataInterface
         puts "#{Time.now} - Beginning download of short interest..."
         t = Time.now
         MarketDataUtilities::ShortInterest::Update.call
-        end
       end
       puts "#{Time.now} Beginning short interest daemon..."
 
       scheduler
     end
-
 
   end
 end
