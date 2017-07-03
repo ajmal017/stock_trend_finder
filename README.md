@@ -1,3 +1,9 @@
+## Copyright Warning
+
+This repository is copyright © 2017 by Winston Kotzan. All rights reserved. _It is available on Github for informational
+purposes only. Do not copy or reuse any of this code without the written consent of Winston Kotzan._ 
+
+
 Winston's Stock Trend Finder Utilities
 --------------------------------------
 
