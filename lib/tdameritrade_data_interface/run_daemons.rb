@@ -206,17 +206,13 @@ module TDAmeritradeDataInterface
       # This is set to run the 2nd, 13th, 17th,28th of every month
       scheduler.cron('0 19 2,13,17,28 * *') do
         puts "#{Time.now} - Beginning download of short interest..."
-        if Date.today.wday == 5
-          t = Time.now
-          MarketDataUtilities::ShortInterest::Update.call
-          puts "Done (began at #{t}, now #{Time.now})"
-        end
+        t = Time.now
+        MarketDataUtilities::ShortInterest::Update.call
       end
       puts "#{Time.now} Beginning short interest daemon..."
 
       scheduler
     end
-
 
   end
 end

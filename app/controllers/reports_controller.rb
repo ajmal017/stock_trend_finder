@@ -72,7 +72,7 @@ class ReportsController < ApplicationController
 
   def hide_symbol
     @symbol = params[:symbol]
-    Ticker.find_by(symbol: @symbol).hide_from_reports(1)
+    Ticker.find_by(symbol: @symbol).hide_from_reports(2) # 2 days for UTC timezone bug for now
   end
 
   def unscrape_symbol
