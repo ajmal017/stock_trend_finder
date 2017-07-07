@@ -150,7 +150,7 @@ module TDAmeritradeDataInterface
 
     def run_db_maintenance_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('0 1 * * SUN-FRI') do
+      scheduler.cron('0 1 * * SAT') do
         puts "Running DB VACUUM: #{Time.now}"
         ActiveRecord::Base.connection_pool.with_connection do
           ActiveRecord::Base.connection.execute "VACUUM FULL"

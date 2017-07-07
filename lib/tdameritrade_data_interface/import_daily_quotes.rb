@@ -457,6 +457,7 @@ module TDAmeritradeDataInterface
         while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
           begin
             quote_bunch = c.get_price_history(tickers, intervaltype: :minute, intervalduration: 5, startdate: date, enddate: date, extended: true)
+            # binding.pry if tickers.include?('XIV') && $stop
             error_count = -1 if quote_bunch
           rescue Exception => e
             error_count += 1
@@ -470,6 +471,7 @@ module TDAmeritradeDataInterface
           ticker_symbol = quotes[:symbol].to_s
           prices = quotes[:bars].select { |bar| bar[:timestamp] >= Time.parse(bar[:timestamp].strftime('%a, %d %b %Y 16:05:00')) }
 
+          # binding.pry if quotes[:symbol] == 'XIV' && $stop
           if prices.empty?
             puts "#{date} Skipping #{i}: #{ticker_symbol} - no AH prints"
           else

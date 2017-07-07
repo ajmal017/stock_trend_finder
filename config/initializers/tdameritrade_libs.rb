@@ -44,7 +44,6 @@ def reload_libs!
   load File.join(Rails.root, 'lib', 'tdameritrade_data_interface', 'vix.rb')
   load File.join(Rails.root, 'lib', 'market_data_utility.rb')
   load File.join(Rails.root, 'lib', 'market_data_pull', 'vix_futures_data_pull.rb')
-  load File.join(Rails.root, 'lib', 'market_data_pull', 'ticker_float_data_pull.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'download_nasdaq_company_list.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'import_nasdaq_company_lists.rb')
   load File.join(Rails.root, 'lib', 'market_data_utilities', 'ticker_list', 'insert_line_items.rb')

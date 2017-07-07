@@ -9,7 +9,7 @@ development:
   username: postgres
   password: postgres
   database: stock_trend_finder_development
-  pool: 5
+  pool: 8
   timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
@@ -21,7 +21,7 @@ test:
   username: postgres
   password: postgres
   database: stock_trend_finder_test
-  pool: 5
+  pool: 8
   timeout: 5000
 
 production:
