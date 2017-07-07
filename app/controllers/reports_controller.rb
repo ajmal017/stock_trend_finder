@@ -4,7 +4,7 @@ class ReportsController < ApplicationController
   include Reports::Build::SQL
 
   def active_stocks
-    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
     line_items = Reports::Build::Active.call(report_date: report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
 
@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
   end
 
   def afterhours
-    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
 
     line_items = Reports::Build::AfterHours.call(report_date: report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
@@ -37,7 +37,7 @@ class ReportsController < ApplicationController
   end
 
   def gaps
-    @fields = [:ticker_symbol, :last_trade, :change_percent, :gap_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :gap_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
 
     line_items = Reports::Build::Gaps.call(report_date: report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
@@ -54,7 +54,7 @@ class ReportsController < ApplicationController
   end
 
   def premarket
-    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
 
     line_items = Reports::Build::Premarket.call(report_date: report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
@@ -81,7 +81,7 @@ class ReportsController < ApplicationController
   end
 
   def week52_highs
-    @fields = [:ticker_symbol, :last_trade, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :actions]
+    @fields = [:ticker_symbol, :last_trade, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
 
     line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value

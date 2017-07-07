@@ -43,6 +43,10 @@ module ReportHelper
     css_class << "rjust " if RJUST_FIELDS.include?(field)
 
     case field
+      when :index
+        if report[:sp500]
+          css_class << 'orange-text'
+        end
       when :percent_above_52_week_high
         if report[:percent_above_52_week_high].to_f > 5.0
           css_class << "darkgreen-bg  "

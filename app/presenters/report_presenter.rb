@@ -17,6 +17,7 @@ class ReportPresenter
     :float,
     :float_percent_traded,
     :institutional_ownership_percent,
+    :sp500,
     :actions
   ]
 
@@ -43,7 +44,8 @@ class ReportPresenter
         short_percent_of_float: display_percent(row[:short_percent_of_float], 0),
         institutional_ownership_percent: display_percent(row[:institutional_ownership_percent], 0),
         float: display_number(row[:float], 0),
-        float_percent_traded: display_percent(row[:float_percent_traded], 0)
+        float_percent_traded: display_percent(row[:float_percent_traded], 0),
+        sp500: row[:sp500]
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))
     end
 

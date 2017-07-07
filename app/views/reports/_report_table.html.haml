@@ -26,7 +26,7 @@
       %th#actions{ style: "width: 100px; padding-left: 15px;"} Actions
     -report.each_with_index do |r, i|
       %tr{ id: r['ticker_symbol'] }
-        %td= i+1
+        %td{ class: set_css_class(r, :index)}= i+1
         %td{ class: set_css_class(r, :ticker_symbol) }= "#{r[:ticker_symbol]} #{symbol_icon(r[:ticker_symbol])}".html_safe
         -if fields.include?(:company_name)
           %td{ class: set_css_class(r, :company_name) }= r[:company_name]

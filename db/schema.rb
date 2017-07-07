@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170619131629) do
+ActiveRecord::Schema.define(version: 20170707021308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -351,6 +351,7 @@ ActiveRecord::Schema.define(version: 20170619131629) do
     t.boolean  "on_nasdaq_list"
     t.date     "unscrape_date"
     t.date     "date_added"
+    t.boolean  "sp500"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", unique: true, using: :btree

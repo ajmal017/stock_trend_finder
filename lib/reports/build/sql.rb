@@ -21,7 +21,8 @@ with ticker_list as
     t.short_ratio as short_ratio,
     t.short_pct_float * 100 as short_percent_of_float,
     t.institutional_holdings_percent as institutional_ownership_percent,  
-    t.hide_from_reports_until > current_date as gray_symbol
+    t.hide_from_reports_until > current_date as gray_symbol,
+    t.sp500
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -44,7 +45,8 @@ select
   short_ratio as short_days_to_cover,
   short_percent_of_float,
   institutional_ownership_percent,
-  gray_symbol
+  gray_symbol,
+  sp500
 from ticker_list
 order by
   volume_ratio desc
@@ -68,7 +70,8 @@ select
   t.short_ratio as short_days_to_cover,
   t.short_pct_float * 100 as short_percent_of_float,
   t.institutional_holdings_percent as institutional_ownership_percent,
-  t.hide_from_reports_until > current_date as gray_symbol
+  t.hide_from_reports_until > current_date as gray_symbol,
+  t.sp500
 
 from daily_stock_prices d inner join tickers t on t.symbol=d.ticker_symbol
 where
@@ -98,7 +101,8 @@ select
   t.short_ratio as short_days_to_cover,
   t.short_pct_float * 100 as short_percent_of_float,
   t.institutional_holdings_percent as institutional_ownership_percent,  
-  t.hide_from_reports_until > current_date as gray_symbol
+  t.hide_from_reports_until > current_date as gray_symbol,
+  t.sp500
 from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -131,7 +135,8 @@ select
   t.short_ratio as short_days_to_cover,
   t.short_pct_float * 100 as short_percent_of_float,
   t.institutional_holdings_percent as institutional_ownership_percent,  
-  t.hide_from_reports_until > current_date as gray_symbol
+  t.hide_from_reports_until > current_date as gray_symbol,
+  t.sp500
 from after_hours_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -166,7 +171,8 @@ select
   t.short_ratio as short_days_to_cover,
   t.short_pct_float * 100 as short_percent_of_float,
   t.institutional_holdings_percent as institutional_ownership_percent,  
-  t.hide_from_reports_until > current_date as gray_symbol
+  t.hide_from_reports_until > current_date as gray_symbol,
+  t.sp500
 from daily_stock_prices d
 inner join tickers t on d.ticker_symbol=t.symbol
 where
@@ -198,7 +204,8 @@ select
   t.float,
   case when volume > 0 and t.float > 0 then volume / t.float * 100 end as float_percent_traded,   
   t.institutional_holdings_percent as institutional_ownership_percent,
-  t.hide_from_reports_until > current_date as gray_symbol
+  t.hide_from_reports_until > current_date as gray_symbol,
+  t.sp500
 from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -229,7 +236,8 @@ select
   t.float,
   case when volume > 0 and t.float > 0 then volume / t.float * 100 end as float_percent_traded,   
   t.institutional_holdings_percent as institutional_ownership_percent,
-  t.hide_from_reports_until > current_date as gray_symbol
+  t.hide_from_reports_until > current_date as gray_symbol,
+  t.sp500
 from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
