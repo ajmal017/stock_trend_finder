@@ -1,1 +1,6 @@
+var st = $(document).scrollTop();
 Turbolinks.visit(location.toString());
+
+$(document).ready(function() {
+  $(document).scrollTop(st);
+})
