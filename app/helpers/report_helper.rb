@@ -21,22 +21,24 @@ module ReportHelper
     if report[:gray_symbol]
       css_class << "gray "
     else
-      if report[:change_percent].to_f > 0
-        css_class << "green "
-      elsif report[:change_percent].to_f < 0
-        css_class << "red "
-      end
+      unless field == :index
+        if report[:change_percent].to_f > 0
+          css_class << "green "
+        elsif report[:change_percent].to_f < 0
+          css_class << "red "
+        end
 
-      if report[:gap_pct].to_f > 0
-        css_class << "green "
-      elsif report[:gap_pct].to_f < 0
-        css_class << "red "
-      end
+        if report[:gap_pct].to_f > 0
+          css_class << "green "
+        elsif report[:gap_pct].to_f < 0
+          css_class << "red "
+        end
 
-      if report[:percent_above_52_week_high].to_f > 0
-        css_class << "green "
-      elsif report[:percent_above_52_week_high].to_f < 0
-        css_class << "red "
+        if report[:percent_above_52_week_high].to_f > 0
+          css_class << "green "
+        elsif report[:percent_above_52_week_high].to_f < 0
+          css_class << "red "
+        end
       end
     end
 
