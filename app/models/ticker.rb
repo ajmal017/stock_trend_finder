@@ -134,8 +134,4 @@ class Ticker < ActiveRecord::Base
     end
   end
 
-  def hide_from_reports(days=1)
-    self.update!(hide_from_reports_until: Date.today + days)
-  end
-
 end

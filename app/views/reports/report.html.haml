@@ -1,5 +1,9 @@
 %h1= @report[:title]
 
+-if flash[:notice]
+  .alert.alert-info
+    =flash[:notice]
+
 -if @report.count > 0
   %div Last Updated: #{@report[:last_updated]}
   %div Items: #{@report[:item_count]}

@@ -1,7 +1,7 @@
-require 'market_data_utilities/datetime_utilities'
+require 'market_data_utilities/date_time_utilities'
 
 class EarningsDay < ActiveRecord::Base
-  extend DateTimeUtilities
+  extend MarketDataUtilities::DateTimeUtilities
 
   # Loads a list of all the earnings expected for the current day and serializes it in the database
   def self.load_list(text, date=Date.today)

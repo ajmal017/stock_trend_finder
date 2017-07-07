@@ -72,7 +72,8 @@ class ReportsController < ApplicationController
 
   def hide_symbol
     @symbol = params[:symbol]
-    Ticker.find_by(symbol: @symbol).hide_from_reports(2) # 2 days for UTC timezone bug for now
+    hidden_until = Actions::HideTickerFromReports.(ticker: @symbol).value
+    flash[:notice] = "#{@symbol} hidden until #{hidden_until}" if hidden_until - Date.current > 3
   end
 
   def unscrape_symbol

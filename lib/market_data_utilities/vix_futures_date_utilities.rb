@@ -1,7 +1,7 @@
-require 'market_data_utilities/datetime_utilities'
+require 'market_data_utilities/date_time_utilities'
 
 module VIXFuturesDateUtilities
-  include DateTimeUtilities
+  include MarketDataUtilities::DateTimeUtilities
 
   # Outputs the VIX futures symbol of the next expiration for the given date
   # Input:  Date
