@@ -4,7 +4,7 @@ class StocktwitsController < ApplicationController
 
   def index
     unless ticker_symbol.present?
-      @twits = Stocktwit.showing(@user_id).limit(20)
+      @twits = Stocktwit.showing(@user_id).order(stocktwit_date: :desc, id: :desc).limit(20)
     else
       # If we have a ticker param, don't load any because the Javascript will load the page
       @twits = Stocktwit.none
