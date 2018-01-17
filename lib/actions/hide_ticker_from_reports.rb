@@ -17,12 +17,14 @@ module Actions
         if @days.present?
           market_days_from(Date.current, @days)
         elsif current_days_hidden.nil?
-          market_days_from(Date.current, 2)
-        elsif current_days_hidden <=3
-          market_days_from(Date.current, 10)
+          market_days_from(Date.current, 5)
+        # elsif current_days_hidden <=3
+        #   market_days_from(Date.current, 10)
         elsif current_days_hidden <= 11
           market_days_from(Date.current, 35)
-        elsif current_days_hidden <= 61
+        elsif current_days_hidden <= 40
+          market_days_from(Date.current, 120)
+        elsif current_days_hidden <= 122
           nil
         end
     end
