@@ -29,6 +29,7 @@ StockTrendFinder::Application.routes.draw do
     get 'candle_row'
     get 'pctgainloss'
     get 'week52_highs'
+    get 'week52_lows'
     get 'ticker_list'
     get 'ipo_list'
   end

@@ -280,7 +280,7 @@ with ticker_list as
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
-    close > high_52_week and
+    high > high_52_week and
     close > 1 and 
     t.scrape_data
 )
@@ -295,6 +295,53 @@ select
   float,
   high_52_week,
   pct_above_52_week,
+  snapshot_time,
+  short_ratio,
+  short_pct_float,
+  institutional_ownership_percent,
+  gray_symbol
+from ticker_list
+order by
+  volume_ratio desc
+SQL
+      end
+
+      def select_52week_lows(most_recent_date)
+        <<SQL
+with ticker_list as 
+(
+  select
+    ticker_symbol, high, close as last_trade, volume,
+    (close/previous_close-1)*100 as pct_change,
+    average_volume_50day as average_volume,
+    volume / average_volume_50day as volume_ratio,
+    float,
+    high_52_week,
+    (close/low_52_week-1)*100 as pct_below_52_week,
+    snapshot_time,
+    t.short_ratio as short_ratio,
+    t.short_pct_float * 100 as short_pct_float,
+    t.institutional_holdings_percent as institutional_ownership_percent,  
+    t.hide_from_reports_until > current_date as gray_symbol
+  from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
+  where 
+    price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
+    volume > 20 and
+    low < low_52_week and
+    close > 1 and 
+    t.scrape_data
+)
+select
+  ticker_symbol,
+  last_trade,
+  pct_change,
+  high,
+  volume,
+  average_volume,
+  volume_ratio,
+  float,
+  high_52_week,
+  pct_below_52_week,
   snapshot_time,
   short_ratio,
   short_pct_float,
@@ -544,6 +591,18 @@ high_52_week=(
   where dsp_high.ticker_symbol=dsp_upd.ticker_symbol and dsp_high.price_date >= (dsp_upd.price_date - interval '1 year') and dsp_high.price_date < dsp_upd.price_date
 )
 where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and high_52_week is null
+SQL
+      end
+
+      def update_low_52_week(begin_date=NEW_TICKER_BEGIN_DATE)
+        <<SQL
+update daily_stock_prices dsp_upd set
+low_52_week=(
+  select min(low) 
+  from daily_stock_prices dsp 
+  where dsp.ticker_symbol=dsp_upd.ticker_symbol and dsp.price_date >= (dsp_upd.price_date - interval '1 year') and dsp.price_date < dsp_upd.price_date
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and low_52_week is null
 SQL
       end
 

@@ -230,6 +230,9 @@ module TDAmeritradeDataInterface
     puts "Updating 52 Week High Cache - #{Time.now}"
     populate_high_52_weeks
 
+    puts "Updating 52 Week Low Cache - #{Time.now}"
+    populate_low_52_weeks
+
     puts "Calculating SMA50's - #{Time.now}"
     populate_sma50
 
@@ -556,6 +559,10 @@ module TDAmeritradeDataInterface
 
   def self.populate_high_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_high_52_week(begin_date)
+  end
+
+  def self.populate_low_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_low_52_week(begin_date)
   end
 
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)

@@ -34,9 +34,11 @@ module ReportHelper
           css_class << "red "
         end
 
-        if report[:percent_above_52_week_high].to_f > 0
+        if report[:percent_above_52_week_high].present?
           css_class << "green "
-        elsif report[:percent_above_52_week_high].to_f < 0
+        end
+
+        if report[:percent_below_52_week_low].present?
           css_class << "red "
         end
       end

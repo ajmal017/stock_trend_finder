@@ -27,7 +27,7 @@ with ticker_list as
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
-    close > high_52_week and
+    high > high_52_week and
     close > 1 and 
     t.scrape_data
 )
@@ -53,6 +53,54 @@ order by
 SQL
       end
 
+      def select_52_week_lows(most_recent_date)
+        <<SQL
+with ticker_list as 
+(
+  select
+    ticker_symbol, high, close as last_trade, volume,
+    (close/previous_close-1)*100 as pct_change,
+    average_volume_50day as average_volume,
+    volume / average_volume_50day as volume_ratio,
+    float,
+    case when volume > 0 and t.float > 0 then volume / t.float * 100 end as float_percent_traded, 
+    high_52_week,
+    (close/low_52_week-1)*100 as pct_below_52_week,
+    coalesce(snapshot_time, dsp.updated_at) as snapshot_time,
+    t.short_ratio as short_ratio,
+    t.short_pct_float * 100 as short_percent_of_float,
+    t.institutional_holdings_percent as institutional_ownership_percent,  
+    t.hide_from_reports_until > current_date as gray_symbol,
+    t.sp500
+  from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
+  where 
+    price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
+    volume > 20 and
+    low < low_52_week and
+    close > 1 and 
+    t.scrape_data
+)
+select
+  ticker_symbol,
+  last_trade,
+  pct_change as change_percent,
+  volume,
+  average_volume as volume_average,
+  volume_ratio,
+  float,
+  float_percent_traded,
+  pct_below_52_week as percent_below_52_week_low,
+  snapshot_time,
+  short_ratio as short_days_to_cover,
+  short_percent_of_float,
+  institutional_ownership_percent,
+  gray_symbol,
+  sp500
+from ticker_list
+order by
+  volume_ratio desc
+SQL
+      end
 
       def select_active(most_recent_date)
         <<SQL

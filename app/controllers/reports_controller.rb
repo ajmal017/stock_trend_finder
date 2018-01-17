@@ -82,7 +82,7 @@ class ReportsController < ApplicationController
   end
 
   def week52_highs
-    @fields = [:ticker_symbol, :last_trade, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :percent_above_52_week_high, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
 
     line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: report_date).value
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
@@ -97,6 +97,24 @@ class ReportsController < ApplicationController
 
     render :report
   end
+
+  def week52_lows
+    @fields = [:ticker_symbol, :last_trade, :change_percent, :percent_below_52_week_low, :volume, :volume_average, :volume_ratio, :short_days_to_cover, :short_percent_of_float, :float, :float_percent_traded, :institutional_ownership_percent, :index, :actions]
+
+    line_items = Reports::Build::FiftyTwoWeekLow.call(report_date: report_date).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
+
+    @report = {
+      title: '52 Week Low List',
+      last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
+      item_count: sorted_line_items.size,
+      sections: Reports::Build::Sections::FiftyTwoWeekLow.(report: sorted_line_items).value,
+      route: :week52_highs,
+    }
+
+    render :report
+  end
+
 
   def ticker_list
     @report = Ticker
