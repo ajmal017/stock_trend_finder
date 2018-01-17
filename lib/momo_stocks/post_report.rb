@@ -5,12 +5,14 @@ module MomoStocks
     input :report_type, optional: [:report_date]
 
     def call
-      PostReportLineItems.(
-        built_at: Time.now,
-        report_date: report_date,
-        report_type: report_type,
-        line_items: line_items
-      )
+      # temporarily disabled
+    
+      # PostReportLineItems.(
+      #   built_at: Time.now,
+      #   report_date: report_date,
+      #   report_type: report_type,
+      #   line_items: line_items
+      # )
     end
 
     private

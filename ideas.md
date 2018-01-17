@@ -1,7 +1,6 @@
 ### TODOs
 
-* Short interest from Nasdaq
-* Reset ticker symbol
+* Fix 52 week high list to have option for currently above 52 wk high or touched 52 week high today
 
 ### Ideas for new features
 

@@ -36,6 +36,7 @@ class VIXFuturesReport
     @report[:contango_1day_gain_pts] = (@report[:contango_1day_gain]) * @report[:xiv]
 
     @report[:vx1_delta] = (((@report[:vx1] + 1).to_f / @report[:vx1].to_f) - 1) * @report[:vx1_mix] * @report[:xiv]
+    @report[:vx_avg_11] = 1 / (11.to_f / @report[:vx_avg]) * @report[:xiv]
     @report[:vx_avg_12] = 1 / (12.to_f / @report[:vx_avg]) * @report[:xiv]
     @report[:vx_avg_14] = 1 / (14.to_f / @report[:vx_avg]) * @report[:xiv]
     @report[:vx_avg_15] = 1 / (15.to_f / @report[:vx_avg]) * @report[:xiv]
