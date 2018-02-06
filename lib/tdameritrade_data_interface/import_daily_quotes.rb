@@ -335,6 +335,9 @@ module TDAmeritradeDataInterface
         puts "Prepopulating 52 Week Highs - #{Time.now}"
         populate_high_52_weeks(prepopulate_date)
 
+        puts "Prepopulating 52 Week Highs - #{Time.now}"
+        populate_low_52_weeks(prepopulate_date)
+
         puts "Done - #{Time.now}"
       else
         puts "Market closed today, no prepopulation necessary"
