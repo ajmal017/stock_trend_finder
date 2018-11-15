@@ -13,7 +13,8 @@ module Stocktwits
 
             :image_thumbnail_url,
             :image_large_url,
-            :image_original_url
+            :image_original_url,
+            :image_cropped_url
           ]
 
     def call
@@ -27,6 +28,7 @@ module Stocktwits
         image_thumb_url: image_thumbnail_url,
         image_large_url: image_large_url,
         image_original_url: image_original_url,
+        image_cropped_url: image_cropped_url,
         hide: false,
         stocktwits_user_name: user_name
       )

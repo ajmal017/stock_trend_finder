@@ -1,4 +1,7 @@
 StockTrendFinder::Application.routes.draw do
+  resources :tweets
+  resources :tweets
+  resources :tweets
   resources :tickers
   resources :stocktwits, except: [:show]
   # Stocktwits AJAX calls
@@ -10,6 +13,8 @@ StockTrendFinder::Application.routes.draw do
   get 'stocktwits/refresh'      => "stocktwits#refresh"
   get 'stocktwits/toggle_watching' => "stocktwits#toggle_watching"
   get 'stocktwits/watching'     => "stocktwits#watching"
+
+  resources :tweets
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

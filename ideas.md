@@ -1,10 +1,12 @@
 ### TODOs
 
 * Fix 52 week high list to have option for currently above 52 wk high or touched 52 week high today
+* Filter 52 week high list for only new stocks to get a pulse on how the stocks added int he last year are doing.
 
 ### Ideas for new features
 
 * Dividend yield scanner
+  - Include dividend yield on reports
 * Report to help filter out defunct tickers
 * Build FIX API for CTCI link to IB (new data provider)
 * Create a "flags" list for ticker analysis - basically the Tickers tab on my spreadsheet but interface thru this app. Suggested labels:
@@ -12,6 +14,8 @@
     - fundamental-favorite
     - sector-specific tags, i.e. China, oil, cloud
 * Handle splits!
+* 52-wk high note on Premarket scan - asterik or something
+  * days since last 52 week high break => longer = better, IPO date
 
 Stock Data
 * Reset stock history after split - this includes making volume history adjustments

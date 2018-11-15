@@ -20,11 +20,11 @@ class StocktwitsController < ApplicationController
   end
 
   def load_twits
-    maxtwit = Stocktwit.find(params[:max]).select(:id, :stocktwit_date, :stocktwit_time) if params[:max].present?
+    maxtwit = Stocktwit.select(:id, :stocktwit_date, :stocktwit_time).find(params[:max]) if params[:max].present?
 
     @twits = Stocktwit.showing(@user_id)
     @twits = @twits.where("stocktwits.stocktwit_date <= ?", maxtwit.stocktwit_date) if params[:max].present?
-    @twits = @twits.where(symbol: params[:symbol]) if params[:symbol].present?
+    @twits = @twits.where(symbol: ticker_symbol) if ticker_symbol.present?
     @twits = @twits.joins(:stocktwit_hashtags).where(stocktwit_hashtags: {tag: params[:setup]}) if params[:setup].present?
     @twits = @twits.order(stocktwit_date: :desc, id: :desc)
     @twits = @twits.limit(20)
@@ -93,7 +93,7 @@ class StocktwitsController < ApplicationController
 
 private
   def ticker_symbol
-    @ticker_symbol = params[:symbol]
+    @ticker_symbol = params[:symbol].to_s.strip
   end
 
   def user_id

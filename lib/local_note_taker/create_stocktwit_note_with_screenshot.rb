@@ -13,9 +13,10 @@ module LocalNoteTaker
         user_name: 'greenspud',
         symbols: symbols,
         hashtags: hashtags,
-        image_thumbnail_url: screenshot_file_url, # decided not to use thumbnails
+        image_thumbnail_url: thumbnail_file_url, # decided not to use thumbnails
         image_large_url: screenshot_file_url,
         image_original_url: screenshot_file_url,
+        image_cropped_url: screenshot_cropped_file_url
       )
 
       result
@@ -40,9 +41,12 @@ module LocalNoteTaker
       @screenshot_file_url ||= "/local_note_taker_screenshots/full_size/#{screenshot_file_paths[:image]}"
     end
 
-    # Decided we're not going to use thumbnails, but keeping the code here in case I change my mind
-    # def thumbnail_file_url
-    #   @thumbnail_file_url ||= "/local_note_taker_screenshots/thumbnails/#{screenshot_file_paths[:thumbnail]}"
-    # end
+    def screenshot_cropped_file_url
+      @screenshot_cropped_url ||= "/local_note_taker_screenshots/cropped/#{screenshot_file_paths[:cropped]}"
+    end
+
+    def thumbnail_file_url
+      @thumbnail_file_url ||= "/local_note_taker_screenshots/thumbnails/#{screenshot_file_paths[:thumbnail]}"
+    end
   end
 end

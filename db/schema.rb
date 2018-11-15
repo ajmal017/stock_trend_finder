@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170708135201) do
+ActiveRecord::Schema.define(version: 20181112031446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,6 +313,7 @@ ActiveRecord::Schema.define(version: 20170708135201) do
     t.integer  "call_result"
     t.string   "note"
     t.date     "stocktwit_date"
+    t.string   "image_cropped_url"
   end
 
   add_index "stocktwits", ["stocktwit_date"], name: "index_stocktwits_on_stocktwit_date", using: :btree
@@ -356,6 +357,15 @@ ActiveRecord::Schema.define(version: 20170708135201) do
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", unique: true, using: :btree
+
+  create_table "tweets", force: :cascade do |t|
+    t.integer  "twitter_message_id", limit: 8
+    t.string   "message"
+    t.string   "local_image_url"
+    t.datetime "posted_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "vix_daily_histories", force: :cascade do |t|
     t.date     "price_date"
