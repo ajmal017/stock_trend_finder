@@ -10,6 +10,6 @@
     .stocktwit-message-call-result-buttons
       =render 'call_result_buttons', :twit=>twit
   %td.stocktwit-to-twitter
-    =link_to(image_tag('twitter.png'), new_tweet_path(twit_id: twit.id))
+    =link_to(image_tag('twitter.png'), new_tweet_path(stocktwit_id: twit.id), target: "_blank")
   %td.stocktwit-thumb
     =link_to(image_tag(twit.image_thumb_url), twit.image_original_url, target: "_blank")

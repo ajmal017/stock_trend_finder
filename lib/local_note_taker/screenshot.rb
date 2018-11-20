@@ -28,11 +28,11 @@ module LocalNoteTaker
     end
 
     def cropped_file_name
-      "chart-cropped-#{Time.now.strftime('%Y-%m-%d-%H%M%S')}#{'-' if symbol.present?}#{symbol}.png"
+      @cropped_file_name ||= "chart-cropped-#{Time.now.strftime('%Y-%m-%d-%H%M%S')}#{'-' if symbol.present?}#{symbol}.png"
     end
 
     def cropped_file_path
-      File.join(NOTE_TAKER_SCREENSHOTS_DIR, 'cropped', cropped_file_name)
+      @cropped_file_path ||= File.join(NOTE_TAKER_SCREENSHOTS_DIR, 'cropped', cropped_file_name)
     end
 
     def screenshot_discard_file_path

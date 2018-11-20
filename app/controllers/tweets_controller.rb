@@ -15,12 +15,12 @@ class TweetsController < ApplicationController
 
   # GET /tweets/new
   def new
-    @tweet = Tweet.new(message: converted_message, local_image_url: twit.image_cropped_url)
+    @tweet = Tweet.new(message: converted_message, local_image_url: twit.image_cropped_url, stocktwit_id: twit.id)
   end
 
   # GET /tweets/1/edit
-  def edit
-  end
+  # def edit
+  # end
 
   # POST /tweets
   # POST /tweets.json
@@ -28,6 +28,7 @@ class TweetsController < ApplicationController
     @tweet = Tweet.new(tweet_params)
     if @tweet.valid?
       @tweet.twitter_message_id = Twitter::CreateTweet.call(tweet: @tweet).value
+      @tweet.save!
       redirect_to @tweet, notice: 'Tweet was successfully created.'
     else
       render action: :new
@@ -36,27 +37,27 @@ class TweetsController < ApplicationController
 
   # PATCH/PUT /tweets/1
   # PATCH/PUT /tweets/1.json
-  def update
-    respond_to do |format|
-      if @tweet.update(tweet_params)
-        format.html { redirect_to @tweet, notice: 'Tweet was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @tweet.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # def update
+  #   respond_to do |format|
+  #     if @tweet.update(tweet_params)
+  #       format.html { redirect_to @tweet, notice: 'Tweet was successfully updated.' }
+  #       format.json { head :no_content }
+  #     else
+  #       format.html { render action: 'edit' }
+  #       format.json { render json: @tweet.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # DELETE /tweets/1
   # DELETE /tweets/1.json
-  def destroy
-    @tweet.destroy
-    respond_to do |format|
-      format.html { redirect_to tweets_url }
-      format.json { head :no_content }
-    end
-  end
+  # def destroy
+  #   @tweet.destroy
+  #   respond_to do |format|
+  #     format.html { redirect_to tweets_url }
+  #     format.json { head :no_content }
+  #   end
+  # end
 
   private
     def converted_message
@@ -70,7 +71,7 @@ class TweetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tweet_params
-      params.require(:tweet).permit(:message, :local_image_url)
+      params.require(:tweet).permit(:message, :local_image_url, :stocktwit_id)
     end
 
     def twit
