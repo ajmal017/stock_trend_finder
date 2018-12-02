@@ -6,12 +6,14 @@ GIT
 
 GIT
   remote: https://github.com/wakproductions/tdameritrade-api-ruby.git
-  revision: a8ed802a8e7b190f1b60af21662012193d1962f0
+  revision: 5bb31cb947e47800c00ca81c7576b7ec28b47277
+  branch: dev
   specs:
     tdameritrade-api-ruby (0.1.alpha)
       activesupport (~> 4.0)
       bundler (~> 1.5)
       hashie
+      httparty (~> 0.13)
       nokogiri (~> 1.6)
       rake
 

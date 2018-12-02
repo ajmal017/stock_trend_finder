@@ -19,6 +19,10 @@ module LocalNoteTaker
         image_cropped_url: screenshot_cropped_file_url
       )
 
+      symbols.each do |symbol|
+        AddSymbolToTosWatchlist.(symbol: symbol)
+      end
+
       result
     end
 

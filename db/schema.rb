@@ -318,10 +318,11 @@ ActiveRecord::Schema.define(version: 20181202063848) do
 
   add_index "stocktwits", ["stocktwit_date"], name: "index_stocktwits_on_stocktwit_date", using: :btree
 
-  create_table "td_ameritrade_tokens", force: :cascade do |t|
+  create_table "tdameritrade_tokens", force: :cascade do |t|
     t.string   "refresh_token"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "refresh_token_expires_at"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "ticker_notes", force: :cascade do |t|

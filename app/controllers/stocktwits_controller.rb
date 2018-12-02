@@ -42,6 +42,7 @@ class StocktwitsController < ApplicationController
       note: params[:message],
       stocktwit_time: params[:followup_id].present? ? Stocktwit.find(params[:followup_id]).stocktwit_time + 60 : Time.now
     )
+
     if outcome == :ok
       render 'twit_result_ok'
     else

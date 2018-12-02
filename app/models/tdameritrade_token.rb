@@ -1,4 +1,4 @@
-class TdAmeritradeToken < ActiveRecord::Base
+class TDAmeritradeToken < ActiveRecord::Base
   def self.get_refresh_token
     self.last.refresh_token
   end
