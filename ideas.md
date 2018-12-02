@@ -14,8 +14,10 @@
     - fundamental-favorite
     - sector-specific tags, i.e. China, oil, cloud
 * Handle splits!
-* 52-wk high note on Premarket scan - asterik or something
+* 52-wk high note on Premarket scan - asterik or glyph or something
   * days since last 52 week high break => longer = better, IPO date
+* Watchlist - coordinate adding ticker to the TD Ameritrade Watchlist and highlight in orange when it show up in reports
+
 
 Stock Data
 * Reset stock history after split - this includes making volume history adjustments
@@ -27,7 +29,8 @@ Stock Data
   - % gap
   - Volume
   - Volume average
-  - Movement over 3 days, 5 days, 10 days, 20 days  
+  - Movement over 3 days, 5 days, 10 days, 20 days
+* Dividend  
 
 
 VIX
