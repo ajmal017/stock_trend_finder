@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181202063848) do
+ActiveRecord::Schema.define(version: 20181203035042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,19 @@ ActiveRecord::Schema.define(version: 20181202063848) do
   end
 
   add_index "earnings_days", ["earnings_date", "before_the_open"], name: "index_earnings_days_date", unique: true, using: :btree
+
+  create_table "fundamentals_histories", force: :cascade do |t|
+    t.string  "ticker_symbol"
+    t.string  "cusip"
+    t.date    "scrape_date"
+    t.date    "most_recent_dividend_date"
+    t.decimal "most_recent_dividend_amount"
+    t.decimal "dividend_yield_pct"
+    t.decimal "calculated_annual_dividend_amount"
+    t.decimal "market_cap"
+    t.decimal "shares_outstanding"
+    t.decimal "float"
+  end
 
   create_table "institutional_ownership_snapshots", force: :cascade do |t|
     t.string   "ticker_symbol"
@@ -348,9 +361,6 @@ ActiveRecord::Schema.define(version: 20181202063848) do
     t.string   "industry",                       limit: 255
     t.decimal  "market_cap"
     t.boolean  "track_gap_up"
-    t.string   "gap_up_note",                    limit: 255
-    t.boolean  "adr"
-    t.string   "note",                           limit: 255
     t.float    "float"
     t.float    "institutional_holdings_percent"
     t.date     "hide_from_reports_until"
@@ -361,6 +371,7 @@ ActiveRecord::Schema.define(version: 20181202063848) do
     t.date     "unscrape_date"
     t.date     "date_added"
     t.boolean  "sp500"
+    t.decimal  "annual_dividend_amount"
   end
 
   add_index "tickers", ["symbol"], name: "index_tickers_on_symbol", unique: true, using: :btree

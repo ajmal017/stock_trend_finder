@@ -171,17 +171,13 @@ module TDAmeritradeDataInterface
       scheduler
     end
 
-    # Not currently being used
-    # def run_evernote_watchlist_daemon
-    #   scheduler = Rufus::Scheduler.new
-    #   scheduler.cron('45 1 * * *') do
-    #     puts "Building Evernote Watchlist #{Time.now}"
-    #     Evernote::EvernoteWatchList.build_evernote_watchlist
-    #     puts "Done building Evernote Watchlist"
-    #   end
-    #   puts "#{Time.now} Beginning Evernote watchlist daemon..."
-    #   scheduler
-    # end
+    def run_fundamentals_history_daemon
+      scheduler = Rufus::Scheduler.new
+      scheduler.cron('0 20 * * SAT') do
+        puts "#{Time.current} - Beginning download of fundamentals data from TD Ameritrade OAuth API..."
+        MarketDataPull::TDAmeritrade::UpdateFundamentals.call
+      end
+    end
 
     def run_institutional_ownership_daemon
       scheduler = Rufus::Scheduler.new
