@@ -14,6 +14,7 @@
 ### Ideas for new features
 
 * Watchlist - coordinate adding ticker to the TD Ameritrade Watchlist and highlight in orange when it show up in reports
+  - Have view to checkout what's on each watchlist along with dividend reports etc
 * Report to help filter out defunct tickers
 * Handle splits!
 

@@ -177,6 +177,8 @@ module TDAmeritradeDataInterface
         puts "#{Time.current} - Beginning download of fundamentals data from TD Ameritrade OAuth API..."
         MarketDataPull::TDAmeritrade::UpdateFundamentals.call
       end
+      puts "#{Time.now} Beginning TDA Fundamentals daemon..."
+      scheduler
     end
 
     def run_institutional_ownership_daemon
