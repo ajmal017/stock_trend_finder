@@ -18,18 +18,19 @@ module LocalNoteTaker
     def call
       return if ignore_symbol?
 
-      client.refresh_access_token
+      refresh_access_token
       client.update_watchlist(ACCOUNT_ID, WATCHLIST_ID, WATCHLIST_NAME, symbol)
     end
 
     private
 
     def client
-      @client ||= TDAmeritrade::Client.new(
-        client_id: ENV.fetch('TOS_CLIENT_ID'),
-        redirect_uri: ENV.fetch('TOS_REDIRECT_URI'),
-        refresh_token: TDAmeritradeToken.get_refresh_token
-      )
+      @client ||= TDAmeritradeToken.build_client
+    end
+
+    def refresh_access_token
+      client.refresh_access_token
+      TDAmeritradeToken.set_refresh_token(client.refresh_token)
     end
 
     def ignore_symbol?
