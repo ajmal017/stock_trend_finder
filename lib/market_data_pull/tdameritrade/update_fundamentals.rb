@@ -4,6 +4,7 @@ module MarketDataPull
       include Verbalize::Action
 
       def call
+        attempts = 0
         Ticker.watching.each do |ticker|
           next if FundamentalsHistory.find_by(ticker_symbol: ticker.symbol, scrape_date: Date.current).present?
           puts "Updating fundamentals for: #{ticker.symbol}"
@@ -40,7 +41,13 @@ module MarketDataPull
 
           Ticker.where(symbol: ticker.symbol).update_all(annual_dividend_amount: calculated_annual_dividend_amount)
 
-          sleep 0.6 # Rate limit of 2 requests per second
+          attempts = 0
+          sleep 0.9 # Rate limit of 2 requests per second
+        rescue RateLimitError => e
+          sleep 31
+          attempts = attempts + 1
+          raise 'TDAmeritrade API error' if attempts >= 3
+          retry
         end
       end
 
