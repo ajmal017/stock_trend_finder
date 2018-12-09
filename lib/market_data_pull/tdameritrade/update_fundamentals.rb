@@ -51,6 +51,8 @@ module MarketDataPull
           raise 'TDAmeritrade API error' if attempts >= 3
           retry
         end
+
+        puts "Done"
       end
 
       private
