@@ -21,8 +21,10 @@
       %th#short-percent-of-float.rjust.divider-right{ style: "width: 65px;"}= "Short %<br />of Float".html_safe
       %th#float.rjust{ style: "width: 65px;"} Float (M)
       %th#float-percent-traded.divider-right.rjust{ style: "width: 65px;"} Float %
+      -if fields.include?(:dividend_yield)
+        %th#dividend-yield.divider-right.rjust{ style: "width: 65px;"} Div %
       -if fields.include?(:institutional_ownership_percent)
-        %th#institutional-ownership-percent.rjust{ style: "width: 75px;"} IO %
+        %th#institutional-ownership-percent.rjust{ style: "width: 65px;"} IO %
       %th#actions{ style: "width: 100px; padding-left: 15px;"} Actions
     -report.each_with_index do |r, i|
       %tr{ id: r['ticker_symbol'] }
@@ -46,6 +48,8 @@
         %td.divider-right{ class: set_css_class(r, :short_percent_of_float) }= r[:short_percent_of_float]
         %td{ class: set_css_class(r, :float) }= r[:float]
         %td.divider-right{ class: set_css_class(r, :float_percent_traded) }= r[:float_percent_traded]
+        -if fields.include?(:dividend_yield)
+          %td.divider-right{ class: set_css_class(r, :dividend_yield) }= r[:dividend_yield]
         -if fields.include?(:institutional_ownership_percent)
           %td{ class: set_css_class(r, :institutional_ownership_percent) }= r[:institutional_ownership_percent]
         %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to("H", reports_hide_symbol_path(r[:ticker_symbol]), remote: true, method: :patch) + " " + link_to("U", reports_unscrape_symbol_path(r[:ticker_symbol]), remote: true, method: :patch)

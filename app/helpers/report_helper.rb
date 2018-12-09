@@ -1,5 +1,19 @@
 module ReportHelper
-  RJUST_FIELDS=[:last_trade, :change_percent, :percent_above_52_week_high, :gap_percent, :float, :float_percent_traded, :institutional_ownership_percent, :volume, :volume_ratio, :volume_average, :short_days_to_cover, :short_percent_of_float]
+  RJUST_FIELDS=[
+    :last_trade,
+    :change_percent,
+    :percent_above_52_week_high,
+    :gap_percent,
+    :float,
+    :float_percent_traded,
+    :dividend_yield,
+    :institutional_ownership_percent,
+    :volume,
+    :volume_ratio,
+    :volume_average,
+    :short_days_to_cover,
+    :short_percent_of_float
+  ]
 
   def report_date_form(page)
     s = form_tag "/reports/#{page}", method: :get, authenticity_token: false do

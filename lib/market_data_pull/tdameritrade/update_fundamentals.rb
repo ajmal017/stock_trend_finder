@@ -39,7 +39,9 @@ module MarketDataPull
             float: float,
           )
 
-          Ticker.where(symbol: ticker.symbol).update_all(annual_dividend_amount: calculated_annual_dividend_amount)
+          Ticker.where(symbol: ticker.symbol).update_all(
+            annual_dividend_amount: calculated_annual_dividend_amount
+          )
 
           attempts = 0
           sleep 0.9 # Rate limit of 2 requests per second

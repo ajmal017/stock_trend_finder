@@ -16,6 +16,7 @@ class ReportPresenter
     :short_percent_of_float,
     :float,
     :float_percent_traded,
+    :dividend_yield,
     :institutional_ownership_percent,
     :sp500,
     :actions
@@ -42,9 +43,10 @@ class ReportPresenter
         volume_ratio: display_number(row[:volume_ratio], 1),
         short_days_to_cover: display_number(row[:short_days_to_cover], 1),
         short_percent_of_float: display_percent(row[:short_percent_of_float], 0),
-        institutional_ownership_percent: display_percent(row[:institutional_ownership_percent], 0),
         float: display_number(row[:float], 0),
+        dividend_yield: display_dividend_yield(row[:dividend_yield]),
         float_percent_traded: display_percent(row[:float_percent_traded], 0),
+        institutional_ownership_percent: display_percent(row[:institutional_ownership_percent], 0),
         sp500: row[:sp500]
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))
     end
@@ -54,6 +56,12 @@ class ReportPresenter
   end
 
   # everything below should be private but I haven't made the switch entirely yet
+
+  def self.display_dividend_yield(value)
+    f = value.try(:to_f)
+    return unless f.present? && f > 0
+    "#{"%.1f" % f}%"
+  end
 
   def self.display_number(value, round=1)
     return unless (f = value.try(:to_f)).present?

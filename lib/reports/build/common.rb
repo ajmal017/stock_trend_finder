@@ -19,6 +19,7 @@ module Reports
             institutional_ownership_percent:  row['institutional_ownership_percent'].try(:to_f),
             float:                            row['float'].try(:to_f),
             float_percent_traded:             row['float_percent_traded'].try(:to_f),
+            dividend_yield:             row['dividend_yield'].try(:to_f),
             sp500:            row['sp500']=='t',
             volume:           row['volume'].try(:to_f),
             volume_average:   row['volume_average'].try(:to_f),
