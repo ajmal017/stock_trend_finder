@@ -24,7 +24,7 @@ module MarketDataPull
 
           dsp = DailyStockPrice.most_recent(ticker.symbol)
           calculated_annual_dividend_amount =
-            dsp&.close.is_a?(Numeric) ? dividend_yield_pct / dsp.close : 0
+            dsp&.close.is_a?(Numeric) ? dividend_yield_pct * dsp.close : 0
 
           FundamentalsHistory.find_or_create_by(
             ticker_symbol: ticker.symbol,
