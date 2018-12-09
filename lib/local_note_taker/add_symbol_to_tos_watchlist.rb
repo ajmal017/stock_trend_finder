@@ -8,6 +8,7 @@ module LocalNoteTaker
 
     IGNORE_SYMBOLS = %w(
       PORTFOLIO
+      SPXL
       SPY
       SVXY
       VXX
@@ -25,12 +26,11 @@ module LocalNoteTaker
     private
 
     def client
-      @client ||= TDAmeritradeToken.build_client
+      @client ||= TDAmeritradeToken.build_client_from_server_token
     end
 
     def refresh_access_token
-      client.refresh_access_token
-      TDAmeritradeToken.set_refresh_token(client.refresh_token)
+      TDAmeritradeToken.refresh_access_token_and_update_server(client)
     end
 
     def ignore_symbol?
