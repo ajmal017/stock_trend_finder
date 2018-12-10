@@ -37,7 +37,7 @@ module MomoStocks
     end
 
     def report_date
-      @report_date || Date.today
+      @report_date || Date.current
     end
 
   end

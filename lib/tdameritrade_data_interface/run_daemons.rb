@@ -11,10 +11,8 @@ module TDAmeritradeDataInterface
           copy_realtime_quotes_to_daily_stock_prices
         end
 
-        puts "Posting reports to Momo Scans"
-        MomoStocks::PostReport.(report_type: 'report_type_active')
-        MomoStocks::PostReport.(report_type: 'report_type_gaps')
-        MomoStocks::PostReport.(report_type: 'report_type_fifty_two_week_high')
+        puts "Saving Report Snapshots: #{Time.now}"
+        Reports::Snapshots::SaveAllSnapshots.call
 
         puts "Done #{Time.now}\n\n"
       else
@@ -75,9 +73,11 @@ module TDAmeritradeDataInterface
             ActiveRecord::Base.connection_pool.with_connection do
               import_premarket_quotes(date: Date.today)
             end
-            puts "Posting reports to Momo Scans - #{Time.now}"
-            MomoStocks::PostReport.(report_type: 'report_type_premarket')
-            puts "Done"
+
+            puts "Saving Report Snapshots: #{Time.now}"
+            Reports::Snapshots::SaveAllSnapshots.call
+
+            puts "Done #{Time.now}"
           else
             puts "Market closed today, no real time quote download necessary"
           end
@@ -112,9 +112,10 @@ module TDAmeritradeDataInterface
             import_afterhours_quotes(date: Date.today)
           end
 
-          puts "Posting reports to Momo Scans - #{Time.now}"
-          MomoStocks::PostReport.(report_type: 'report_type_after_hours')
-          puts "Done"
+          puts "Saving Report Snapshots: #{Time.now}"
+          Reports::Snapshots::SaveAllSnapshots.call
+
+          puts "Done #{Time.now}"
         else
           puts "Market closed today, no real time quote download necessary"
         end
