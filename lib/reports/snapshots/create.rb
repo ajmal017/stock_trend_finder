@@ -28,7 +28,7 @@ module Reports
         return if line_items.empty?
 
         line_items.each do |li|
-          report_snapshot.report_snapshot_line_items.build(li.slice(*Reports::Snapshots::Build::REPORT_FIELDS))
+          report_snapshot.report_snapshot_line_items.build(li.slice(*REPORT_FIELDS))
         end
 
         report_snapshot.save
