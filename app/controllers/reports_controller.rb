@@ -215,19 +215,16 @@ class ReportsController < ApplicationController
 
 
   def ticker_list
-    @report = Ticker
-      .watching
-      .order(date_added: :desc)
-      .to_a
-      .map do |ar|
-        {
-          symbol: ar.symbol,
-          company_name: ar.company_name,
-          exchange: ar.exchange,
-          float: ar.float.to_s,
-          institutional_ownership_pct: ar.institutional_holdings_percent.to_s,
-        }.stringify_keys
-      end
+    line_items = Reports::Build::TickerList.call(report_date: report_date).value
+
+    @report = {
+      title: 'Master Ticker List',
+      last_updated: Time.current.in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S'),
+      line_items: line_items,
+      item_count: line_items.size,
+    }
+
+    render :ticker_list_report
   end
 
   # def pctgainloss

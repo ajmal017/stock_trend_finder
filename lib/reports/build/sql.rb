@@ -319,6 +319,28 @@ order by volume_ratio desc
 SQL
       end
 
+      def select_tickers_report
+      <<SQL
+select 
+  id, 
+  symbol, 
+  company_name, 
+  exchange, 
+  scrape_data, 
+  sector, 
+  industry, 
+  market_cap,
+  sp500, 
+  coalesce(unscrape_date, date_added, created_at, date '2013-01-01') as date_modified, 
+  CASE
+    WHEN coalesce(unscrape_date, date_added, created_at, date '2013-01-01')=date_added THEN 'Added'
+    ELSE 'Removed'
+  END as last_action,
+  (select max(price_date) from daily_stock_prices where ticker_symbol=t.symbol) most_recent_price
+from tickers t order by date_modified desc, symbol;
+SQL
+      end
+
     end
   end
 end

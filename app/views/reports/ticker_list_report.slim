@@ -1,0 +1,62 @@
+h1= @report[:title]
+
+-if flash[:notice]
+  .alert.alert-info.alert-dismissable.fixed-alert
+    =flash[:notice]
+
+-if @report[:item_count] > 0
+  div= "Items: #{@report[:item_count]}"
+
+.report-container
+  table.table-bordered( style="width: 1200px;" )
+    thead
+      th#index( style="width: 40px;")
+      th#ticker-symbol( style="width: 75px;") Symbol
+      th#company-name( style="width: 200px;" ) Company Name
+      th#exchange( style="width: 70px;" ) Exchange
+      th#sector( style="width: 100px;" ) Sector
+      th#industry( style="width: 175px;" ) Industry
+      th#market-cap( style="width: 75px;" ) MktCap
+      / th#last-action( style="width: 65px;" ) Last Action
+      th#date-modified( style="width: 75px;" ) Modified
+      th#most-recent-price( style="width: 75px;" ) Last Price
+      th#actions( style="width: 100px; padding-left: 30px;") Actions
+    - @report[:line_items].each_with_index do |r, i|
+      tr{ id=r['ticker_symbol'] }
+        td( class=set_css_class(r, :index) )= r[:id]
+        td( class=set_css_class(r, :ticker_symbol) ) = ticker_symbol(r).html_safe
+        td( class=set_css_class(r, :company_name) )= r[:company_name]
+        td( class=set_css_class(r, :exchange) )= r[:exchange]
+        td( class=set_css_class(r, :sector) )= r[:sector]
+        td( class=set_css_class(r, :industry) )= r[:industry]
+        td( class=set_css_class(r, :market_cap) )= r[:market_cap]
+        / td( class=set_css_class(r, :last_action) )= r[:last_action]
+        td( class=set_css_class(r, :date_modified) )= r[:date_modified]
+        td( class=set_css_class(r, :most_recent_price) )= r[:most_recent_price]
+        td( class=set_css_class(r, :actions) style="padding-left: 15px;" )= link_to("U", reports_unscrape_symbol_path(r[:ticker_symbol]), remote: true, method: :patch)
+
+
+        /       td{ class: set_css_class(r, :index)}= i+1
+        / %td{ class: set_css_class(r, :ticker_symbol) }= ticker_symbol(r).html_safe
+        / -if fields.include?(:company_name)
+        /   %td{ class: set_css_class(r, :company_name) }= r[:company_name]
+        / %td{ class: set_css_class(r, :last_trade) }= r[:last_trade]
+        / -if fields.include?(:change_percent)
+        /   %td{ class: set_css_class(r, :change_percent) }= r[:change_percent]
+        / -if fields.include?(:gap_percent)
+        /   %td{ class: set_css_class(r, :gap_percent)}= r[:gap_percent]
+        / -if fields.include?(:percent_above_52_week_high)
+        /   %td{ class: set_css_class(r, :percent_above_52_week_high)}= r[:percent_above_52_week_high]
+        / -if fields.include?(:volume)
+        /   %td{ class: set_css_class(r, :volume) }= r[:volume]
+        / %td{ class: set_css_class(r, :volume_average) }= r[:volume_average]
+        / -if fields.include?(:volume_ratio)
+        /   %td{ class: set_css_class(r, :volume_ratio) }= r[:volume_ratio]
+        / %td.divider-left{ class: set_css_class(r, :short_days_to_cover) }= r[:short_days_to_cover]
+        / %td.divider-right{ class: set_css_class(r, :short_percent_of_float) }= r[:short_percent_of_float]
+        / %td{ class: set_css_class(r, :float) }= r[:float]
+        / %td.divider-right{ class: set_css_class(r, :float_percent_traded) }= r[:float_percent_traded]
+        / -if fields.include?(:dividend_yield)
+        /   %td.divider-right{ class: set_css_class(r, :dividend_yield) }= r[:dividend_yield]
+        / -if fields.include?(:institutional_ownership_percent)
+        /   %td{ class: set_css_class(r, :institutional_ownership_percent) }= r[:institutional_ownership_percent]

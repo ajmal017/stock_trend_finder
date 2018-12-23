@@ -1,9 +1,9 @@
-require 'market_data_utilities/money_string_to_number'
+require 'market_data_utilities/money_as_string'
 
 module MarketDataUtilities
   module TickerList
     class LineItemFilter
-      extend MarketDataUtilities::MoneyStringToNumber
+      extend MarketDataUtilities::MoneyAsString
 
       class << self
         COMPANY_NAME_BLACKLIST_TEXT=[
