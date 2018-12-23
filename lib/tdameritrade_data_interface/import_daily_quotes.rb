@@ -334,9 +334,11 @@ module TDAmeritradeDataInterface
 
         puts "Prepopulating 52 Week Highs - #{Time.now}"
         populate_high_52_weeks(prepopulate_date)
+        populate_premarket_high_52_weeks(prepopulate_date)
 
         puts "Prepopulating 52 Week Lows - #{Time.now}"
         populate_low_52_weeks(prepopulate_date)
+        populate_premarket_low_52_weeks(prepopulate_date)
 
         puts "Done - #{Time.now}"
       else
@@ -566,6 +568,14 @@ module TDAmeritradeDataInterface
 
   def self.populate_low_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_low_52_week(begin_date)
+  end
+
+  def self.populate_premarket_high_52_weeks(begin_date=Date.new(2017,1,1))
+    ActiveRecord::Base.connection.execute update_premarket_high_52_week(begin_date)
+  end
+
+  def self.populate_premarket_low_52_weeks(begin_date=Date.new(2017,1,1))
+    ActiveRecord::Base.connection.execute update_premarket_low_52_week(begin_date)
   end
 
   def self.populate_previous_close(begin_date=NEW_TICKER_BEGIN_DATE)

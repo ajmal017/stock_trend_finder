@@ -10,6 +10,7 @@
 * Fix 52 week high list to have option for currently above 52 wk high or touched 52 week high today
 * Filter 52 week high list for only new stocks to get a pulse on how the stocks added int he last year are doing.
 * Dividend yield scanner
+* Chart of number of companies reaching 52 wk high/low
 
 ### Ideas for new features
 

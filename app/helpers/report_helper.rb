@@ -124,4 +124,10 @@ module ReportHelper
       ''
     end
   end
+
+  def ticker_symbol(line_item)
+    outside_52_wk_marker = line_item[:outside_52_week_range] ? ' <span style="color: orange">*</span>' : ''
+
+    "#{line_item[:ticker_symbol]}#{outside_52_wk_marker} #{symbol_icon(line_item[:ticker_symbol])}"
+  end
 end

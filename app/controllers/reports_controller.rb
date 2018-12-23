@@ -113,6 +113,7 @@ class ReportsController < ApplicationController
       :float_percent_traded,
       :dividend_yield,
       :institutional_ownership_percent,
+      :outside_52_week_range,
       :index,
       :actions
     ]

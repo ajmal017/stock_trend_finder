@@ -262,7 +262,10 @@ select
   coalesce(t.annual_dividend_amount, 0) / last_trade * 100 as dividend_yield,   
   t.institutional_holdings_percent as institutional_ownership_percent,
   t.hide_from_reports_until > current_date as gray_symbol,
-  t.sp500
+  t.sp500,
+  high_52_week,
+  low_52_week,
+  (last_trade > high_52_week) or (last_trade < low_52_week) as outside_52_week_range
 from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and
@@ -296,7 +299,10 @@ select
   coalesce(t.annual_dividend_amount, 0) / last_trade * 100 as dividend_yield,   
   t.institutional_holdings_percent as institutional_ownership_percent,
   t.hide_from_reports_until > current_date as gray_symbol,
-  t.sp500
+  t.sp500,
+  high_52_week,
+  low_52_week,
+  (last_trade > high_52_week) or (last_trade < low_52_week) as outside_52_week_range
 from premarket_prices p inner join tickers t on p.ticker_symbol=t.symbol
 where
 t.scrape_data and

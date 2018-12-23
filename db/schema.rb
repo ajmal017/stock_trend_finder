@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210032006) do
+ActiveRecord::Schema.define(version: 20181223043945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -185,6 +185,8 @@ ActiveRecord::Schema.define(version: 20181210032006) do
     t.float    "average_volume_50day"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "high_52_week"
+    t.float    "low_52_week"
   end
 
   add_index "premarket_prices", ["ticker_symbol", "price_date"], name: "index_premarket_prices_on_ticker_symbol_price_date", unique: true, using: :btree

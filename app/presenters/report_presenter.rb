@@ -8,6 +8,7 @@ class ReportPresenter
     :change_percent,
     :gap_percent,
     :percent_above_52_week_high,
+    :outside_52_week_range,
     :volume,
     :average_volume,
     :volume_average,
@@ -37,6 +38,7 @@ class ReportPresenter
         high: display_number(row[:high], 2),
         gap_percent: display_number(row[:gap_percent], 1),
         percent_above_52_week_high: display_number(row[:percent_above_52_week_high], 1),
+        outside_52_week_range: row[:outside_52_week_range],
         change_percent: display_percent(row[:change_percent], 1),
         volume: display_number(row[:volume], 0),
         volume_average: display_number(row[:volume_average], 0),
@@ -51,7 +53,6 @@ class ReportPresenter
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))
     end
 
-    # new_report.sort! { |a,b| sort_direction==:desc ? b[sort_field].to_f<=>a[sort_field].to_f : a[sort_field].to_f<=>b[sort_field].to_f }
     new_report
   end
 

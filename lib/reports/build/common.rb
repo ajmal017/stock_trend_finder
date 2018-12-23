@@ -14,6 +14,7 @@ module Reports
             change_percent:   row['change_percent'].try(:to_f),
             gap_percent:                      row['gap_percent'].try(:to_f),
             percent_above_52_week_high:       row['percent_above_52_week_high'].try(:to_f),
+            outside_52_week_range:            row['outside_52_week_range'].present? ? row['outside_52_week_range']=='t' : nil,
             short_days_to_cover:              row['short_days_to_cover'].try(:to_f),
             short_percent_of_float:           row['short_percent_of_float'].try(:to_f),
             institutional_ownership_percent:  row['institutional_ownership_percent'].try(:to_f),

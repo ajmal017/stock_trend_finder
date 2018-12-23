@@ -606,6 +606,30 @@ where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and low_52_week is null
 SQL
       end
 
+      def update_premarket_high_52_week(begin_date=NEW_TICKER_BEGIN_DATE)
+        <<SQL
+update premarket_prices pp_upd set
+high_52_week=(
+  select max(high) 
+  from daily_stock_prices dsp_high 
+  where dsp_high.ticker_symbol=pp_upd.ticker_symbol and dsp_high.price_date >= (pp_upd.price_date - interval '1 year') and dsp_high.price_date < pp_upd.price_date
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and high_52_week is null
+SQL
+      end
+
+      def update_premarket_low_52_week(begin_date=NEW_TICKER_BEGIN_DATE)
+        <<SQL
+update premarket_prices pp_upd set
+low_52_week=(
+  select min(low) 
+  from daily_stock_prices dsp 
+  where dsp.ticker_symbol=pp_upd.ticker_symbol and dsp.price_date >= (pp_upd.price_date - interval '1 year') and dsp.price_date < pp_upd.price_date
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and low_52_week is null
+SQL
+      end
+
       def update_sma50(date=nil)
         if date.nil?
           <<SQL
