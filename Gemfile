@@ -32,7 +32,7 @@ gem 'ystock',               '~> 0.4.10'
 # Don't put these in the development-only group because certain
 # financial data crawling functions make use of these gems.
 gem 'capybara',     '~>2.1'
-gem 'nokogiri',     '~>1.6'
+gem 'nokogiri'
 gem 'poltergeist',  '~>1.5'
 
 ### All other gems ###

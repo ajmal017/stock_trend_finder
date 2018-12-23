@@ -570,11 +570,11 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_low_52_week(begin_date)
   end
 
-  def self.populate_premarket_high_52_weeks(begin_date=Date.new(2017,1,1))
+  def self.populate_premarket_high_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_premarket_high_52_week(begin_date)
   end
 
-  def self.populate_premarket_low_52_weeks(begin_date=Date.new(2017,1,1))
+  def self.populate_premarket_low_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_premarket_low_52_week(begin_date)
   end
 

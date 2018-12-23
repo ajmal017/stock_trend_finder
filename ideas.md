@@ -1,21 +1,14 @@
 ### TODOs
 
-* Include dividend yield on reports
 * Tickers: 
   - Track addition/changes of tickers
-  - CUSIP 
-* 52-wk high note on Premarket scan - asterik or glyph or something
-  * days since last 52 week high break => longer = better, IPO date
-* Make a JSON dump of each report for the MOMO stocks archive
-* Fix 52 week high list to have option for currently above 52 wk high or touched 52 week high today
-* Filter 52 week high list for only new stocks to get a pulse on how the stocks added int he last year are doing.
+  - Page for each ticker with info about it
+    - any data changes to cusip or title
 * Dividend yield scanner
 * Chart of number of companies reaching 52 wk high/low
 
 ### Ideas for new features
 
-* Watchlist - coordinate adding ticker to the TD Ameritrade Watchlist and highlight in orange when it show up in reports
-  - Have view to checkout what's on each watchlist along with dividend reports etc
 * Report to help filter out defunct tickers
 * Handle splits!
 
