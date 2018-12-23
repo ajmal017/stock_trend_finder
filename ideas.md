@@ -6,6 +6,7 @@
     - any data changes to cusip or title
 * Dividend yield scanner
 * Chart of number of companies reaching 52 wk high/low
+* Chart of number of scrapeable stocks
 
 ### Ideas for new features
 
