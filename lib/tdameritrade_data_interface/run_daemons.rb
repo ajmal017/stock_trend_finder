@@ -1,3 +1,6 @@
+require 'rake'
+load 'lib/tasks/tickers.rake'
+
 module TDAmeritradeDataInterface
   module RunDaemons
     extend self
@@ -196,6 +199,17 @@ module TDAmeritradeDataInterface
         end
       end
       puts "#{Time.now} Beginning institutional ownership daemon..."
+
+      scheduler
+    end
+
+    def run_update_company_list_daemon
+      scheduler = Rufus::Scheduler.new
+      scheduler.cron('1 20 * * MON-FRI') do
+        puts "#{Time.now} - Beginning download of company list..."
+        Rake::Task["tickers:update_company_list"].execute
+      end
+      puts "#{Time.now} Beginning update company list daemon..."
 
       scheduler
     end
