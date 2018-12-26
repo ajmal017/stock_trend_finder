@@ -27,11 +27,11 @@ module MarketDataPull
         end
 
         def file_path_for_symbol(symbol)
-          File.join(html_page_dir, "institutional-ownership-#{symbol}.html")
+          File.join(html_page_dir, "institutional-holdings-#{symbol}.html")
         end
 
         def html_page_dir
-          @html_page_dir ||= File.join(STOCK_TREND_FINDER_DATA_DIR, 'nasdaq_scrape/institutional_ownership', Date.today.strftime('%Y%m%d'))
+          @html_page_dir ||= File.join(STOCK_TREND_FINDER_DATA_DIR, 'nasdaq_scrape/institutional_holdings', Date.today.strftime('%Y%m%d'))
         end
 
         def tickers_to_scrape

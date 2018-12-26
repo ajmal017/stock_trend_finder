@@ -194,7 +194,7 @@ module TDAmeritradeDataInterface
         puts "#{Time.now} - Beginning download of institutional ownership..."
         if Date.today.wday == 5
           t = Time.now
-          MarketDataUtilities::InstitutionalOwnership::ScrapeAll.call
+          MarketDataUtilities::Nasdaq::InstitutionalHoldings::ScrapeAll.call
           puts "Done (began at #{t}, now #{Time.now})"
         end
       end
