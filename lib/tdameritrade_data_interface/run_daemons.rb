@@ -189,8 +189,8 @@ module TDAmeritradeDataInterface
       scheduler = Rufus::Scheduler.new
       # See http://stackoverflow.com/questions/11683387/run-every-2nd-and-4th-saturday-of-the-month for explanation
       # of the Cron line
-      # This is set to run the second and fourth Friday of the month at 7pm
-      scheduler.cron('0 19 8-14,22-28 * *') do
+      # This is set to run the fourth Friday of the month at 7pm
+      scheduler.cron('0 19 22-28 * *') do
         puts "#{Time.now} - Beginning download of institutional ownership..."
         if Date.today.wday == 5
           t = Time.now
