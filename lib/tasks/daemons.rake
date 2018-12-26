@@ -10,7 +10,7 @@ namespace :stock_trend_finder do
     $stf.run_prepopulate_daily_stock_quotes_daemon
     $stf.run_fundamentals_history_daemon
     # $stf.run_stocktwits_sync_daemon
-    # $stf.run_import_vix_futures_daemon
+    $stf.run_report_snapshots_daemon
     $stf.run_db_maintenance_daemon
     $stf.run_institutional_ownership_daemon
     $stf.run_update_company_list_daemon
