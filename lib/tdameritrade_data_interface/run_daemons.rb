@@ -14,13 +14,15 @@ module TDAmeritradeDataInterface
           copy_realtime_quotes_to_daily_stock_prices
         end
 
-        puts "Saving Report Snapshots: #{Time.now}"
-        Reports::Snapshots::SaveAllSnapshots.call
-
         puts "Done #{Time.now}\n\n"
       else
         puts "Market closed today, no real time quote download necessary"
       end
+    end
+
+    def take_reports_snapshot(reports)
+      puts "Saving Report Snapshots: #{Time.now} - #{reports.join(',')}"
+      Reports::Snapshots::SaveSnapshots.call(reports: reports)
     end
 
     def run_realtime_quotes_daemon
@@ -77,9 +79,6 @@ module TDAmeritradeDataInterface
               import_premarket_quotes(date: Date.today)
             end
 
-            puts "Saving Report Snapshots: #{Time.now}"
-            Reports::Snapshots::SaveAllSnapshots.call
-
             puts "Done #{Time.now}"
           else
             puts "Market closed today, no real time quote download necessary"
@@ -106,6 +105,21 @@ module TDAmeritradeDataInterface
       scheduler
     end
 
+    def run_report_snapshots_daemon
+      puts "#{Time.now} Beginning report snapshots daemon..."
+
+      premarket_reports = [:premarket]
+      daytime_reports = [:active, :fifty_two_week_high, :fifty_two_week_low, :gaps]
+      afterhours_reports = [:after_hours]
+
+      schedulers = Array.new(8) { Rufus::Scheduler.new }
+      schedulers[0].cron('50 8 * * MON-FRI') { take_reports_snapshot(premarket_reports) }
+      schedulers[1].cron('45 9 * * MON-FRI') { take_reports_snapshot(premarket_reports) }
+      schedulers[2].cron('50 9,10,11,13,15,17 * * MON-FRI') { take_reports_snapshot(daytime_reports) }
+      schedulers[3].cron('51 17,18,20 * * MON-FRI') { take_reports_snapshot(afterhours_reports) }
+      schedulers
+    end
+
     def run_afterhours_quotes_daemon
       scheduler = Rufus::Scheduler.new
       scheduler.cron('25 17,18,21 * * MON-FRI') do
@@ -114,9 +128,6 @@ module TDAmeritradeDataInterface
           ActiveRecord::Base.connection_pool.with_connection do
             import_afterhours_quotes(date: Date.today)
           end
-
-          puts "Saving Report Snapshots: #{Time.now}"
-          Reports::Snapshots::SaveAllSnapshots.call
 
           puts "Done #{Time.now}"
         else

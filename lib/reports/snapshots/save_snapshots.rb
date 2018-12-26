@@ -1,6 +1,6 @@
 module Reports
   module Snapshots
-    class SaveAllSnapshots
+    class SaveSnapshots
       include Verbalize::Action
 
       REPORTS = [
@@ -12,10 +12,18 @@ module Reports
         :premarket
       ]
 
+      input optional: [:reports]
+
       def call
-        REPORTS.each do |rt|
+        reports.each do |rt|
           Reports::Snapshots::Create.call(report_type: rt, report_date: Date.today)
         end
+      end
+
+      private
+
+      def reports
+        @reports || REPORTS
       end
 
     end
