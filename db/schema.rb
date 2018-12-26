@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181223043945) do
+ActiveRecord::Schema.define(version: 20181226154319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,10 +48,7 @@ ActiveRecord::Schema.define(version: 20181223043945) do
     t.float    "previous_close"
     t.float    "previous_high"
     t.float    "previous_low"
-    t.boolean  "exclude",                          default: false
     t.float    "average_volume_50day"
-    t.decimal  "ema13"
-    t.string   "candle_vs_ema13",      limit: 255
     t.datetime "snapshot_time"
     t.float    "sma50"
     t.float    "sma200"
