@@ -3,8 +3,8 @@ module LocalNoteTaker
     include Verbalize::Action
 
     ACCOUNT_ID = ENV.fetch('TOS_ACCOUNT_ID')
-    WATCHLIST_ID = '634270226'
-    WATCHLIST_NAME = 'Upside Break/GURM'
+    WATCHLIST_ID = '1214745853'
+    WATCHLIST_NAME = 'StocktwitsApp'
 
     IGNORE_SYMBOLS = %w(
       PORTFOLIO
@@ -12,6 +12,7 @@ module LocalNoteTaker
       SPY
       SVXY
       VXX
+      UVXY
     )
 
     input :symbol
