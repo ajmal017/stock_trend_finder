@@ -19,7 +19,7 @@ module MarketDataUtilities
 
       def component_table
         @component_table ||= noko.css('table').select do |t|
-          t.css('th').first.text =~ /Ticker symbol/
+          t.css('th').first.text =~ /symbol/i
         end.first
       end
 

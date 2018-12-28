@@ -191,6 +191,9 @@ module TDAmeritradeDataInterface
       scheduler.cron('0 20 * * SAT') do
         puts "#{Time.current} - Beginning download of fundamentals data from TD Ameritrade OAuth API..."
         MarketDataPull::TDAmeritrade::UpdateFundamentals.call
+
+        puts "#{Time.current} - Updating the S&P 500 list"
+        MarketDataUtilities::Indices::UpdateSP500List.call
       end
       puts "#{Time.now} Beginning TDA Fundamentals daemon..."
       scheduler
