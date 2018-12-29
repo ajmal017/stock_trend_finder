@@ -30,6 +30,7 @@ module MarketDataUtilities
         Ticker.where(on_nasdaq_list: false, scrape_data: true).update_all(scrape_data: false, unscrape_date: Date.current)
 
         @change_report[:tickers_dropped] = tickers_dropped(ticker_list_before)
+        save_change_history
         @change_report
       end
 
@@ -44,7 +45,33 @@ module MarketDataUtilities
       def tickers_dropped(ticker_list_before)
         ticker_list_after = Ticker.where(on_nasdaq_list: true).pluck(:symbol, :company_name)
         ticker_list_before.reject do |symbol, _company_name|
-          ticker_list_after.map { |after_symbol, after_company_name| after_symbol }.include?(symbol)
+          ticker_list_after.map { |after_symbol, _after_company_name| after_symbol }.include?(symbol)
+        end
+      end
+
+      def save_change_history
+        @change_report[:tickers_added].each do |ta|
+          TickerChange.create(
+            ticker_symbol: ta[0],
+            action_date: Date.current,
+            type: 'add'
+          )
+        end
+        @change_report[:updated_company_names].each do |ta|
+          TickerChange.create(
+            ticker_symbol: ta[:symbol],
+            action_date: Date.current,
+            type: 'change_name',
+            old_value: ta[:previous_company_name],
+            new_value: ta[:new_company_name]
+          )
+        end
+        @change_report[:tickers_dropped].each do |ta|
+          TickerChange.create(
+            ticker_symbol: ta[0],
+            action_date: Date.current,
+            type: 'remove'
+          )
         end
       end
 

@@ -1,5 +1,4 @@
 require 'rake'
-load 'lib/tasks/tickers.rake'
 
 module TDAmeritradeDataInterface
   module RunDaemons
@@ -193,7 +192,7 @@ module TDAmeritradeDataInterface
         MarketDataPull::TDAmeritrade::UpdateFundamentals.call
 
         puts "#{Time.current} - Updating the S&P 500 list"
-        MarketDataUtilities::Indices::UpdateSP500List.call
+        MarketDataPull::Wikipedia::UpdateSP500List.call
       end
       puts "#{Time.now} Beginning TDA Fundamentals daemon..."
       scheduler

@@ -1,5 +1,5 @@
-module MarketDataUtilities
-  module Indices
+module MarketDataPull
+  module Wikipedia
     class FetchSP500List
       include Verbalize::Action
 
@@ -13,7 +13,7 @@ module MarketDataUtilities
 
       def components
         component_table.css('tr').map do |tr|
-          tr.css('td').first.try(:text)
+          tr.css('td').first.try(:text).try(:gsub, '.', '/')
         end.compact
       end
 

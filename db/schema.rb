@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181226154319) do
+ActiveRecord::Schema.define(version: 20181229070713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -368,6 +368,16 @@ ActiveRecord::Schema.define(version: 20181226154319) do
     t.datetime "refresh_token_expires_at"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+  end
+
+  create_table "ticker_changes", force: :cascade do |t|
+    t.string   "ticker_symbol"
+    t.date     "action_date"
+    t.string   "type"
+    t.string   "old_value"
+    t.string   "new_value"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "ticker_notes", force: :cascade do |t|
