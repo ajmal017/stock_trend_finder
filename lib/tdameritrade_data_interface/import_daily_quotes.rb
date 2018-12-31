@@ -192,8 +192,6 @@ module TDAmeritradeDataInterface
                 previous_high: nil,
                 previous_low: nil,
                 average_volume_50day: nil,
-                ema13: nil,
-                candle_vs_ema13: nil,
                 snapshot_time: nil
             }
 
@@ -217,9 +215,6 @@ module TDAmeritradeDataInterface
 
     puts "Calculating Average Daily Volumes - #{Time.now}"
     populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
-
-    #puts "Calculating EMA13's"
-    #populate_ema13
 
     puts "Updating Previous High Cache - #{Time.now}"
     populate_previous_high
@@ -594,27 +589,6 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_average_volume_50day(begin_date)
   end
 
-  def self.populate_ema13(begin_date=Date.new(2014,05,02))
-
-    begin
-      # Populate the first entry - sma13
-      ActiveRecord::Base.connection.execute update_ema13_first_sma(begin_date)
-
-      # Populate the remaining items
-      (begin_date..Date.today).each do |d|
-        puts "Populating EMA13 for #{d}"
-        ActiveRecord::Base.connection.execute(update_ema13(d))
-      end
-
-      ActiveRecord::Base.connection.execute update_candle_vs_ema13
-
-    rescue => e
-      puts "#{e.message}"
-      log = log + "#{e.message}\n"
-    end
-
-  end
-
   def self.populate_sma50(date=Date.today)
 
     begin
@@ -704,9 +678,6 @@ module TDAmeritradeDataInterface
 
       puts "Calculating Average Daily Volumes - #{Time.now}"
       populate_average_volume_50day(Date.today)
-
-      #puts "Calculating EMA13's"
-      #populate_ema13(Date.today)
 
       puts "Calculating SMA50's - #{Time.now}"
       populate_sma50(Date.today)
