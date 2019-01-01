@@ -95,43 +95,5 @@ class Ticker < ActiveRecord::Base
     Ticker.create(symbol: symbol, company_name: company_name, exchange: exchange, scrape_data:true)
   end
 
-  ########### ADDING NEW TICKERS ###########
-
-  # SAMPLE OF INPUT (tab delimited):
-  # Company Name	Symbol	Market	Price	Shares	Offer Amount	Expected IPO Date
-  # JUNO THERAPEUTICS, INC.	JUNO	NASDAQ	15.00-18.00	9,250,000	$191,475,000	12/19/2014
-  # FIRST GUARANTY BANCSHARES, INC.		NASDAQ	19.00-21.00	4,571,428	$110,399,982	12/19/2014
-  # WORKIVA LLC	WK	New York Stock Exchange	13.00-15.00	7,200,000	$124,200,000	12/12/2014
-  def self.add_nasdaq_ticker_list
-    log = ''
-    File.open(File.join(Rails.root, 'downloads', 'ipo_list.txt'), 'r').each_line do |line|
-      company_name,symbol,market,price,shares,offer,ipo_date = line.split("\t")
-      case market
-        when 'NASDAQ'
-          market = 'nasdaq'
-        when 'New York Stock Exchange'
-          market = 'nyse'
-      end
-
-      shares = Float(shares.delete(',')) / 1000
-
-      puts "Creating: #{symbol}, #{company_name}, #{market}, #{shares}"
-      log = log + "Creating: #{symbol}, #{company_name}, #{market}, #{shares}\n"
-      t = Ticker.find_by(symbol: symbol)
-      if t
-        puts "Ticker #{symbol} already exists. Resetting scrape flag. Scrape currently #{t.scrape_data}"
-        log = log + "Ticker #{symbol} already exists. Resetting scrape flag. Scrape currently #{t.scrape_data}\n"
-        t.company_name = company_name
-        t.float = shares
-        t.exchange = market
-        t.scrape_data = true
-        t.save!
-      else
-        Ticker.create(symbol: symbol, company_name: company_name, exchange: market, float: shares, scrape_data:true)
-      end
-
-      puts log
-    end
-  end
 
 end

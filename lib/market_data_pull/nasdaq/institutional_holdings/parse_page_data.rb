@@ -41,6 +41,17 @@ module MarketDataPull
           value.index('.') ? value.to_f : value.to_i
         end
 
+        def latest_filing_date
+          date_str = noko
+          .css('.genTable table tr')
+          .try(:[], 1)
+          .try(:css, 'td')
+          .try(:[], 1)
+          .try(:text)
+
+          date_str.present? ? Date.strptime(date_str, '%m/%d/%Y') : nil
+        end
+
         def td_column_text_in_table_row(tr, row)
           return nil if tr.nil?
           tr.css('td')[row].try(:text)
@@ -65,6 +76,7 @@ module MarketDataPull
             sold_positions_count: column_contents_for_header_as_number('Sold Out Positions', 0),
             new_positions_shares: column_contents_for_header_as_number('New Positions', 1),
             sold_positions_shares: column_contents_for_header_as_number('Sold Out Positions', 1),
+            latest_filing_date: latest_filing_date
           }
         end
 

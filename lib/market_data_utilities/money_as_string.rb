@@ -1,5 +1,6 @@
 module MarketDataUtilities
   module MoneyAsString
+    module_function
 
     def human_readable(number, precision=2, as: nil)
       f = number.try(:to_f)

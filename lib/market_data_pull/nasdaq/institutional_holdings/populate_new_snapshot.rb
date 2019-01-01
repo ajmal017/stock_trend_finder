@@ -4,7 +4,7 @@ module MarketDataPull
       class PopulateNewSnapshot
         include Verbalize::Action
 
-        input :symbol, :values
+        input :symbol, :values, optional: [:scrape_filename]
 
         def call
           if values[:institutional_ownership_pct] > 0
@@ -25,6 +25,7 @@ module MarketDataPull
           values.merge({
                          ticker_symbol: symbol,
                          scrape_date: Date.today,
+                         scrape_filename: @scrape_filename
                        })
         end
 
