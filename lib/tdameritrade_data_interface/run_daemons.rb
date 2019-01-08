@@ -56,7 +56,6 @@ module TDAmeritradeDataInterface
     def run_prepopulate_daily_stock_quotes_daemon
       scheduler = Rufus::Scheduler.new
       scheduler.cron('12 6 * * MON-FRI') do
-        puts "Prepopulating daily_stock_quotes table: #{Time.now}"
         ActiveRecord::Base.connection_pool.with_connection do
           prepopulate_daily_stock_prices(Date.today)
         end

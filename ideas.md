@@ -7,10 +7,13 @@
 * Dividend yield scanner
 * Chart of number of companies reaching 52 wk high/low
 * Chart of number of scrapeable stocks
+* Scrape 13Fs from SEC website
+
+* Stocktwits:
+- alias setup tags for easier search/aggregation
 
 ### Ideas for new features
 
-* Report to help filter out defunct tickers
 * Handle splits!
 
 
