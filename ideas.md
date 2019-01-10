@@ -11,6 +11,7 @@
 * Scrape 13Fs from SEC website (EDGAR project)
 
 * Stocktwits:
+  - Split into its own app
 
 ### Ideas for new features
 

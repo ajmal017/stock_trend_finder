@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ReportPresenter
+  extend MarketDataUtilities::MoneyAsString
 
   DEFAULT_FIELDS=[
     :ticker_symbol,
@@ -18,6 +19,7 @@ class ReportPresenter
     :float,
     :float_percent_traded,
     :dividend_yield,
+    :market_cap,
     :institutional_ownership_percent,
     :sp500,
     :actions
@@ -48,6 +50,7 @@ class ReportPresenter
         float: display_number(row[:float], 0),
         dividend_yield: display_dividend_yield(row[:dividend_yield]),
         float_percent_traded: display_percent(row[:float_percent_traded], 0),
+        market_cap: human_readable(row[:market_cap], 1, as: :billions).gsub(' B', ''),
         institutional_ownership_percent: display_percent(row[:institutional_ownership_percent], 0),
         sp500: row[:sp500]
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))

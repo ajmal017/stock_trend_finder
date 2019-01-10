@@ -6,6 +6,7 @@ module ReportHelper
     :gap_percent,
     :float,
     :float_percent_traded,
+    :market_cap,
     :dividend_yield,
     :institutional_ownership_percent,
     :volume,

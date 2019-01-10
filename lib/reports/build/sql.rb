@@ -23,7 +23,8 @@ with ticker_list as
     t.short_pct_float * 100 as short_percent_of_float,
     t.institutional_holdings_percent as institutional_ownership_percent,  
     t.hide_from_reports_until > current_date as gray_symbol,
-    t.sp500
+    t.sp500,
+    t.market_cap
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -48,7 +49,8 @@ select
   short_percent_of_float,
   institutional_ownership_percent,
   gray_symbol,
-  sp500
+  sp500,
+  market_cap
 from ticker_list
 order by
   volume_ratio desc
@@ -74,7 +76,8 @@ with ticker_list as
     t.short_pct_float * 100 as short_percent_of_float,
     t.institutional_holdings_percent as institutional_ownership_percent,  
     t.hide_from_reports_until > current_date as gray_symbol,
-    t.sp500
+    t.sp500,
+    t.market_cap
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -99,7 +102,8 @@ select
   short_percent_of_float,
   institutional_ownership_percent,
   gray_symbol,
-  sp500
+  sp500,
+  market_cap
 from ticker_list
 order by
   volume_ratio desc
@@ -262,6 +266,7 @@ select
   coalesce(t.annual_dividend_amount, 0) / last_trade * 100 as dividend_yield,   
   t.institutional_holdings_percent as institutional_ownership_percent,
   t.hide_from_reports_until > current_date as gray_symbol,
+  t.market_cap,
   t.sp500,
   high_52_week,
   low_52_week,
@@ -299,6 +304,7 @@ select
   coalesce(t.annual_dividend_amount, 0) / last_trade * 100 as dividend_yield,   
   t.institutional_holdings_percent as institutional_ownership_percent,
   t.hide_from_reports_until > current_date as gray_symbol,
+  t.market_cap,
   t.sp500,
   high_52_week,
   low_52_week,

@@ -21,6 +21,8 @@
       %th#short-percent-of-float.rjust.divider-right{ style: "width: 65px;"}= "Short %<br />of Float".html_safe
       %th#float.rjust{ style: "width: 65px;"} Float (M)
       %th#float-percent-traded.divider-right.rjust{ style: "width: 65px;"} Float %
+      -if fields.include?(:market_cap)
+        %th#mkt-cap.divider-right.rjust{ style: "width: 75px;"} MktCap(B)
       -if fields.include?(:dividend_yield)
         %th#dividend-yield.divider-right.rjust{ style: "width: 65px;"} Div %
       -if fields.include?(:institutional_ownership_percent)
@@ -48,6 +50,8 @@
         %td.divider-right{ class: set_css_class(r, :short_percent_of_float) }= r[:short_percent_of_float]
         %td{ class: set_css_class(r, :float) }= r[:float]
         %td.divider-right{ class: set_css_class(r, :float_percent_traded) }= r[:float_percent_traded]
+        -if fields.include?(:market_cap)
+          %td.divider-right{ class: set_css_class(r, :market_cap) }= r[:market_cap]
         -if fields.include?(:dividend_yield)
           %td.divider-right{ class: set_css_class(r, :dividend_yield) }= r[:dividend_yield]
         -if fields.include?(:institutional_ownership_percent)
