@@ -93,8 +93,14 @@ class StocktwitsController < ApplicationController
   end
 
 private
+  TICKER_SYMBOL_ALIASES = [%w(SPY SPXL SSO), %w(VXX VXXB XIV SVXY)]
+
   def ticker_symbol
-    @ticker_symbol = params[:symbol].to_s.strip
+    return @ticker_symbol if @ticker_symbol.present?
+
+    ticker_raw = params[:symbol].to_s.strip
+    aliases = TICKER_SYMBOL_ALIASES.select { |a| a.include?(ticker_raw) }.flatten
+    @ticker_symbol = aliases.any? ? aliases : ticker_raw
   end
 
   def user_id
