@@ -152,9 +152,10 @@ module TDAmeritradeDataInterface
       scheduler = Rufus::Scheduler.new
       scheduler.cron('0 9,10,14,17 * * MON-FRI') do
         puts "VIX Futures data sync: #{Time.now}"
-        ActiveRecord::Base.connection_pool.with_connection do
-          VIXFuturesHistory.import_vix_futures if is_market_day?(Date.today)
-        end
+        # ActiveRecord::Base.connection_pool.with_connection do
+        #   VIXFuturesHistory.import_vix_futures if is_market_day?(Date.today)
+        # end
+        VIXCentralScreenshot.new.download_screenshot
         puts "Done"
       end
       puts "#{Time.now} Beginning VIX Futures History daemon..."
