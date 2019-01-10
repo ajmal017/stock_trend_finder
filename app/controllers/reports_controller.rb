@@ -167,14 +167,15 @@ class ReportsController < ApplicationController
     ]
 
     line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: report_date).value
-    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: line_items, sort_field: sort_field, sort_direction: :desc).value
+    filtered_line_items = filter(line_items)
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: filtered_line_items, sort_field: sort_field, sort_direction: :desc).value
 
     @report = {
       title: '52 Week High List',
       last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
       item_count: sorted_line_items.size,
       sections: Reports::Build::Sections::FiftyTwoWeekHigh.(report: sorted_line_items).value,
-      route: :week52_lows,
+      route: :week52_highs,
     }
 
     render :report
@@ -207,7 +208,7 @@ class ReportsController < ApplicationController
       last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
       item_count: sorted_line_items.size,
       sections: Reports::Build::Sections::FiftyTwoWeekLow.(report: sorted_line_items).value,
-      route: :week52_highs,
+      route: :week52_lows,
     }
 
     render :report
@@ -233,6 +234,12 @@ class ReportsController < ApplicationController
   # end
 
 private
+
+  # I know biz logic shouldn't be in the controller but this is experimental. Will move to interactor later.
+  def filter(items)
+    return items unless params[:price]
+    items.reject { |li| li[:last_trade] < params[:price].to_f }
+  end
 
   def report_date
     begin
