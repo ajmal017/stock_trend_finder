@@ -3,15 +3,19 @@ module LocalNoteTaker
     include Verbalize::Action
 
     ACCOUNT_ID = ENV.fetch('TOS_ACCOUNT_ID')
-    WATCHLIST_ID = '1214745853'
-    WATCHLIST_NAME = 'StocktwitsApp'
+    WATCHLISTS = [
+      { watchlist_id: '1214745853', watchlist_name: 'StocktwitsApp' },
+      { watchlist_id: '1175279388', watchlist_name: 'Previous Trades' },
+    ]
 
     IGNORE_SYMBOLS = %w(
       PORTFOLIO
+      SSO
       SPXL
       SPY
       SVXY
       VXX
+      VXXB
       UVXY
     )
 
@@ -21,7 +25,10 @@ module LocalNoteTaker
       return if ignore_symbol?
 
       refresh_access_token
-      client.update_watchlist(ACCOUNT_ID, WATCHLIST_ID, WATCHLIST_NAME, symbol)
+
+      WATCHLISTS.each do |watchlist|
+        client.update_watchlist(ACCOUNT_ID, watchlist[:watchlist_id], watchlist[:watchlist_name], symbol)
+      end
     end
 
     private

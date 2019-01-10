@@ -1,19 +1,20 @@
 ### TODOs
 
+* Add market cap to reports
+* Filter for price cutoff and or market cap
 * Tickers: 
-  - Track addition/changes of tickers
   - Page for each ticker with info about it
     - any data changes to cusip or title
 * Dividend yield scanner
 * Chart of number of companies reaching 52 wk high/low
 * Chart of number of scrapeable stocks
-* Scrape 13Fs from SEC website
+* Scrape 13Fs from SEC website (EDGAR project)
 
 * Stocktwits:
-- alias setup tags for easier search/aggregation
 
 ### Ideas for new features
 
+* Gather options open interest and plot on chart like Sassy SPY
 * Handle splits!
 
 
