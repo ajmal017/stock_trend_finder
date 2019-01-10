@@ -174,7 +174,7 @@ class ReportsController < ApplicationController
       last_updated: sorted_line_items.size > 0 ? sorted_line_items.first[:snapshot_time].in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S') : '',
       item_count: sorted_line_items.size,
       sections: Reports::Build::Sections::FiftyTwoWeekHigh.(report: sorted_line_items).value,
-      route: :week52_highs,
+      route: :week52_lows,
     }
 
     render :report
