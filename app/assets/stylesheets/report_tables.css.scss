@@ -36,10 +36,16 @@
 
 .green {
   color: greenyellow;
+  a {
+    color: greenyellow;
+  }
 }
 
 .red {
   color: red;
+  a {
+    color: red;
+  }
 }
 
 .bold {
@@ -88,6 +94,7 @@
 }
 
 img.report-stock-icon {
+  margin-left: 4px;
   height: 15px;
   width: 15px;
 }

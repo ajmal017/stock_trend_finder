@@ -318,7 +318,7 @@ module TDAmeritradeDataInterface
       ActiveRecord::Base.connection.execute insert_daily_stock_prices_prepopulated_fields(prepopulate_date)
 
       puts "Prepopulating Average Daily Volumes - #{Time.now}"
-      populate_average_volume_50day(Date.today)
+      populate_average_volume_50day(prepopulate_date)
 
       puts "Prepopulating SMA50 - #{Time.now}"
       populate_sma50(prepopulate_date)

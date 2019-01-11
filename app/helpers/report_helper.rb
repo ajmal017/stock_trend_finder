@@ -127,8 +127,12 @@ module ReportHelper
   end
 
   def ticker_symbol(line_item)
-    outside_52_wk_marker = line_item[:outside_52_week_range] ? ' <span style="color: orange">*</span>' : ''
+    outside_52_wk_marker = line_item[:outside_52_week_range] ? ' <span style="color: orange"> *</span>' : ''
 
-    "#{line_item[:ticker_symbol]}#{outside_52_wk_marker} #{symbol_icon(line_item[:ticker_symbol])}"
+    link_to(
+      "#{line_item[:ticker_symbol]}#{outside_52_wk_marker}",
+      "https://www.reuters.com/finance/stocks/companyProfile/#{line_item[:ticker_symbol]}",
+      target: '_blank'
+    ) + symbol_icon(line_item[:ticker_symbol])
   end
 end

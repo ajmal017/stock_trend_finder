@@ -12,6 +12,7 @@
 
 * Stocktwits:
   - Split into its own app
+  - Conslidate tickers
 
 ### Ideas for new features
 
