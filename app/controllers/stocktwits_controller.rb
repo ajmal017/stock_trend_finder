@@ -50,6 +50,20 @@ class StocktwitsController < ApplicationController
     end
   end
 
+  def edit_twit
+    head :bad_request if params[:message].nil?
+    outcome, @twit = LocalNoteTaker::EditStocktwit.(
+      stocktwit_id: params[:id],
+      message: params[:message]
+    )
+
+    if outcome == :ok
+      render 'edit_twit_ok'
+    else
+      render 'edit_twit_error'
+    end
+  end
+
   def edit_note
     head :bad_request  if params[:note].nil? || params[:id].nil?
     if @twit = Stocktwits::AddNote.(stocktwit_id: params[:id], note_message: params[:note])

@@ -13,6 +13,10 @@
 * Stocktwits:
   - Split into its own app
   - Conslidate tickers
+    - have hierarchial - supercategory groupings
+  - Gold nugget indicator
+  - Edit the Twits
+  - Convert Twit note to text data type
 
 ### Ideas for new features
 
