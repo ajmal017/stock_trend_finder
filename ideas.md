@@ -6,9 +6,15 @@
   - Page for each ticker with info about it
     - any data changes to cusip or title
 * Dividend yield scanner
-* Chart of number of companies reaching 52 wk high/low
-* Chart of number of scrapeable stocks
-* Scrape 13Fs from SEC website (EDGAR project)
+
+* Options open interest
+  - Chart of SPY open interest, next 5 or so weekly expirations and open interest at strikes
+
+
+* Charts:
+  - Chart of number of companies reaching 52 wk high/low
+  - Chart of number of scrapeable stocks
+
 
 * Stocktwits:
   - Split into its own app
@@ -18,9 +24,11 @@
   - Edit the Twits
   - Convert Twit note to text data type
 
+* Scrape 13Fs from SEC website (EDGAR project)
+
+
 ### Ideas for new features
 
-* Gather options open interest and plot on chart like Sassy SPY
 * Handle splits!
 
 
@@ -28,14 +36,6 @@ Stock Data
 * Reset stock history after split - this includes making volume history adjustments
 * "as recorded" daily stock price table - populate it with stock data upon resetting. only daily stock prices 
   get reset - premarket prices remain
-* On gaps report, click the symbol to find the stock's gap history
-  - Previous high
-  - Previous close
-  - % gap
-  - Volume
-  - Volume average
-  - Movement over 3 days, 5 days, 10 days, 20 days
-* Dividend  
 
 
 VIX

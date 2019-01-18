@@ -23,8 +23,8 @@
   load_next = (symbol_or_setup, last_id) ->
     loading = true
 
-    console.log symbol_or_setup
-    console.log symbol_or_setup[0] == '#'
+    -#console.log symbol_or_setup
+    -#console.log symbol_or_setup[0] == '#'
     if symbol_or_setup[0] == '#'
       postdata = { user_id: $user_id_filter, setup: symbol_or_setup, max: last_id }
     else
@@ -36,9 +36,12 @@
       , (data) ->
         if data.length > 0
            if $('table.stocktwits tr').filter(':last').length > 0
-             $('table.stocktwits tr').filter(':last').after(data)
+             jData = $.parseHTML(data)
+             jData.forEach (el) ->
+               if el.nodeName == 'TR' && $('table.stocktwits tr#' + el.getAttribute('id')).html() == undefined
+                 $('table.stocktwits tr').filter(':last').after(el.outerHTML)
            else
-             $('#stocktwits-content table.stocktwits').append(data)
+             $('table.stocktwits').append(data)
         else
           nomore = true
         $('.last-twit-placeholder').hide()
