@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190101221359) do
+ActiveRecord::Schema.define(version: 20190118063837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -349,7 +349,7 @@ ActiveRecord::Schema.define(version: 20190101221359) do
     t.datetime "stocktwit_time"
     t.string   "stocktwit_url",        limit: 255
     t.string   "symbol",               limit: 255
-    t.string   "message",              limit: 255
+    t.text     "message"
     t.string   "image_thumb_url",      limit: 255
     t.string   "image_large_url",      limit: 255
     t.string   "image_original_url",   limit: 255
