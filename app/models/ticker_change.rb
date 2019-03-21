@@ -5,6 +5,7 @@ class TickerChange < ActiveRecord::Base
     add: 'add',
     change_name: 'change_name',
     remove: 'remove',
+    unscrape: 'unscrape',
     sp500_index: 'sp500_index',
   }
 end

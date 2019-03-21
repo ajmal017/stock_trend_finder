@@ -49,6 +49,16 @@ module MarketDataUtilities
         end
       end
 
+      def rescrape_ticker?(ticker, new_attributes)
+        # Don't rescrape if I intentionally set it to unscrapeable
+        rescrape = !(TickerChange.where(ticker_symbol: ticker).order(action_date: :desc).first&.type == 'unscrape')
+
+        # Set it to scrapable from unscrapable if the company name changed (i.e. ticker gets recycled under new company)
+        rescrape = rescrape || (new_attributes[:company_name] != ticker.company_name)
+
+        rescrape
+      end
+
       def save_change_history
         @change_report[:tickers_added].each do |ta|
           TickerChange.create(
@@ -85,8 +95,11 @@ module MarketDataUtilities
           }
         end
 
-        # Only set it to scrapable from unscrapable if the company name changed (i.e. ticker gets recycled under new company)
-        scrape_data = ticker.scrape_data? || (new_attributes[:company_name] != ticker.company_name)
+        binding.pry if ticker == 'VZ'
+        scrape_data = ticker.scrape_data? || rescrape_ticker?(ticker, new_attributes)
+        if scrape_data != ticker.scrape_data?
+          @change_report[:tickers_added] << [new_attributes[:symbol], new_attributes[:company_name]]
+        end
 
         ticker.update(
           new_attributes.merge(

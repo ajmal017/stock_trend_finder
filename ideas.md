@@ -15,10 +15,12 @@
   - Chart of number of companies reaching 52 wk high/low
   - Chart of number of scrapeable stocks
 
+* 52 week report
+  - Breakdown by sector
 
 * Stocktwits:
   - Split into its own app
-  - Conslidate tickers
+  - Conslidate hashtags
     - have hierarchial - supercategory groupings
   - Gold nugget indicator
   - Edit the Twits
@@ -67,9 +69,6 @@ Reports
 Stocktwits Report
 
 * Download system refactor ideas
-    - PrepopulateDatabase module
-        - Populate moving average fields
-        - Populate yesterday HLC 
     - ExternalMarketData module
         - \#import_daily_quotes(date)
         - TDAmeritradeInterface
@@ -80,23 +79,3 @@ Ticker List
     - Tags with each ticker
     
     
-    
-    Good stuff:
-sims = DailyStockPrice.where.not(snapshot_time: nil).pluck(:ticker_symbol).uniq  # gets all problematic tickers
-quotes = c.get_quote(sims)
-qm = quotes.map { |q| [q[:symbol], q[:description], q[:error]] }
-filter_invalid = qm.select { |qm| qm[2] =~ /Invalid/ }
-filter_not_found = qm.select { |qm| qm[1] =~ /not found/ }
-filter_no_name = qm.select { |qm| qm[1].length==0 }
-filter_acquisition_unit = qm.select { |qm| qm[0] =~ /....U/ } 
-(filter_invalid + filter_not_found + filter_no_name).each { |f| Ticker.unscrape f[0] }
-
-sims.each do |symbol|
-   puts "Unscrape #{symbol}?"
-   r = gets
-   if r.index('y')
-     Ticker.unscrape symbol
-     puts "Removing #{symbol}"
-   end  
-end  
-            

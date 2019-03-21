@@ -63,6 +63,11 @@ class Ticker < ActiveRecord::Base
   def self.unscrape(*symbols)
     symbols.each do |symbol|
       Ticker.find_by(symbol: symbol).update!(scrape_data: false, unscrape_date: Date.today)
+      TickerChange.create(
+        ticker_symbol: symbol,
+        type: 'unscrape',
+        action_date: Date.today
+      )
     end
   end
 
