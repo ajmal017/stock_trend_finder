@@ -527,7 +527,6 @@ module TDAmeritradeDataInterface
     puts "Done"
   end
 
-
   def self.reset_snapshot_flags
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
   end
@@ -539,15 +538,11 @@ module TDAmeritradeDataInterface
     end
 
     prepopulate_daily_stock_prices(date)
+    DailyStockPrice.where(price_date: date).update_all(snapshot_time: date)
 
     update_daily_stock_prices_from_real_time_snapshot
     import_premarket_quotes(date: date)
     import_afterhours_quotes(date: date)
-
-    if date == Date.today
-      VIXFuturesHistory.import_vix_futures(true)
-      Stocktwit.sync_twits
-    end
 
     if vacuum
       ActiveRecord::Base.connection.execute "VACUUM FULL"
@@ -689,7 +684,7 @@ module TDAmeritradeDataInterface
 
 
   private
-  
+
   def self.get_history_returned_error?(return_value)
     if return_value.is_a? Array and return_value.length > 0
       return return_value.first.has_key?(:error)
