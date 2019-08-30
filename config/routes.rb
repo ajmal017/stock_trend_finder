@@ -36,5 +36,9 @@ StockTrendFinder::Application.routes.draw do
   patch 'reports/unscrape/:symbol(.:format)', to: 'reports#unscrape_symbol', as: 'reports_unscrape_symbol'
   post 'tickers/:ticker/note', to: 'tickers#note', as: 'tickers_note'
 
+  namespace :tda_data do
+    post 'watchlists/symbol', to: 'watchlists#add_symbol', as: 'watchlists_add_symbol'
+  end
+
   root 'home#index'
 end

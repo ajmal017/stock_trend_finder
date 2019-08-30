@@ -2,11 +2,7 @@ module LocalNoteTaker
   class AddSymbolToTosWatchlist
     include Verbalize::Action
 
-    ACCOUNT_ID = ENV.fetch('TOS_ACCOUNT_ID')
-    WATCHLISTS = [
-      { watchlist_id: '1214745853', watchlist_name: 'StocktwitsApp' },
-      { watchlist_id: '1175279388', watchlist_name: 'Previous Trades' },
-    ]
+    TOS_LOCAL_API_URL = "#{ENV.fetch('TOS_LOCAL_SERVER')}/tda_data/watchlists/symbol"
 
     IGNORE_SYMBOLS = %w(
       PORTFOLIO
@@ -14,6 +10,7 @@ module LocalNoteTaker
       SPXL
       SPY
       SVXY
+      TLT
       VXX
       VXXB
       UVXY
@@ -23,23 +20,10 @@ module LocalNoteTaker
 
     def call
       return if ignore_symbol?
-
-      refresh_access_token
-
-      WATCHLISTS.each do |watchlist|
-        client.update_watchlist(ACCOUNT_ID, watchlist[:watchlist_id], watchlist[:watchlist_name], symbol)
-      end
+      HTTParty.post(TOS_LOCAL_API_URL, query: { secret: ENV['TOS_LOCAL_SECRET'], symbol: symbol })
     end
 
     private
-
-    def client
-      @client ||= TDAmeritradeToken.build_client_from_server_token
-    end
-
-    def refresh_access_token
-      TDAmeritradeToken.refresh_access_token_and_update_server(client)
-    end
 
     def ignore_symbol?
       IGNORE_SYMBOLS.include?(symbol)

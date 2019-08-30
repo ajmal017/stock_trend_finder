@@ -16,6 +16,8 @@
 # end
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.acronym 'OAuth'
+  inflect.acronym 'TDA'
   inflect.acronym 'TDAmeritrade'
   inflect.acronym 'VIX'
   inflect.acronym 'XIV'
