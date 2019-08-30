@@ -16,7 +16,6 @@ module TDA
       client.get_new_access_token
       TDAmeritradeToken.set_refresh_token(client.refresh_token)
 
-      binding.pry
       block.call(client)
     end
   end
