@@ -1,10 +1,9 @@
 ### TODOs
 
-* Add market cap to reports
-* Filter for price cutoff and or market cap
 * Tickers: 
   - Page for each ticker with info about it
     - any data changes to cusip or title
+
 * Dividend yield scanner
 
 * Options open interest
@@ -17,6 +16,7 @@
 
 * 52 week report
   - Breakdown by sector
+  - Note IPO date
 
 * Stocktwits:
   - Split into its own app
@@ -25,16 +25,20 @@
   - Gold nugget indicator
   - Edit the Twits
   - Convert Twit note to text data type
+  - Timer tickers - reminder to look at a stock after a certain amount of time
 
 * Scrape 13Fs from SEC website (EDGAR project)
+
+* ~~Add market cap to reports~~
+* ~~Filter for price cutoff and or market cap~~
 
 
 ### Ideas for new features
 
-* Handle splits!
 
 
 Stock Data
+* Handle splits!
 * Reset stock history after split - this includes making volume history adjustments
 * "as recorded" daily stock price table - populate it with stock data upon resetting. only daily stock prices 
   get reset - premarket prices remain

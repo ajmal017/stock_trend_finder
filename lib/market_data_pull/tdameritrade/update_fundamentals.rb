@@ -5,12 +5,16 @@ module MarketDataPull
 
       def call
         attempts = 0
-        Ticker.watching.each do |ticker|
+        total_count = Ticker.watching.count
+        Ticker.watching.each_with_index do |ticker, i|
           next if FundamentalsHistory.find_by(ticker_symbol: ticker.symbol, scrape_date: Date.current).present?
-          puts "Updating fundamentals for: #{ticker.symbol}"
+          puts "Updating fundamentals for: #{ticker.symbol} (#{i} of #{total_count})"
 
           tdaf = client.get_instrument_fundamentals(ticker.symbol)
-          next if tdaf.empty?
+          if tdaf.empty?
+            puts "No data returned for #{ticker.symbol}"
+            next
+          end
 
           cusip = tdaf[ticker.symbol]["cusip"]
           most_recent_dividend_date = tdaf[ticker.symbol]["fundamental"]["dividendDate"]
@@ -58,7 +62,7 @@ module MarketDataPull
       private
 
       def client
-        @client ||= TDAmeritradeToken.build_client
+        @client ||= TDAmeritradeToken.build_client_with_new_access_token
       end
 
     end

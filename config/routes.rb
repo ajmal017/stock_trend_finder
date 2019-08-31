@@ -13,9 +13,6 @@ StockTrendFinder::Application.routes.draw do
   get 'stocktwits/toggle_watching'  => "stocktwits#toggle_watching"
   get 'stocktwits/watching'         => "stocktwits#watching"
 
-  get 'tdameritrade_token' => 'tdameritrade_refresh_token#show'
-  put 'tdameritrade_token' => 'tdameritrade_refresh_token#update'
-
   namespace :reports do
     get 'active_stocks'
     get 'range'
