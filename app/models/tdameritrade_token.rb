@@ -11,6 +11,8 @@ class TDAmeritradeToken < ActiveRecord::Base
     def build_client_with_new_access_token
       client = self.build_client
       self.get_new_access_token(client)
+      self.set_refresh_token(client.refresh_token)
+      client
     end
 
     def get_new_access_token(client)

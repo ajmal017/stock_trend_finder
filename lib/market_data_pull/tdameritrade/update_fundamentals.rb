@@ -49,7 +49,8 @@ module MarketDataPull
 
           attempts = 0
           sleep 0.9 # Rate limit of 2 requests per second
-        rescue TDAmeritrade::Error::RateLimitError => e
+        rescue ::TDAmeritrade::Error::RateLimitError => e
+          puts "Rate limit error"
           sleep 31
           attempts = attempts + 1
           raise 'TDAmeritrade API error' if attempts >= 3
