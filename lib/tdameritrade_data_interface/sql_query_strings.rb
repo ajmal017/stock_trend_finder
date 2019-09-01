@@ -275,7 +275,15 @@ with ticker_list as
     t.short_ratio as short_ratio,
     t.short_pct_float * 100 as short_pct_float,
     t.institutional_holdings_percent as institutional_ownership_percent,  
-    t.hide_from_reports_until > current_date as gray_symbol
+    t.hide_from_reports_until > current_date as gray_symbol,
+    case 
+      when date_added is null then
+        null
+      when current_date - date_added > 365 then
+            null
+        else
+          current_date - date_added
+    end as days_active
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -299,7 +307,8 @@ select
   short_ratio,
   short_pct_float,
   institutional_ownership_percent,
-  gray_symbol
+  gray_symbol,
+  days_active
 from ticker_list
 order by
   volume_ratio desc
@@ -322,7 +331,15 @@ with ticker_list as
     t.short_ratio as short_ratio,
     t.short_pct_float * 100 as short_pct_float,
     t.institutional_holdings_percent as institutional_ownership_percent,  
-    t.hide_from_reports_until > current_date as gray_symbol
+    t.hide_from_reports_until > current_date as gray_symbol,
+    case 
+      when date_added is null then
+        null
+      when current_date - date_added > 365 then
+            null
+        else
+          current_date - date_added
+    end as days_active
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -346,7 +363,8 @@ select
   short_ratio,
   short_pct_float,
   institutional_ownership_percent,
-  gray_symbol
+  gray_symbol,
+  days_active
 from ticker_list
 order by
   volume_ratio desc

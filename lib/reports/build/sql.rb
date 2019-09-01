@@ -24,7 +24,15 @@ with ticker_list as
     t.institutional_holdings_percent as institutional_ownership_percent,  
     t.hide_from_reports_until > current_date as gray_symbol,
     t.sp500,
-    t.market_cap
+    t.market_cap,
+    case 
+      when date_added is null then
+        null
+      when current_date - date_added > 365 then
+            null
+        else
+          current_date - date_added
+    end as days_active
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -50,7 +58,8 @@ select
   institutional_ownership_percent,
   gray_symbol,
   sp500,
-  market_cap
+  market_cap,
+  days_active
 from ticker_list
 order by
   volume_ratio desc
@@ -77,7 +86,15 @@ with ticker_list as
     t.institutional_holdings_percent as institutional_ownership_percent,  
     t.hide_from_reports_until > current_date as gray_symbol,
     t.sp500,
-    t.market_cap
+    t.market_cap,
+    case 
+      when date_added is null then
+        null
+      when current_date - date_added > 365 then
+            null
+        else
+          current_date - date_added
+    end as days_active
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -103,7 +120,8 @@ select
   institutional_ownership_percent,
   gray_symbol,
   sp500,
-  market_cap
+  market_cap,
+  days_active
 from ticker_list
 order by
   volume_ratio desc

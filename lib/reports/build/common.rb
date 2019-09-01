@@ -26,6 +26,7 @@ module Reports
             volume:           row['volume'].try(:to_f),
             volume_average:   row['volume_average'].try(:to_f),
             volume_ratio:     row['volume_ratio'].try(:to_f),
+            days_active:      row['days_active']
           }
         end
         new_report

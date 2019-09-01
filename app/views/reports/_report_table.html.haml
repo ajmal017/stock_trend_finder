@@ -17,9 +17,11 @@
       %th#average-volume.rjust{ style: "width: 100px;"} Avg Vol (K)
       -if fields.include?(:volume_ratio)
         %th#volume-ratio.rjust{ style: "width: 100px;"} Volume Ratio
-      %th#short-days-to-cover.rjust.divider-left{ style: "width: 65px;"}= "Short<br />Ratio".html_safe
-      %th#short-percent-of-float.rjust.divider-right{ style: "width: 65px;"}= "Short %<br />of Float".html_safe
-      %th#float.rjust{ style: "width: 65px;"} Float (M)
+      -if fields.include?(:short_days_to_cover)
+        %th#short-days-to-cover.rjust.divider-left{ style: "width: 65px;"}= "Short<br />Ratio".html_safe
+      -if fields.include?(:short_percent_of_float)
+        %th#short-percent-of-float.rjust.divider-right{ style: "width: 65px;"}= "Short %<br />of Float".html_safe
+      %th#float.rjust.divider-left{ style: "width: 65px;"} Float (M)
       %th#float-percent-traded.divider-right.rjust{ style: "width: 65px;"} Float %
       -if fields.include?(:market_cap)
         %th#mkt-cap.divider-right.rjust{ style: "width: 75px;"} MktCap(B)
@@ -27,6 +29,8 @@
         %th#dividend-yield.divider-right.rjust{ style: "width: 65px;"} Div %
       -if fields.include?(:institutional_ownership_percent)
         %th#institutional-ownership-percent.rjust{ style: "width: 65px;"} IO %
+      -if fields.include?(:days_active)
+        %th#days-active.rjust.divider-left.divider-right{ style: "width: 65px;"}= "Days Active".html_safe
       %th#actions{ style: "width: 100px; padding-left: 15px;"} Actions
     -report.each_with_index do |r, i|
       %tr{ id: r['ticker_symbol'] }
@@ -46,9 +50,11 @@
         %td{ class: set_css_class(r, :volume_average) }= r[:volume_average]
         -if fields.include?(:volume_ratio)
           %td{ class: set_css_class(r, :volume_ratio) }= r[:volume_ratio]
-        %td.divider-left{ class: set_css_class(r, :short_days_to_cover) }= r[:short_days_to_cover]
-        %td.divider-right{ class: set_css_class(r, :short_percent_of_float) }= r[:short_percent_of_float]
-        %td{ class: set_css_class(r, :float) }= r[:float]
+        -if fields.include?(:short_days_to_cover)
+          %td.divider-left{ class: set_css_class(r, :short_days_to_cover) }= r[:short_days_to_cover]
+        -if fields.include?(:short_percent_of_float)
+          %td.divider-right{ class: set_css_class(r, :short_percent_of_float) }= r[:short_percent_of_float]
+        %td.divider-left{ class: set_css_class(r, :float) }= r[:float]
         %td.divider-right{ class: set_css_class(r, :float_percent_traded) }= r[:float_percent_traded]
         -if fields.include?(:market_cap)
           %td.divider-right{ class: set_css_class(r, :market_cap) }= r[:market_cap]
@@ -56,4 +62,6 @@
           %td.divider-right{ class: set_css_class(r, :dividend_yield) }= r[:dividend_yield]
         -if fields.include?(:institutional_ownership_percent)
           %td{ class: set_css_class(r, :institutional_ownership_percent) }= r[:institutional_ownership_percent]
+        -if fields.include?(:days_active)
+          %td.divider-left.divider-right{ class: set_css_class(r, :days_active) }= r[:days_active]
         %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to("H", reports_hide_symbol_path(r[:ticker_symbol]), remote: true, method: :patch) + " " + link_to("U", reports_unscrape_symbol_path(r[:ticker_symbol]), remote: true, method: :patch)
