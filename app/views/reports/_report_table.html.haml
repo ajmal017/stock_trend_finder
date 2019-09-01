@@ -63,5 +63,5 @@
         -if fields.include?(:institutional_ownership_percent)
           %td{ class: set_css_class(r, :institutional_ownership_percent) }= r[:institutional_ownership_percent]
         -if fields.include?(:days_active)
-          %td.divider-left.divider-right{ class: set_css_class(r, :days_active) }= r[:days_active]
+          %td.divider-left.rjust.divider-right{ class: set_css_class(r, :days_active) }= r[:days_active]
         %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to("H", reports_hide_symbol_path(r[:ticker_symbol]), remote: true, method: :patch) + " " + link_to("U", reports_unscrape_symbol_path(r[:ticker_symbol]), remote: true, method: :patch)

@@ -21,6 +21,7 @@ class ReportPresenter
     :dividend_yield,
     :market_cap,
     :institutional_ownership_percent,
+    :days_active,
     :sp500,
     :actions
   ]
