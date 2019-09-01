@@ -334,6 +334,12 @@ module TDAmeritradeDataInterface
       populate_low_52_weeks(prepopulate_date)
       populate_premarket_low_52_weeks(prepopulate_date)
 
+      puts "Prepopulating 52 Week High Streak - #{Time.now}"
+      populate_high_52_week_streak(prepopulate_date)
+
+      puts "Prepopulating 52 Week Low Streak - #{Time.now}"
+      populate_low_52_week_streak(prepopulate_date)
+
       puts "Done prepopulating Daily Stock Prices - #{Time.now}"
     else
       puts "Market closed today, no prepopulation necessary"
@@ -556,6 +562,14 @@ module TDAmeritradeDataInterface
 
   def self.populate_low_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_low_52_week(begin_date)
+  end
+
+  def self.populate_high_52_week_streak(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_high_52_week_streak(begin_date)
+  end
+
+  def self.populate_low_52_week_streak(begin_date=NEW_TICKER_BEGIN_DATE)
+    ActiveRecord::Base.connection.execute update_low_52_week_streak(begin_date)
   end
 
   def self.populate_premarket_high_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)

@@ -2,7 +2,7 @@
 
 * 52 week report
   - Streak -> number of days on report within the last 100 trading days
-  - Note IPO date, or days since IPO
+  - ~~Note IPO date, or days since IPO~~
 
 * 52 week report in charts:
   - Chart of number of companies reaching 52 wk high/low

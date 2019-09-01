@@ -624,6 +624,34 @@ where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and low_52_week is null
 SQL
       end
 
+      def update_high_52_week_streak(begin_date=NEW_TICKER_BEGIN_DATE)
+        <<SQL
+update daily_stock_prices dsp_upd set
+high_52_week_streak=(
+  select count(*) from daily_stock_prices 
+  where 
+    ticker_symbol=dsp_upd.ticker_symbol and 
+    price_date between (dsp_upd.price_date - interval '90 days') and dsp_upd.price_date and
+    high > previous_high  
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and high_52_week_streak is null
+SQL
+      end
+
+      def update_low_52_week_streak(begin_date=NEW_TICKER_BEGIN_DATE)
+        <<SQL
+update daily_stock_prices dsp_upd set
+low_52_week_streak=(
+  select count(*) from daily_stock_prices 
+  where 
+    ticker_symbol=dsp_upd.ticker_symbol and 
+    price_date between (dsp_upd.price_date - interval '90 days') and dsp_upd.price_date and
+    low < previous_low
+)
+where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and low_52_week_streak is null
+SQL
+      end
+
       def update_premarket_high_52_week(begin_date=NEW_TICKER_BEGIN_DATE)
         <<SQL
 update premarket_prices pp_upd set
