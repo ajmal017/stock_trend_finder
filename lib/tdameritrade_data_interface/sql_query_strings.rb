@@ -632,7 +632,7 @@ high_52_week_streak=(
   where 
     ticker_symbol=dsp_upd.ticker_symbol and 
     price_date between (dsp_upd.price_date - interval '90 days') and dsp_upd.price_date and
-    high > previous_high  
+    high > high_52_week  
 )
 where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and high_52_week_streak is null
 SQL
@@ -646,7 +646,7 @@ low_52_week_streak=(
   where 
     ticker_symbol=dsp_upd.ticker_symbol and 
     price_date between (dsp_upd.price_date - interval '90 days') and dsp_upd.price_date and
-    low < previous_low
+    low < low_52_week
 )
 where price_date >= '#{begin_date.strftime('%Y-%m-%d')}' and low_52_week_streak is null
 SQL
