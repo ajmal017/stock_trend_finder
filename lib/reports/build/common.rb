@@ -21,12 +21,13 @@ module Reports
             float:                            row['float'].try(:to_f),
             float_percent_traded:             row['float_percent_traded'].try(:to_f),
             market_cap:                       row['market_cap'].try(:to_f),
-            dividend_yield:             row['dividend_yield'].try(:to_f),
-            sp500:            row['sp500']=='t',
-            volume:           row['volume'].try(:to_f),
-            volume_average:   row['volume_average'].try(:to_f),
-            volume_ratio:     row['volume_ratio'].try(:to_f),
-            days_active:      row['days_active']
+            dividend_yield:         row['dividend_yield'].try(:to_f),
+            sp500:                  row['sp500']=='t',
+            volume:                 row['volume'].try(:to_f),
+            volume_average:         row['volume_average'].try(:to_f),
+            volume_ratio:           row['volume_ratio'].try(:to_f),
+            week_52_streak:         row['week_52_streak'],
+            days_active:            row['days_active']
           }
         end
         new_report

@@ -21,6 +21,7 @@ class ReportPresenter
     :dividend_yield,
     :market_cap,
     :institutional_ownership_percent,
+    :week_52_streak,
     :days_active,
     :sp500,
     :actions
@@ -46,6 +47,7 @@ class ReportPresenter
         volume: display_number(row[:volume], 0),
         volume_average: display_number(row[:volume_average], 0),
         volume_ratio: display_number(row[:volume_ratio], 1),
+        week_52_streak: row[:week_52_streak],
         days_active: row[:days_active],
         short_days_to_cover: display_number(row[:short_days_to_cover], 1),
         short_percent_of_float: display_percent(row[:short_percent_of_float], 0),

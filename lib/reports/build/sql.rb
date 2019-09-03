@@ -32,7 +32,8 @@ with ticker_list as
             null
         else
           current_date - date_added
-    end as days_active
+    end as days_active,
+    high_52_week_streak as week_52_streak
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -59,7 +60,8 @@ select
   gray_symbol,
   sp500,
   market_cap,
-  days_active
+  days_active,
+  week_52_streak
 from ticker_list
 order by
   volume_ratio desc
@@ -94,7 +96,8 @@ with ticker_list as
             null
         else
           current_date - date_added
-    end as days_active
+    end as days_active,
+    low_52_week_streak as week_52_streak
   from daily_stock_prices dsp inner join tickers t on dsp.ticker_symbol=t.symbol
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
@@ -121,7 +124,8 @@ select
   gray_symbol,
   sp500,
   market_cap,
-  days_active
+  days_active,
+  week_52_streak
 from ticker_list
 order by
   volume_ratio desc

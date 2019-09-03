@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/wakproductions/stock_market_days.git
+  revision: 92c6ce60c5346490e99f408e09db9ca6beff99e3
+  specs:
+    stock_market_days (1.0.0)
+      bundler (~> 1.7)
+      rake
+
+GIT
   remote: https://github.com/wakproductions/stocktwits-api-ruby.git
   revision: f29adc5acf4c8cc7b575cdd7bbefb69d94f7837c
   specs:
@@ -327,6 +335,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.0)
   sdoc
   slim
+  stock_market_days!
   stocktwits-api-ruby!
   tdameritrade-api-ruby!
   tdameritrade_api!

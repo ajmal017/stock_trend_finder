@@ -29,8 +29,10 @@
         %th#dividend-yield.divider-right.rjust{ style: "width: 65px;"} Div %
       -if fields.include?(:institutional_ownership_percent)
         %th#institutional-ownership-percent.rjust{ style: "width: 65px;"} IO %
+      -if fields.include?(:week_52_streak)
+        %th#week-52-streak.rjust.divider-left{ style: "width: 65px;"}= "Streak".html_safe
       -if fields.include?(:days_active)
-        %th#days-active.rjust.divider-left.divider-right{ style: "width: 65px;"}= "Days Active".html_safe
+        %th#days-active.rjust.divider-right{ style: "width: 65px;"}= "Days Active".html_safe
       %th#actions{ style: "width: 100px; padding-left: 15px;"} Actions
     -report.each_with_index do |r, i|
       %tr{ id: r['ticker_symbol'] }
@@ -62,6 +64,8 @@
           %td.divider-right{ class: set_css_class(r, :dividend_yield) }= r[:dividend_yield]
         -if fields.include?(:institutional_ownership_percent)
           %td{ class: set_css_class(r, :institutional_ownership_percent) }= r[:institutional_ownership_percent]
+        -if fields.include?(:week_52_streak)
+          %td.divider-left.rjust{ class: set_css_class(r, :week_52_streak) }= r[:week_52_streak]
         -if fields.include?(:days_active)
-          %td.divider-left.rjust.divider-right{ class: set_css_class(r, :days_active) }= r[:days_active]
+          %td.divider-right.rjust{ class: set_css_class(r, :days_active) }= r[:days_active]
         %td{ class: set_css_class(r, :actions), style: "padding-left: 15px;" }= link_to("H", reports_hide_symbol_path(r[:ticker_symbol]), remote: true, method: :patch) + " " + link_to("U", reports_unscrape_symbol_path(r[:ticker_symbol]), remote: true, method: :patch)
