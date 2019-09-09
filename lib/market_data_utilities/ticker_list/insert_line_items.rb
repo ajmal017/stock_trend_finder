@@ -95,7 +95,6 @@ module MarketDataUtilities
           }
         end
 
-        binding.pry if ticker == 'VZ'
         scrape_data = ticker.scrape_data? || rescrape_ticker?(ticker, new_attributes)
         if scrape_data != ticker.scrape_data?
           @change_report[:tickers_added] << [new_attributes[:symbol], new_attributes[:company_name]]

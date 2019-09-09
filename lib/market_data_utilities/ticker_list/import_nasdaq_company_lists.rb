@@ -22,7 +22,7 @@ module MarketDataUtilities
               symbol:       line['Symbol'],
               company_name: line['Name'],
               exchange:     file_detail_hash[:exchange],
-              market_cap:   line['MarketCap'],
+              market_cap:   line['MarketCap'], # no longer capturing market cap; getting it from TD Ameritrade
               sector:       line['Sector'],
               industry:     line['industry']
             }

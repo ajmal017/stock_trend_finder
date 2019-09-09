@@ -94,10 +94,10 @@ module ReportHelper
 
         if report[:gap_pct].to_f.abs > 10
           css_class << "bold "
-        end                   
+        end
       when :float
         # Format how it is displayed into millions from thousands of shares
-        report[:float] = '%.0f' % (report[:float].to_f / 1000) if report[:float].present?
+        # report[:float] = '%.0f' % (report[:float].to_f / 1000) if report[:float].present?
 
         # Have a different designator for low float stock
         # if (report[:float].to_f < 15 && (report[:float].to_f) > 0)

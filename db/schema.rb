@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190901153819) do
+ActiveRecord::Schema.define(version: 20190904014603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,6 +237,11 @@ ActiveRecord::Schema.define(version: 20190901153819) do
     t.float    "percent_below_52_week_low"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+    t.decimal  "market_cap"
+    t.integer  "week_52_streak"
+    t.integer  "days_active"
+    t.string   "sector"
+    t.string   "industry"
   end
 
   add_index "report_snapshot_line_items", ["report_snapshot_id", "ticker_symbol"], name: "report_line_items_unique", unique: true, using: :btree

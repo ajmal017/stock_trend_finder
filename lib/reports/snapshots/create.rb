@@ -18,7 +18,10 @@ module Reports
         :institutional_ownership_percent,
         :gap_percent,
         :percent_above_52_week_high,
-        :percent_below_52_week_low
+        :percent_below_52_week_low,
+        :market_cap,
+        :week_52_streak,
+        :days_active
       ]
 
       input :report_type, :report_date

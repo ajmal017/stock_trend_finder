@@ -25,7 +25,7 @@ module Strategies
       set_threshold(price_history.first)
 
       price_history.each do |ph|
-        binding.pry if ph[:timestamp].to_date == Date.new(2009,3,3) || $stop
+        # binding.pry if ph[:timestamp].to_date == Date.new(2009,3,3) || $stop
         if @trend_direction == :up
           record_swing(ph) if ph[:low] < @threshold_value
         elsif @trend_direction == :down

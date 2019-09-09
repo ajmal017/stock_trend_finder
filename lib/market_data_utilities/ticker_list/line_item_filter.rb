@@ -24,7 +24,7 @@ module MarketDataUtilities
             if line_item[:market_cap] == 'n/a'
               line_item.delete(:market_cap)
             else
-              line_item[:market_cap] = money_string_to_number(line_item[:market_cap])
+              line_item[:market_cap] = money_string_to_number(line_item[:market_cap]) / 1000 # in thousands
             end
           end
         end

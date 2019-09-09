@@ -21,10 +21,10 @@ module MarketDataPull
           most_recent_dividend_amount = tdaf[ticker.symbol]["fundamental"]["dividendAmount"]
           dividend_yield_pct = tdaf[ticker.symbol]["fundamental"]["dividendYield"] / 100
 
-          # all reported in millions
-          market_cap = tdaf[ticker.symbol]["fundamental"]["marketCap"] / 1_000_000
-          float = tdaf[ticker.symbol]["fundamental"]["marketCapFloat"] / 1_000_000
-          shares_outstanding = tdaf[ticker.symbol]["fundamental"]["sharesOutstanding"] / 1_000_000
+          # all reported in millions, we store these in thousands
+          market_cap = tdaf[ticker.symbol]["fundamental"]["marketCap"] * 1_000
+          float = tdaf[ticker.symbol]["fundamental"]["marketCapFloat"] * 1_000
+          shares_outstanding = tdaf[ticker.symbol]["fundamental"]["sharesOutstanding"] * 1_000
 
           dsp = DailyStockPrice.most_recent(ticker.symbol)
           calculated_annual_dividend_amount =
@@ -44,7 +44,9 @@ module MarketDataPull
           )
 
           Ticker.where(symbol: ticker.symbol).update_all(
-            annual_dividend_amount: calculated_annual_dividend_amount
+            annual_dividend_amount: calculated_annual_dividend_amount,
+            market_cap: market_cap,
+            float: float
           )
 
           attempts = 0

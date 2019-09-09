@@ -51,10 +51,10 @@ class ReportPresenter
         days_active: row[:days_active],
         short_days_to_cover: display_number(row[:short_days_to_cover], 1),
         short_percent_of_float: display_percent(row[:short_percent_of_float], 0),
-        float: display_number(row[:float], 0),
+        float: display_number(divide_by_thousand(row[:float]), 0), # from in thousands to in millions
         dividend_yield: display_dividend_yield(row[:dividend_yield]),
         float_percent_traded: display_percent(row[:float_percent_traded], 0),
-        market_cap: human_readable(row[:market_cap], 1, as: :billions).gsub(' B', ''),
+        market_cap: human_readable(multiply_by_thousand(row[:market_cap].try(:to_f) || 0), 1, as: :billions).gsub(' B', ''),
         institutional_ownership_percent: display_percent(row[:institutional_ownership_percent], 0),
         sp500: row[:sp500]
       }.slice(*(fields_filter + [:snapshot_time, :updated_at, :gray_symbol]))

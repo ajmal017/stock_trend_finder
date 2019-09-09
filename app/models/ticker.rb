@@ -1,6 +1,10 @@
 require 'open-uri'
 require 'concerns/tickers/tags'
 
+# Important Storage Notes
+# Market Cap: in thousands
+# Float: in thousands
+
 class Ticker < ActiveRecord::Base
   include Tags
   self.primary_key = 'symbol'

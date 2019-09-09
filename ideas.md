@@ -31,6 +31,10 @@
 * ~~Add market cap to reports~~
 * ~~Filter for price cutoff and or market cap~~
 
+### Stuff to ask TDA
+
+How to identify debt securities? LTSH, SOLN
+
 
 ### Ideas for new features
 

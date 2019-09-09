@@ -2,6 +2,11 @@ module MarketDataUtilities
   module MoneyAsString
     module_function
 
+    def divide_by_thousand(value, times=1)
+      return 0 if value == 0 || value.nil?
+      value.to_f / (times * 1_000)
+    end
+
     def human_readable(number, precision=2, as: nil)
       f = number.try(:to_f)
       return 'NaN' if f.nil?
@@ -34,6 +39,11 @@ module MarketDataUtilities
           raise "Unknown money qualifier '#{qualifier}' for the money value #{money_value}"
       end
     end
-    
+
+    def multiply_by_thousand(value, times=1)
+      return 0 if value.nil?
+      value.to_f * 1_000 * times
+    end
+
   end
 end
