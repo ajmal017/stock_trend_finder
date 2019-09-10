@@ -39,7 +39,8 @@ with ticker_list as
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
     high > high_52_week and
-    close > 1 and 
+    close > 1 and
+    average_volume_50day > 0 and 
     t.scrape_data
 )
 select
@@ -104,6 +105,7 @@ with ticker_list as
     volume > 20 and
     low < low_52_week and
     close > 1 and 
+    average_volume_50day > 0 and 
     t.scrape_data
 )
 select
@@ -157,7 +159,8 @@ where
 t.scrape_data=true and
 abs((((close / previous_close) - 1) * 100)) > 2 and
 price_date = '#{most_recent_date.strftime('%Y-%m-%d')}' and
-(close * volume > 5000)
+(close * volume > 5000) and
+average_volume_50day > 0 
 order by volume_ratio desc
 limit 50
 SQL
@@ -192,6 +195,7 @@ volume > 10 and
 intraday_close is not null and
 average_volume_50day = 0 and
 price_date = '#{report_date.strftime('%Y-%m-%d')}' and
+average_volume_50day > 0 and 
 ((last_trade / intraday_close) - 1) * 100 > 1
 order by change_percent desc
 limit 50
@@ -260,6 +264,7 @@ inner join tickers t on d.ticker_symbol=t.symbol
 where
 t.scrape_data = true and
 close > 1 and
+average_volume_50day > 0 and 
 volume > 100 and
 (
   (low > previous_high and open / previous_high > 1.03) or (high < previous_low and open / previous_low < 0.97)  

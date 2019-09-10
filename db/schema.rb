@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190909022830) do
+ActiveRecord::Schema.define(version: 20190910163904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,8 @@ ActiveRecord::Schema.define(version: 20190909022830) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "market_cap_aggregations", ["price_date"], name: "index_mktcapagg_price_date", using: :btree
 
   create_table "memoized_fields", force: :cascade do |t|
     t.string   "ticker_symbol"
