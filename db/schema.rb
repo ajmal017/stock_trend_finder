@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190904014603) do
+ActiveRecord::Schema.define(version: 20190909022830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,15 @@ ActiveRecord::Schema.define(version: 20190904014603) do
     t.integer  "low_liquidity_days"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "market_cap_aggregations", force: :cascade do |t|
+    t.date     "price_date"
+    t.string   "bucket_type"
+    t.string   "bucket"
+    t.decimal  "market_cap"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "memoized_fields", force: :cascade do |t|

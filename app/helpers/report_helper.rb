@@ -131,7 +131,8 @@ module ReportHelper
 
     link_to(
       "#{line_item[:ticker_symbol]}",
-      "https://www.reuters.com/finance/stocks/companyProfile/#{line_item[:ticker_symbol]}",
+      # "https://www.reuters.com/finance/stocks/companyProfile/#{line_item[:ticker_symbol]}",
+      "https://www.reuters.com/companies/#{line_item[:ticker_symbol]}",
       target: '_blank'
     ) + outside_52_wk_marker + symbol_icon(line_item[:ticker_symbol])
   end
