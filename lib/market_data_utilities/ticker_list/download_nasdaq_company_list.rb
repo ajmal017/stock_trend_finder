@@ -7,11 +7,11 @@ module MarketDataUtilities
     class DownloadNasdaqCompanyList
       include Verbalize::Action
 
-      # From http://www.nasdaq.com/screening/company-list.aspx
+      # From http://old.nasdaq.com/screening/company-list.aspx
       FILE_URLS=[
-        ['nasdaq', 'http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download'],
-        ['nyse', 'http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download'],
-        ['amex', 'http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download'],
+        ['nasdaq', 'http://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download'],
+        ['nyse', 'http://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download'],
+        ['amex', 'http://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download'],
       ]
 
       def call
