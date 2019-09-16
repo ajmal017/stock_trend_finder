@@ -11,7 +11,6 @@ module MarketDataPull
           puts "Backpopulating #{symbol} for #{dates}"
           period_values = period_values_for_date
 
-          binding.pry
           price_history = client.get_price_history(
             symbol,
             frequency: 1,
@@ -23,7 +22,6 @@ module MarketDataPull
             puts "No candles returned for #{symbol}"
           end
 
-          binding.pry
           market_dates.each do |date|
             candle = price_history['candles'].find { |ph| ph['datetime']&.to_date == date }
             next if candle.nil?
