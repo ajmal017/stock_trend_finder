@@ -14,9 +14,9 @@ GIT
 
 GIT
   remote: https://github.com/wakproductions/tdameritrade-api-ruby.git
-  revision: 7053e8e69cc78339168bacf8d6e0b15c11c06dd1
+  revision: 64760b9d05cc9703481f8981872ce62d5fc61134
   specs:
-    tdameritrade-api-ruby (1.1.0)
+    tdameritrade-api-ruby (1.2.0.20190915)
       activesupport (~> 4.0)
       bundler (~> 1.5)
       hashie
@@ -100,7 +100,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
-    concurrent-ruby (1.1.3)
+    concurrent-ruby (1.1.5)
     crass (1.0.4)
     diff-lcs (1.3)
     domain_name (0.5.20180417)
@@ -138,7 +138,7 @@ GEM
       domain_name (~> 0.5)
     http-form_data (2.1.1)
     http_parser.rb (0.6.0)
-    httparty (0.16.3)
+    httparty (0.17.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
     httpx (0.3.0)
@@ -166,9 +166,9 @@ GEM
     memoizable (0.4.2)
       thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
-    mime-types (3.2.2)
+    mime-types (3.3)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2018.0812)
+    mime-types-data (3.2019.0904)
     mini_mime (1.0.1)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
@@ -176,7 +176,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     naught (1.1.0)
-    nokogiri (1.9.1)
+    nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     oauth (0.4.7)
     pg (0.18.1)
@@ -224,7 +224,7 @@ GEM
       activesupport (= 4.2.11)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (12.3.1)
+    rake (12.3.3)
     rdoc (4.3.0)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
