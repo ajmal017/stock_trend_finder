@@ -9,8 +9,9 @@ module MarketDataPull
 
         def call
           puts "Backpopulating #{symbol} for #{dates}"
-          period_values = period_values_for_date(start_date)
+          period_values = period_values_for_date
 
+          binding.pry
           price_history = client.get_price_history(
             symbol,
             frequency: 1,
@@ -22,6 +23,7 @@ module MarketDataPull
             puts "No candles returned for #{symbol}"
           end
 
+          binding.pry
           market_dates.each do |date|
             candle = price_history['candles'].find { |ph| ph['datetime']&.to_date == date }
             next if candle.nil?
@@ -56,7 +58,7 @@ module MarketDataPull
         end
 
         def end_date
-          market_dates.max
+          Date.current
         end
 
         def market_dates
@@ -66,25 +68,25 @@ module MarketDataPull
         # For some strange reason this returns bad request... can't query daily candles using start/end date:
         # client.get_price_history('MSFT', frequency_type: :daily, frequency: 1, start_date: Date.new(2019,9,11), end_date: Date.new(2019,9,13))
         # ... so I had to come up with this elaborate system
-        def period_values_for_date(date)
-          days_between = Date.current - start_date
-          if days_between > 10.years
+        def period_values_for_date
+          interval_between = Date.current.to_time - start_date.to_time
+          if interval_between > 10.years
             { period_type: :year, period: 20 }
-          elsif days_between > 5.years
+          elsif interval_between > 5.years
             { period_type: :year, period: 10 }
-          elsif days_between > 3.years
+          elsif interval_between > 3.years
             { period_type: :year, period: 5 }
-          elsif days_between > 2.years
+          elsif interval_between > 2.years
             { period_type: :year, period: 3 }
-          elsif days_between > 1.years
+          elsif interval_between > 1.years
             { period_type: :year, period: 2 }
-          elsif days_between > 6.months
+          elsif interval_between > 6.months
             { period_type: :year, period: 1 }
-          elsif days_between > 3.months
+          elsif interval_between > 3.months
             { period_type: :month, period: 6 }
-          elsif days_between > 2.months
+          elsif interval_between > 2.months
             { period_type: :month, period: 3 }
-          elsif days_between > 1.month
+          elsif interval_between > 1.month
             { period_type: :month, period: 2 }
           else
             { period_type: :month, period: 1 }
