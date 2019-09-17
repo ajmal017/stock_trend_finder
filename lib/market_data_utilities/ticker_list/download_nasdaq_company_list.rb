@@ -9,9 +9,9 @@ module MarketDataUtilities
 
       # From http://old.nasdaq.com/screening/company-list.aspx
       FILE_URLS=[
-        ['nasdaq', 'http://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download'],
-        ['nyse', 'http://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download'],
-        ['amex', 'http://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download'],
+        ['nasdaq', 'https://old.nasdaq.com/screening/companies-by-industry.aspx?letter=0&exchange=NASDAQ&render=download'],
+        ['nyse', 'https://old.nasdaq.com/screening/companies-by-industry.aspx?letter=0&exchange=NYSE&render=download'],
+        ['amex', 'https://old.nasdaq.com/screening/companies-by-industry.aspx?letter=0&exchange=AMEX&render=download'],
       ]
 
       def call
