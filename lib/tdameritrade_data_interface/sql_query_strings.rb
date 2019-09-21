@@ -288,6 +288,7 @@ with ticker_list as
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
+    high_52_week > 0
     high > high_52_week and
     close > 1 and 
     t.scrape_data
@@ -344,6 +345,7 @@ with ticker_list as
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
+    low_52_week > 0
     low < low_52_week and
     close > 1 and 
     t.scrape_data
