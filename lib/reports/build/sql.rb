@@ -38,6 +38,7 @@ with ticker_list as
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
+    high_52_week > 0 and
     high > high_52_week and
     close > 1 and
     average_volume_50day > 0 and 
@@ -103,6 +104,7 @@ with ticker_list as
   where 
     price_date='#{most_recent_date.strftime('%Y-%m-%d')}' and
     volume > 20 and
+    low_52_week > 0 and
     low < low_52_week and
     close > 1 and 
     average_volume_50day > 0 and 
