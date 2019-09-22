@@ -2,7 +2,7 @@ module LocalNoteTaker
   class Screenshot
     include Verbalize::Action
 
-    input optional: [:symbol]
+    input optional: [:symbol, :screen_count]
 
     def call
       `#{command_screencapture}`
@@ -15,7 +15,12 @@ module LocalNoteTaker
     private
 
     def command_screencapture
-      "screencapture #{screenshot_discard_file_path} #{screenshot_file_path}"
+      if @screen_count == 1
+        "screencapture #{screenshot_file_path}"
+      else
+        #assume 2 screens
+        "screencapture #{screenshot_discard_file_path} #{screenshot_file_path}"
+      end
     end
 
     def create_cropped

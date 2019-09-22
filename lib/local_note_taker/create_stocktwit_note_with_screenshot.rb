@@ -3,7 +3,7 @@ module LocalNoteTaker
     include ParseTags
     include Verbalize::Action
 
-    input :note, optional: [:stocktwit_time]
+    input :note, optional: [:stocktwit_time, :screen_count]
 
     def call
       raise "You forgot to add ticker symbol" if symbols.empty?
@@ -38,7 +38,8 @@ module LocalNoteTaker
     end
 
     def screenshot_file_paths
-      @screenshot_file_paths ||= Screenshot.call(symbol: symbols.first).value
+      sleep 4 if @screen_count == 1
+      @screenshot_file_paths ||= Screenshot.call(symbol: symbols.first, screen_count: @screen_count).value
     end
 
     def screenshot_file_url

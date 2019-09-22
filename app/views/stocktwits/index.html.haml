@@ -8,17 +8,11 @@
         =link_to(image_tag(asset_path('icon-cloud-download.png')), stocktwits_refresh_path)
     #user-dropdown
       .btn-group
-        %button.btn.btn-default.dropdown-toggle#user-dropdown-button{:type=> "button", "data-toggle"=>"dropdown", "aria-expanded"=>"false"}
-          =@user_id
+        %button.btn.btn-default.dropdown-toggle#screens-dropdown-button{:type=> "button", "data-toggle"=>"dropdown", "aria-expanded"=>"false"}
+          ="2 Screens"
         %ul.dropdown-menu{ role: "menu" }
-          %li= link_to "all", stocktwits_path
-          %li= link_to "greenspud", stocktwits_path(user_id: 'greenspud')
-          %li= link_to "traderstewie", stocktwits_path(user_id: 'traderstewie')
-          %li= link_to "TraderRL23", stocktwits_path(user_id: 'TraderRL23')
-          %li= link_to "stt2318", stocktwits_path(user_id: 'stt2318')
-          %li= link_to "chartingManDan", stocktwits_path(user_id: 'chartingManDan')
-          %li= link_to "Mastertrader_Consultant", stocktwits_path(user_id: 'Mastertrader_Consultant')
-          %li= link_to "starbreakouts", stocktwits_path(user_id: 'starbreakouts')
+          %li= link_to("1 Screen", "", id: "screens-one-toggle")
+          %li= link_to("2 Screens", "", id: "screens-two-toggle")
   #stocktwits-watch-indicator{ "data-symbol"=>"" }
     =link_to(image_tag(asset_path('icon-star-sm-yellow.png'), class: 'stocktwits-watch-indicator', style: "display: none;"), "#", id: 'toggle-watching')
   #stocktwits-filter-indicator{ "data-symbol"=>"" }
@@ -40,6 +34,7 @@
   .stocktwits-setup-navigation
     = render partial: 'setup_navigation'
 
+=render "toggle_single_screen_script"
 =render "load_twits_script"
 =render "edit_note_dialog_script"
 =render "add_twit_dialog_script"

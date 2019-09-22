@@ -40,7 +40,8 @@ class StocktwitsController < ApplicationController
     head :bad_request  if params[:message].nil?
     outcome, @twit = LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(
       note: params[:message],
-      stocktwit_time: params[:followup_id].present? ? Stocktwit.find(params[:followup_id]).stocktwit_time + 60 : Time.now
+      stocktwit_time: params[:followup_id].present? ? Stocktwit.find(params[:followup_id]).stocktwit_time + 60 : Time.now,
+      screen_count: screen_count || 2
     )
 
     if outcome == :ok
@@ -115,6 +116,10 @@ private
     ticker_raw = params[:symbol].to_s.strip
     aliases = TICKER_SYMBOL_ALIASES.select { |a| a.include?(ticker_raw) }.flatten
     @ticker_symbol = aliases.any? ? aliases : ticker_raw
+  end
+
+  def screen_count
+    params[:screen_count] =~ /1/ ? 1 : 2
   end
 
   def user_id

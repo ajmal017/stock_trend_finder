@@ -1,6 +1,7 @@
 :coffee
   add_twit = (followup_id=null) ->
     note_text = window.prompt('New Local Twit Text')
+    screen_count = $('#screens-dropdown-button').text().trim()
     if note_text
       $.ajax
         url: 'stocktwits/add_twit',
@@ -9,6 +10,7 @@
         data:
           followup_id: followup_id,
           message: note_text,
+          screen_count: screen_count
 
   $(document).on("click", 'button#add-twit-button', () ->
     add_twit()
