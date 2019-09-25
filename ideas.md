@@ -1,16 +1,16 @@
 ### TODOs
 
 * 52 week report
-  - Streak -> number of days on report within the last 100 trading days
-  - ~~Note IPO date, or days since IPO~~
+  - ~~Streak -> number of days on report within the last 100 trading days~~
+  - ~~Note IPO date, or days since IPO~~                                   
 
 * 52 week report in charts:
-  - Chart of number of companies reaching 52 wk high/low
+  - ~~Chart of number of companies reaching 52 wk high/low~~
   - Chart of number of scrapable stocks
   - Breakdown by sector
 
 * Tickers: 
-  - Page for each ticker with info about it
+  - ~~Page for each ticker with info about it~~
     - any data changes to cusip or title
 
 * Stocktwits:
@@ -18,12 +18,15 @@
   - Split into its own app
   - Conslidate hashtags
     - have hierarchial - supercategory groupings
-  - Gold nugget indicator
-  - Convert Twit note to text data type
+  - Gold nugget indicator for gold stocks/silver
+  - Capture note with delay for when doing one screen
   - ~~Edit the Twits~~
 
 * Dividend yield scanner
 * Scrape 13Fs from SEC website (EDGAR project)
+* 200DMA break - turning point (gets above the 200 and curvature shifts) - RDUS, NVDA
+* Highlight stocks of interest on the scans
+* Research engulfing candles
 
 * Options open interest
   - Chart of SPY open interest, next 5 or so weekly expirations and open interest at strikes

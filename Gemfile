@@ -27,6 +27,7 @@ gem 'evernote_oauth',       '~> 0.2.3'
 gem "stock_market_days",      git: 'https://github.com/wakproductions/stock_market_days.git'
 gem "stocktwits-api-ruby",    git: 'https://github.com/wakproductions/stocktwits-api-ruby.git'
 gem "tdameritrade-api-ruby",  git: 'https://github.com/wakproductions/tdameritrade-api-ruby.git'
+# gem "tdameritrade-api-ruby",  path: '~/Development/tdameritrade-api-ruby'
 gem "tdameritrade_api",       git: 'https://github.com/wakproductions/tdameritrade_api.git'
 gem 'twitter'
 gem 'ystock',               '~> 0.4.10' # deprecated - remove

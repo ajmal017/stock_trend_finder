@@ -8,7 +8,8 @@ module TDAmeritradeDataInterface
       puts "Real Time Quote Import: #{Time.now}"
       if is_market_day? Date.today
         ActiveRecord::Base.connection_pool.with_connection do
-          import_realtime_quotes
+          # import_realtime_quotes
+          MarketDataPull::TDAmeritrade::DailyQuotes::PullRealTimeQuotes.call
           puts "Copying from real time quotes cache to daily_stock_prices... #{Time.now}"
           copy_realtime_quotes_to_daily_stock_prices
         end

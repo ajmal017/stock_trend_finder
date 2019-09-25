@@ -3,8 +3,8 @@ module TDAmeritradeDataInterface
     extend self
 
     # Short cut for add Local Note Taker / Stocktwit note
-    def n(message)
-      LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(note: message)
+    def n(message, screen_count: 2)
+      LocalNoteTaker::CreateStocktwitNoteWithScreenshot.(note: message, screen_count: screen_count)
     end
 
     def split(ticker, as_of, shares_given, for_every)

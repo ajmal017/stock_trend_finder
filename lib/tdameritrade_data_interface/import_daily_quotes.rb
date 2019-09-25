@@ -56,7 +56,6 @@ module TDAmeritradeDataInterface
             # TODO Change this so that it handles an exception rather than checks for error condition
             error_count += 1
             puts "Error processing #{symbol} - (attempt ##{error_count}) #{prices.first[:error]}"
-            log = log + "Error processing #{symbol} - (attempt ##{error_count}) #{prices.first[:error]}\n"
           else
             error_count = -1
           end
@@ -247,69 +246,70 @@ module TDAmeritradeDataInterface
 
   end
 
-  def self.import_realtime_quotes(opts={})
-    cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
-
-    c = TDAmeritradeApi::Client.new
-    attempt = 0
-    while attempt < 2
-      begin
-        c.login
-        break
-      rescue Exception => e
-        puts "Error logging in for downloading real time quotes, attempt #{attempt}: #{e.message}"
-        attempt += 1
-      end
-    end
-
-    log = ""
-
-    RealTimeQuote.reset_cache
-
-    ticker_watch_list = Ticker.watching.pluck(:symbol, :id)
-    begin
-      list = ticker_watch_list.slice!(0,250)
-      quotes = nil
-      while quotes == nil
-        begin
-          quotes = c.get_quote(list.map { |x| x[0] })
-        rescue
-          puts "Error getting quotes - trying again"
-        end
-      end
-
-      # ticker_id_hash = Hash[list.collect { |i| i }]
-
-      begin
-        of = open(cache_file, "w")
-        of.write("ticker_symbol,last_trade,quote_time,open,high,low,volume\n")
-        quotes.each do |bar|
-          if bar[:last].present? && bar[:open].present? && bar[:high].present? && bar[:low].present?
-            of.write "#{bar[:symbol]},#{bar[:last]},#{bar[:last_trade_time].to_s},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:volume]}\n"
-          end
-        end
-        of.close
-      rescue
-        #puts "Error processing #{bar[:symbol]} - #{e.message}"
-        #log = log + "Error processing #{bar[:symbol]} - #{e.message}\n"
-        next
-      end
-
-      begin
-        ActiveRecord::Base.connection.execute(
-            "COPY real_time_quotes (ticker_symbol,last_trade,quote_time,open,high,low,volume)
-              FROM '#{cache_file}'
-              WITH (FORMAT 'csv', HEADER)"
-        )
-      rescue => e
-        puts "#{e.message}"
-        log = log + "#{e.message}\n"
-      end
-
-    end while list != []
-
-    puts log if log && log != ""
-  end
+  # replaced by MarketDataPull::TDAmeritrade::DailyQuotes::PullRealTimeQuotes.call
+  # def self.import_realtime_quotes(opts={})
+  #   cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
+  #
+  #   c = TDAmeritradeApi::Client.new
+  #   attempt = 0
+  #   while attempt < 2
+  #     begin
+  #       c.login
+  #       break
+  #     rescue Exception => e
+  #       puts "Error logging in for downloading real time quotes, attempt #{attempt}: #{e.message}"
+  #       attempt += 1
+  #     end
+  #   end
+  #
+  #   log = ""
+  #
+  #   RealTimeQuote.reset_cache
+  #
+  #   ticker_watch_list = Ticker.watching.pluck(:symbol, :id)
+  #   begin
+  #     list = ticker_watch_list.slice!(0,250)
+  #     quotes = nil
+  #     while quotes == nil
+  #       begin
+  #         quotes = c.get_quote(list.map { |x| x[0] })
+  #       rescue
+  #         puts "Error getting quotes - trying again"
+  #       end
+  #     end
+  #
+  #     # ticker_id_hash = Hash[list.collect { |i| i }]
+  #
+  #     begin
+  #       of = open(cache_file, "w")
+  #       of.write("ticker_symbol,last_trade,quote_time,open,high,low,volume\n")
+  #       quotes.each do |bar|
+  #         if bar[:last].present? && bar[:open].present? && bar[:high].present? && bar[:low].present?
+  #           of.write "#{bar[:symbol]},#{bar[:last]},#{bar[:last_trade_time].to_s},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:volume]}\n"
+  #         end
+  #       end
+  #       of.close
+  #     rescue
+  #       #puts "Error processing #{bar[:symbol]} - #{e.message}"
+  #       #log = log + "Error processing #{bar[:symbol]} - #{e.message}\n"
+  #       next
+  #     end
+  #
+  #     begin
+  #       ActiveRecord::Base.connection.execute(
+  #           "COPY real_time_quotes (ticker_symbol,last_trade,quote_time,open,high,low,volume)
+  #             FROM '#{cache_file}'
+  #             WITH (FORMAT 'csv', HEADER)"
+  #       )
+  #     rescue => e
+  #       puts "#{e.message}"
+  #       log = log + "#{e.message}\n"
+  #     end
+  #
+  #   end while list != []
+  #
+  #   puts log if log && log != ""
+  # end
 
   def self.prepopulate_daily_stock_prices(prepopulate_date)
     if is_market_day?(prepopulate_date)
