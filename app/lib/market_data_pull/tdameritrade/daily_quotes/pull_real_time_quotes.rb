@@ -18,12 +18,10 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
           of = open(CACHE_FILE, "w")
           of.write("ticker_symbol,last_trade,quote_time,open,high,low,volume\n")
 
-          binding.pry if $stop
           quotes.keys.each do |symbol|
             begin
               bar = quotes[symbol]
 
-              binding.pry if $stop
               if bar['mark'] > 0 && bar['openPrice'] > 0 && bar['highPrice'] > 0 && bar['lowPrice'] > 0
                 line =
                   "#{symbol}," \
@@ -44,8 +42,6 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
         ensure
           of.close
         end
-
-        binding.pry if $stop
 
         begin
           ActiveRecord::Base.connection.execute(
