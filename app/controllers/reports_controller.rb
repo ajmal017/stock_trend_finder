@@ -219,7 +219,6 @@ class ReportsController < ApplicationController
     render :report
   end
 
-
   def ticker_list
     line_items = Reports::Build::TickerList.call(report_date: report_date).value
 
@@ -231,6 +230,22 @@ class ReportsController < ApplicationController
     }
 
     render :ticker_list_report
+  end
+
+  def industry
+    line_items = Reports::Build::Industry.call(report_date: report_date).value
+
+    ### INCOMPLETE - NOT READY YET ###
+
+    #
+    # @report = {
+    #   title: 'Master Ticker List',
+    #   last_updated: Time.current.in_time_zone("US/Eastern").strftime('%Y-%m-%d %H:%M:%S'),
+    #   line_items: line_items,
+    #   item_count: line_items.size,
+    # }
+    #
+    render :industry_report
   end
 
   # def pctgainloss

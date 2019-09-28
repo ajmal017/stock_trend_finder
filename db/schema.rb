@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190910163904) do
+ActiveRecord::Schema.define(version: 20190928032242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,9 @@ ActiveRecord::Schema.define(version: 20190910163904) do
     t.decimal "float"
   end
 
+  add_index "fundamentals_histories", ["scrape_date", "ticker_symbol"], name: "index_fh_scrape_date_symbol", using: :btree
+  add_index "fundamentals_histories", ["ticker_symbol", "scrape_date"], name: "index_fh_symbol_scrape_date", using: :btree
+
   create_table "institutional_ownership_snapshots", force: :cascade do |t|
     t.string   "ticker_symbol"
     t.date     "scrape_date"
@@ -131,11 +134,15 @@ ActiveRecord::Schema.define(version: 20190910163904) do
     t.string   "bucket_type"
     t.string   "bucket"
     t.decimal  "market_cap"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.decimal  "change_pct_1_day",  precision: 5, scale: 2
+    t.decimal  "change_pct_10_day", precision: 5, scale: 2
+    t.decimal  "change_pct_30_day", precision: 5, scale: 2
+    t.decimal  "change_pct_90_day", precision: 5, scale: 2
   end
 
-  add_index "market_cap_aggregations", ["price_date"], name: "index_mktcapagg_price_date", using: :btree
+  add_index "market_cap_aggregations", ["price_date", "bucket", "bucket_type"], name: "index_mktcapagg_price_date", unique: true, using: :btree
 
   create_table "memoized_fields", force: :cascade do |t|
     t.string   "ticker_symbol"

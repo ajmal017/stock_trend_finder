@@ -235,10 +235,22 @@ module TDAmeritradeDataInterface
       # This is set to run the 2nd, 13th, 17th,28th of every month
       scheduler.cron('0 19 2,13,17,28 * *') do
         puts "#{Time.now} - Beginning download of short interest..."
-        t = Time.now
         MarketDataUtilities::ShortInterest::Update.call
       end
       puts "#{Time.now} Beginning short interest daemon..."
+
+      scheduler
+    end
+
+    def run_market_cap_aggregations_daemon
+      scheduler = Rufus::Scheduler.new
+      # This is set to run the 2nd, 13th, 17th,28th of every month
+      scheduler.cron('30 18 * * MON-FRI') do
+        return unless is_market_day?
+        puts "#{Time.now} - Beginning market cap aggregations calculation..."
+        MarketDataUtilities::MarketCapAggregation::BuildForDate.call(date: Date.current)
+      end
+      puts "#{Time.now} Beginning market cap aggregations daemon..."
 
       scheduler
     end
