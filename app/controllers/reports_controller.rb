@@ -171,7 +171,7 @@ class ReportsController < ApplicationController
 
     line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: report_date).value
     filtered_line_items = filter(line_items)
-    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: filtered_line_items, sort_field: sort_field, sort_direction: :desc).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: filtered_line_items, sort_field: sort_field).value
 
     @report = {
       title: '52 Week High List',
@@ -206,7 +206,7 @@ class ReportsController < ApplicationController
 
     line_items = Reports::Build::FiftyTwoWeekLow.call(report_date: report_date).value
     filtered_line_items = filter(line_items)
-    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: filtered_line_items, sort_field: sort_field, sort_direction: :desc).value
+    sorted_line_items = Reports::Presenters::LineItemSort.(line_items: filtered_line_items, sort_field: sort_field).value
 
     @report = {
       title: '52 Week Low List',

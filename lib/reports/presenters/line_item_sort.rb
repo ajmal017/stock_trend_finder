@@ -17,13 +17,17 @@ module Reports
 
       private
 
+      def default_sort_direction
+        sort_field==:week_52_streak ? :asc : :desc
+      end
+
       # formatted value
       def fv(value)
         is_number? ? value&.to_f : value
       end
 
       def sort_direction
-        @sort_direction || :asc
+        @sort_direction || default_sort_direction
       end
 
       def is_number?
