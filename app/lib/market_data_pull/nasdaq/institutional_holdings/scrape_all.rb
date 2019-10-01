@@ -3,17 +3,18 @@ module MarketDataPull; module Nasdaq; module InstitutionalHoldings
     include Verbalize::Action
 
     def call
-      errors = 0
+      consecutive_errors = 0
       symbols.each_with_index do |symbol, i|
         puts "Pulling institutional holdings snapshot for #{symbol} (#{i + 1} of #{symbols.size})"
         SaveOwnershipSnapshotForSymbol.call(symbol: symbol)
-        sleep(Random.rand(1..8))
+        consecutive_errors = 0
+        sleep(Random.rand(1..6))
       rescue StandardError
-        if errors > 10
+        if consecutive_errors > 10
           puts "Something is wrong scraping. Aborting"
           return
         else
-          errors += 1
+          consecutive_errors += 1
           next
         end
       end
