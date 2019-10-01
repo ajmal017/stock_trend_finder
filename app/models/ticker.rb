@@ -11,6 +11,7 @@ class Ticker < ActiveRecord::Base
 
   has_many :daily_stock_prices, foreign_key: 'ticker_symbol', primary_key: 'symbol'
   has_many :dividends
+  has_many :institutional_ownership_snapshots, foreign_key: 'ticker_symbol', primary_key: 'symbol'
   has_many :minute_stock_prices
   has_many :real_time_quotes
   has_many :stock_splits

@@ -203,16 +203,11 @@ module TDAmeritradeDataInterface
 
     def run_institutional_ownership_daemon
       scheduler = Rufus::Scheduler.new
-      # See http://stackoverflow.com/questions/11683387/run-every-2nd-and-4th-saturday-of-the-month for explanation
-      # of the Cron line
-      # This is set to run the fourth Friday of the month at 7pm
-      scheduler.cron('0 19 22-28 * *') do
+      scheduler.cron('0 19 27 * *') do
         puts "#{Time.now} - Beginning download of institutional ownership..."
-        if Date.today.wday == 5
           t = Time.now
-          MarketDataUtilities::Nasdaq::InstitutionalHoldings::ScrapeAll.call
+          MarketDataPull::Nasdaq::InstitutionalHoldings::ScrapeAll.call
           puts "Done (began at #{t}, now #{Time.now})"
-        end
       end
       puts "#{Time.now} Beginning institutional ownership daemon..."
 

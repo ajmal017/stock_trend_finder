@@ -19,8 +19,12 @@
   - Conslidate hashtags
     - have hierarchial - supercategory groupings
   - Gold nugget indicator for gold stocks/silver
-  - Capture note with delay for when doing one screen
+  - ~~Capture note with delay for when doing one screen~~
   - ~~Edit the Twits~~
+
+  - Fix Institutional Ownership
+  - Refactor cron jobs
+
 
 * Dividend yield scanner
 * Scrape 13Fs from SEC website (EDGAR project)
