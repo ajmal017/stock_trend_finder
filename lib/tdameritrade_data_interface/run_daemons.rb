@@ -44,7 +44,7 @@ module TDAmeritradeDataInterface
         puts "Daily Quote Import: #{Time.now}"
         if is_market_day? Date.today
           ActiveRecord::Base.connection_pool.with_connection do
-            update_daily_stock_prices_from_real_time_snapshot
+            MarketDataPull::TDAmeritrade::DailyQuotes::FinalizeDailyQuotesFromRealtimeSnapshot.call
           end
         else
           puts "Market closed today, no real time quote download necessary"

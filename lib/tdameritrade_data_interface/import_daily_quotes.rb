@@ -130,187 +130,7 @@ module TDAmeritradeDataInterface
     puts "Summary report of problem tickers: #{log_problem_tickers}"
 
   end
-
-  def self.update_daily_stock_prices_from_real_time_snapshot(opts={})
-    log_file = File.join(Rails.root, 'downloads', 'import_quotes.log')
-
-    c = TDAmeritradeApi::Client.new
-    c.login
-    log = ""
-
-    puts "Preparing to update DailyStockPrices - assessing records to be updated"
-    records_to_update = DailyStockPrice.where.not(snapshot_time: nil).order(:ticker_symbol, :price_date)
-    #records_to_update = DailyStockPrice.where(symbol: 'IDIX', price_date: Date.today).order(:ticker_symbol, :price_date)
-    count = records_to_update.count
-
-    price_dates_to_update = records_to_update.map {|dsp| dsp[:price_date] }.uniq
-
-    i = 1
-    price_dates_to_update.each do |price_date|
-      puts "Updating records from #{price_date}"
-
-      total_count = records_to_update.count
-      counter = 1
-      records_to_update.select { |dsp| dsp[:price_date]==price_date }.map { |dsp| dsp[:ticker_symbol] }.each_slice(100) do |tickers|
-        begin
-          quote_bunch=[]
-          2.times.each do |error_count|
-            begin
-              quote_bunch = c.get_price_history(tickers, intervaltype: :daily, intervalduration: 1, startdate: price_date, enddate: price_date)
-              break
-            rescue Exception => e
-              #TODO figure out what causes it - why we trying to get records that dont exist
-              puts "Error processing - #{e.message} - attempt (#{error_count + 1})"
-              log = log + "Error processing - #{e.message} - attempt (#{error_count + 1})\n"
-              sleep Random.rand(15)
-            end
-          end
-
-          next if quote_bunch.empty?
-          quote_bunch.each do |quotes|
-            next if quotes[:symbol].nil? || quotes[:bars].nil? || quotes[:bars].length < 1
-            ticker_symbol = quotes[:symbol].to_s
-            prices = quotes[:bars]
-
-            p = prices.first
-            puts "Processing #{counter} of #{total_count}: #{p[:symbol]}"; counter += 1
-
-
-            if p[:timestamp].to_date != price_date
-              puts "Error: price date does not match"
-              log = log + "Error processing #{p[:symbol]}: incorrect price date #{p[:timestamp]} vs #{price_date} in the record"
-              next
-            end
-            new_attributes = {
-                open: p[:open],
-                high: p[:high],
-                low: p[:low],
-                close: p[:close].to_f.round(2),
-                volume: p[:volume]/10,
-                previous_close: nil,
-                previous_high: nil,
-                previous_low: nil,
-                average_volume_50day: nil,
-                snapshot_time: nil
-            }
-
-            dsp = DailyStockPrice.where(ticker_symbol: ticker_symbol, price_date: price_date).first
-            if dsp.present?
-              dsp.update_attributes(new_attributes)
-            end
-            i += 1
-          end
-
-        end
-      end
-
-    end
-
-
-    puts log
-
-    puts "Updating Previous Close Cache - #{Time.now}"
-    populate_previous_close
-
-    puts "Calculating Average Daily Volumes - #{Time.now}"
-    populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
-
-    puts "Updating Previous High Cache - #{Time.now}"
-    populate_previous_high
-
-    puts "Updating Previous Low Cache - #{Time.now}"
-    populate_previous_low
-
-    puts "Updating 52 Week High Cache - #{Time.now}"
-    populate_high_52_weeks
-
-    puts "Updating 52 Week Low Cache - #{Time.now}"
-    populate_low_52_weeks
-
-    puts "Calculating SMA50's - #{Time.now}"
-    populate_sma50
-
-    puts "Calculating SMA200's - #{Time.now}"
-    populate_sma200
-
-    of = open(log_file, "w")
-    of.write(log)
-    of.close
-
-    log_problem_tickers=""
-    log.lines.each do |line|
-      log_problem_tickers+="#{/Error processing (.*?) -/.match(line)[1]}," if /\b#{/Error processing (.*?) -/.match(line)[1]}\b/.match(log_problem_tickers).nil?
-    end
-    log_problem_tickers.slice!(log_problem_tickers.length-1) if log_problem_tickers.last==","
-    puts "Summary report of problem tickers: #{log_problem_tickers}"
-
-  end
-
-  # replaced by MarketDataPull::TDAmeritrade::DailyQuotes::PullRealTimeQuotes.call
-  # def self.import_realtime_quotes(opts={})
-  #   cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
-  #
-  #   c = TDAmeritradeApi::Client.new
-  #   attempt = 0
-  #   while attempt < 2
-  #     begin
-  #       c.login
-  #       break
-  #     rescue Exception => e
-  #       puts "Error logging in for downloading real time quotes, attempt #{attempt}: #{e.message}"
-  #       attempt += 1
-  #     end
-  #   end
-  #
-  #   log = ""
-  #
-  #   RealTimeQuote.reset_cache
-  #
-  #   ticker_watch_list = Ticker.watching.pluck(:symbol, :id)
-  #   begin
-  #     list = ticker_watch_list.slice!(0,250)
-  #     quotes = nil
-  #     while quotes == nil
-  #       begin
-  #         quotes = c.get_quote(list.map { |x| x[0] })
-  #       rescue
-  #         puts "Error getting quotes - trying again"
-  #       end
-  #     end
-  #
-  #     # ticker_id_hash = Hash[list.collect { |i| i }]
-  #
-  #     begin
-  #       of = open(cache_file, "w")
-  #       of.write("ticker_symbol,last_trade,quote_time,open,high,low,volume\n")
-  #       quotes.each do |bar|
-  #         if bar[:last].present? && bar[:open].present? && bar[:high].present? && bar[:low].present?
-  #           of.write "#{bar[:symbol]},#{bar[:last]},#{bar[:last_trade_time].to_s},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:volume]}\n"
-  #         end
-  #       end
-  #       of.close
-  #     rescue
-  #       #puts "Error processing #{bar[:symbol]} - #{e.message}"
-  #       #log = log + "Error processing #{bar[:symbol]} - #{e.message}\n"
-  #       next
-  #     end
-  #
-  #     begin
-  #       ActiveRecord::Base.connection.execute(
-  #           "COPY real_time_quotes (ticker_symbol,last_trade,quote_time,open,high,low,volume)
-  #             FROM '#{cache_file}'
-  #             WITH (FORMAT 'csv', HEADER)"
-  #       )
-  #     rescue => e
-  #       puts "#{e.message}"
-  #       log = log + "#{e.message}\n"
-  #     end
-  #
-  #   end while list != []
-  #
-  #   puts log if log && log != ""
-  # end
-
+  
   def self.prepopulate_daily_stock_prices(prepopulate_date)
     if is_market_day?(prepopulate_date)
       puts "Prepopulating Daily Stock Prices for #{prepopulate_date} - #{Time.now}"
@@ -537,6 +357,7 @@ module TDAmeritradeDataInterface
     ActiveRecord::Base.connection.execute update_reset_snapshot_flags
   end
 
+  # WARNING THIS FUNCTION IS BROKEN - NEEDS TO BE UPDATED TO USE NEW API CALLS
   def self.catch_up(date, vacuum=true)
     unless date.is_a? Date
       puts "Enter an input date"
@@ -546,9 +367,9 @@ module TDAmeritradeDataInterface
     prepopulate_daily_stock_prices(date)
     DailyStockPrice.where(price_date: date).update_all(snapshot_time: date)
 
-    update_daily_stock_prices_from_real_time_snapshot
-    import_premarket_quotes(date: date)
-    import_afterhours_quotes(date: date)
+    # update_daily_stock_prices_from_real_time_snapshot
+    # import_premarket_quotes(date: date)
+    # import_afterhours_quotes(date: date)
 
     if vacuum
       ActiveRecord::Base.connection.execute "VACUUM FULL"

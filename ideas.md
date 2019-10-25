@@ -24,13 +24,18 @@
 
   - Fix Institutional Ownership
   - Refactor cron jobs
+  - Have stocktwits notes appear in a discord
 
 
+* yields report
 * Dividend yield scanner
 * Scrape 13Fs from SEC website (EDGAR project)
 * 200DMA break - turning point (gets above the 200 and curvature shifts) - RDUS, NVDA
 * Highlight stocks of interest on the scans
 * Research engulfing candles
+* favorite items on each report
+* track days that I've looked at or missed
+* add market cap to other reports
 
 * Options open interest
   - Chart of SPY open interest, next 5 or so weekly expirations and open interest at strikes
