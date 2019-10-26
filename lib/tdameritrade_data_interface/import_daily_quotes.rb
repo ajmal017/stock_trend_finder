@@ -130,7 +130,7 @@ module TDAmeritradeDataInterface
     puts "Summary report of problem tickers: #{log_problem_tickers}"
 
   end
-  
+
   def self.prepopulate_daily_stock_prices(prepopulate_date)
     if is_market_day?(prepopulate_date)
       puts "Prepopulating Daily Stock Prices for #{prepopulate_date} - #{Time.now}"

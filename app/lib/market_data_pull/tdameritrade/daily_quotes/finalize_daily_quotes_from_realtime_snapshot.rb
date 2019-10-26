@@ -23,7 +23,7 @@ module MarketDataPull
             DailyStockPrice.where(ticker_symbol: ticker).update_all(snapshot_time: nil)
 
             attempts = 0
-          rescue ::TDAmeritrade::Error::RateLimitError => e
+          rescue ::TDAmeritrade::Error::RateLimitError, Net::Timeout => e
             puts "Rate limit error"
             sleep 31
             attempts = attempts + 1
