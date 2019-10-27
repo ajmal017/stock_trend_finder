@@ -27,8 +27,8 @@ module TDAmeritradeDataInterface
 
     def run_realtime_quotes_daemon
       schedulers = [
-        '0,12,24,36,48 10-15 * * MON-FRI',
-        '34,48 9 * * MON-FRI',
+        '12,24,36,48,59 10-15 * * MON-FRI',
+        '34,48,59 9 * * MON-FRI',
       ].map do |scheduled_time|
         scheduler = Rufus::Scheduler.new
         scheduler.cron(scheduled_time) { realtime_quote_daemon_block }
@@ -38,10 +38,10 @@ module TDAmeritradeDataInterface
       schedulers
     end
 
-    def run_daily_quotes_daemon
+    def run_finalize_realtime_snapshot_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('10 16 * * MON-FRI') do
-        puts "Daily Quote Import: #{Time.now}"
+      scheduler.cron('10 17 * * FRI') do
+        puts "Finalizing real time quotes: #{Time.now}"
         if is_market_day? Date.today
           ActiveRecord::Base.connection_pool.with_connection do
             MarketDataPull::TDAmeritrade::DailyQuotes::FinalizeDailyQuotesFromRealtimeSnapshot.call
@@ -134,18 +134,6 @@ module TDAmeritradeDataInterface
         end
       end
       puts "#{Time.now} Beginning afterhours quotes update daemon..."
-      scheduler
-    end
-
-    def run_stocktwits_sync_daemon
-      scheduler = Rufus::Scheduler.new
-      scheduler.cron('0 0,7,16 * * *') do
-        puts "StockTwits data sync: #{Time.now}"
-        ActiveRecord::Base.connection_pool.with_connection do
-          Stocktwit.sync_twits
-        end
-      end
-      puts "#{Time.now} Beginning StockTwits sync daemon..."
       scheduler
     end
 

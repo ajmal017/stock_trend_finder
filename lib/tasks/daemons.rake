@@ -3,7 +3,7 @@ namespace :stock_trend_finder do
   desc "Runs the daily market scanning background programs"
   task :run_daemons => :environment do
     $stf.run_realtime_quotes_daemon
-    $stf.run_daily_quotes_daemon
+    $stf.run_finalize_realtime_snapshot_daemon
     $stf.run_premarket_quotes_daemon
     $stf.run_premarket_memoization_daemon
     $stf.run_afterhours_quotes_daemon
