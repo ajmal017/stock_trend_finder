@@ -8,7 +8,8 @@ module MarketDataPull; module TDAmeritrade
         next if FundamentalsHistory.find_by(ticker_symbol: ticker.symbol, scrape_date: Date.current).present?
         puts "Updating fundamentals for: #{ticker.symbol} (#{i} of #{total_count})"
 
-        tdaf = with_rate_limit_safeguard { client.get_instrument_fundamentals(ticker.symbol) }
+        tdaf = {}
+        with_rate_limit_safeguard { tdaf = client.get_instrument_fundamentals(ticker.symbol) }
         if tdaf.empty?
           puts "No data returned for #{ticker.symbol}"
           next
