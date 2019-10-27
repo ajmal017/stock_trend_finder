@@ -26,8 +26,10 @@ class TDAmeritradeToken < ActiveRecord::Base
     end
 
     def set_refresh_token(new_token)
-      self.delete_all
-      self.create!(refresh_token: new_token)
+      ActiveRecord::Base.transaction do
+        self.delete_all
+        self.create!(refresh_token: new_token)
+      end
     end
 
   end
