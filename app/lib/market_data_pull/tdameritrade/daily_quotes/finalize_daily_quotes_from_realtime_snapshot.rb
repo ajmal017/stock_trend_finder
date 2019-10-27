@@ -13,17 +13,14 @@ module MarketDataPull
           tickers_to_update.each do |ticker|
             puts "Updating records for #{ticker}"
 
-            dates_to_update = records_to_update.select { |dsp| dsp.ticker_symbol==ticker }.map { |dsp| dsp.price_date }
-
-            BackpopulateDailyStockPricesForSymbol.call(
-              symbol: ticker,
-              dates: dates_to_update
-            )
-
-            DailyStockPrice.where(ticker_symbol: ticker).update_all(snapshot_time: nil)
+            dates_to_update = records_to_update
+              .select { |dsp| dsp.ticker_symbol==ticker }
+              .map { |dsp| dsp.price_date }
+              .reject { |price_date| price_date == Date.current }
+            backpopulate_dates_for_symbol(ticker, dates_to_update) if dates_to_update.present?
 
             attempts = 0
-          rescue ::TDAmeritrade::Error::RateLimitError, Net::Timeout => e
+          rescue ::TDAmeritrade::Error::RateLimitError, Timeout::Error => e
             puts "Rate limit error"
             sleep 31
             attempts = attempts + 1
@@ -37,6 +34,18 @@ module MarketDataPull
           puts "Done with FinalizeDailyQuotesFromRealtimeSnapshot"
         end
 
+      end
+
+      private
+
+      # This uses the historical prices API call to retrieve quotes further back than today
+      def backpopulate_dates_for_symbol(symbol, dates)
+        BackpopulateDailyStockPricesForSymbol.call(
+          symbol: ticker,
+          dates: dates_to_update
+        )
+
+        DailyStockPrice.where(ticker_symbol: ticker).update_all(snapshot_time: nil)
       end
     end
   end
