@@ -28,7 +28,7 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
     # This uses the historical prices API call to retrieve quotes further back than today
     def backpopulate_dates_for_symbol(symbol, dates)
       BackpopulateDailyStockPricesForSymbol.call(symbol: symbol, dates: dates)
-      DailyStockPrice.where(ticker_symbol: ticker).update_all(snapshot_time: nil)
+      DailyStockPrice.where(ticker_symbol: symbol).update_all(snapshot_time: nil)
     end
 
     def records_to_update
