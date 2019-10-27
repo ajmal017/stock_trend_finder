@@ -6,8 +6,8 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
       puts "Preparing to finalize DailyStockPrices after real time snapshots - assessing records to be updated"
       tickers_to_update = records_to_update.map { |dsp| dsp[:ticker_symbol] }.uniq
 
-      tickers_to_update.each do |ticker|
-        puts "Updating records for #{ticker}"
+      tickers_to_update.each_with_index do |ticker, i|
+        puts "Updating records for #{ticker} (#{i+1} of #{tickers_to_update.size})"
 
         with_rate_limit_safeguard do
           dates_to_update = records_to_update
