@@ -29,7 +29,8 @@ module MarketDataPull
 
       def with_rate_limit_safeguard(&block)
         block.call
-      rescue ::TDAmeritrade::Error::RateLimitError => e
+        reset_attemps
+      rescue ::TDAmeritrade::Error::RateLimitError, Timeout::Error => e
         handle_rate_limit_error && retry
       end
 
