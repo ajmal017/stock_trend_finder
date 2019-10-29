@@ -11,7 +11,7 @@ gem 'dotenv-rails',   '~> 2.2', groups: [:development, :test] # Needs to be here
 gem 'autoprefixer-rails', '~> 2.1'
 gem 'bootstrap-sass',     '~> 3.2'
 gem 'coffee-rails',       '~> 4.0.0'
-gem 'haml',               '~> 4.0'
+gem 'haml',               '~> 5.0'
 gem 'jquery-rails'
 gem 'jquery-turbolinks',  '~> 2.1'
 gem 'jquery-ui-rails',    '~> 5.0'
