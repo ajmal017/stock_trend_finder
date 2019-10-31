@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191001211633) do
+ActiveRecord::Schema.define(version: 20191027035300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -234,6 +234,16 @@ ActiveRecord::Schema.define(version: 20191001211633) do
   end
 
   add_index "real_time_quotes", ["ticker_symbol"], name: "index_real_time_quotes_ticker_symbol", using: :btree
+
+  create_table "report_reviews", force: :cascade do |t|
+    t.date     "report_date"
+    t.string   "report_type"
+    t.date     "reviewed_date"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "report_reviews", ["report_date", "report_type"], name: "report_reviews_unique", unique: true, using: :btree
 
   create_table "report_snapshot_line_items", force: :cascade do |t|
     t.integer  "report_snapshot_id"

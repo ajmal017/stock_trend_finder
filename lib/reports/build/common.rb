@@ -36,6 +36,7 @@ module Reports
       def run_query(qry)
         ActiveRecord::Base.connection.execute(qry)
       end
+
     end
   end
 end

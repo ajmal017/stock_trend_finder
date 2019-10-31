@@ -179,6 +179,8 @@ class ReportsController < ApplicationController
       item_count: sorted_line_items.size,
       sections: Reports::Build::Sections::FiftyTwoWeekHigh.(report: sorted_line_items).value,
       route: :week52_highs,
+      report_date: report_date,
+      reviewed_date: ReportReview.report_reviewed_date(:week52_highs, report_date)
     }
 
     render :report
@@ -248,10 +250,9 @@ class ReportsController < ApplicationController
     render :industry_report
   end
 
-  # def pctgainloss
-  #   @report_winners = run_query(TDAmeritradeDataInterface.select_10pct_gainers(@report_date))
-  #   @report_losers = run_query(TDAmeritradeDataInterface.select_10pct_losers(@report_date))
-  # end
+  def mark_reviewed
+    ReportReview.log_review(params[:report_type], params[:report_date])
+  end
 
 private
 
@@ -266,7 +267,12 @@ private
 
   def report_date
     begin
-      @report_date ||= Date.strptime(params[:report_date], '%m/%d/%Y')
+      @report_date ||=
+        if params[:report_date] =~ /\d{2}\/\d{2}\/\d{4}/
+          Date.strptime(params[:report_date], '%m/%d/%Y')
+        else
+          Date.strptime(params[:report_date], '%Y%m%d')
+        end
     rescue
       @report_date ||= DailyStockPrice.most_recent_date
     end

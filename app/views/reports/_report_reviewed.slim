@@ -1,0 +1,5 @@
+#review-notifier
+  - if report_reviewed_date.present?
+    = "✅ Reviewed #{report_reviewed_date.strftime('%m/%d/%y')}"
+  - else
+    =link_to("Mark Reviewed", reports_mark_reviewed_path(report_type: report_type, report_date: report_date.strftime("%Y%m%d")), class: 'button btn btn-default', remote: true, method: :patch)

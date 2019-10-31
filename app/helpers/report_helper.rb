@@ -16,9 +16,9 @@ module ReportHelper
     :short_percent_of_float
   ]
 
-  def report_date_form(page)
+  def report_date_form(page, current_report_date)
     s = form_tag "/reports/#{page}", method: :get, authenticity_token: false do
-      b = text_field_tag :report_date, @report_date.strftime('%m/%d/%Y')
+      b = text_field_tag :report_date, current_report_date.strftime('%m/%d/%Y')
       b << submit_tag("Go")
       b
     end
@@ -131,8 +131,7 @@ module ReportHelper
 
     link_to(
       "#{line_item[:ticker_symbol]}",
-      # "https://www.reuters.com/finance/stocks/companyProfile/#{line_item[:ticker_symbol]}",
-      "https://www.reuters.com/companies/#{line_item[:ticker_symbol]}",
+      "https://old.nasdaq.com/symbol/#{line_item[:ticker_symbol].downcase}",
       target: '_blank'
     ) + outside_52_wk_marker + symbol_icon(line_item[:ticker_symbol])
   end

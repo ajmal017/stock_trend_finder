@@ -28,6 +28,7 @@ StockTrendFinder::Application.routes.draw do
     get 'week52_lows'
     get 'ticker_list'
     get 'ipo_list'
+    patch 'mark_reviewed'
   end
   patch 'reports/hide/:symbol(.:format)', to: 'reports#hide_symbol', as: 'reports_hide_symbol'
   patch 'reports/unscrape/:symbol(.:format)', to: 'reports#unscrape_symbol', as: 'reports_unscrape_symbol'

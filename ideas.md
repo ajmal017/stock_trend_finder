@@ -1,5 +1,17 @@
 ### TODOs
 
+* Short term goals
+  - Daily report review checkoff report (don't leave any stones unturned)
+  - Consolidated summary report (actions lead to partial checkoff report)
+  - Reports and unreviewed items
+  - Log trades and pair to opening trades
+  - Favorite items on report for each day, see recent favorites report
+  - Detect nosedive setup, 200DMA pullback, 200DMA breakout
+  - Discord integration
+    * Precursor is cropping of charts option  
+
+
+
 * 52 week report
   - ~~Streak -> number of days on report within the last 100 trading days~~
   - ~~Note IPO date, or days since IPO~~                                   
@@ -11,7 +23,7 @@
 
 * Tickers: 
   - ~~Page for each ticker with info about it~~
-    - any data changes to cusip or title
+    - ~~any data changes to cusip or title~~
 
 * Stocktwits:
   - Timer tickers - reminder to look at a stock after a certain amount of time
@@ -22,7 +34,7 @@
   - ~~Capture note with delay for when doing one screen~~
   - ~~Edit the Twits~~
 
-  - Fix Institutional Ownership
+  - ~~Fix Institutional Ownership~~
   - Refactor cron jobs
   - Have stocktwits notes appear in a discord
 
