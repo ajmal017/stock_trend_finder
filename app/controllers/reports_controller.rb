@@ -172,6 +172,7 @@ class ReportsController < ApplicationController
     line_items = Reports::Build::FiftyTwoWeekHigh.call(report_date: report_date).value
     filtered_line_items = filter(line_items)
     sorted_line_items = Reports::Presenters::LineItemSort.(line_items: filtered_line_items, sort_field: sort_field).value
+    binding.pry
 
     @report = {
       title: '52 Week High List',
@@ -180,7 +181,8 @@ class ReportsController < ApplicationController
       sections: Reports::Build::Sections::FiftyTwoWeekHigh.(report: sorted_line_items).value,
       route: :week52_highs,
       report_date: report_date,
-      reviewed_date: ReportReview.report_reviewed_date(:week52_highs, report_date)
+      reviewed_date: ReportReview.report_reviewed_date(:week52_highs, report_date),
+      unfiltered_item_count: line_items.size
     }
 
     render :report
@@ -216,6 +218,7 @@ class ReportsController < ApplicationController
       item_count: sorted_line_items.size,
       sections: Reports::Build::Sections::FiftyTwoWeekLow.(report: sorted_line_items).value,
       route: :week52_lows,
+      unfiltered_item_count: line_items.size
     }
 
     render :report
@@ -254,15 +257,27 @@ class ReportsController < ApplicationController
     ReportReview.log_review(params[:report_type], params[:report_date])
   end
 
+  def reviewed_reports
+    @report = { lines: ReportReview.list_by_date(report_date) }
+  end
+
 private
 
   # I know biz logic shouldn't be in the controller but this is experimental. Will move to interactor later.
   def filter(items)
-    return items unless params[:price] || params[:mclt] || params[:mcgt]
+    return items unless params[:price] || params[:mclt] || params[:mcgt] || params[:default_filter]
+
+    if params[:default_filter]
+      @sort_field = :week_52_streak
+      return items
+        .reject { |li| (li[:market_cap] || 0) < 700_000 } # market cap is in thousands
+        # .reject { |li| (li[:week_52_streak] || 6).to_f > 5 }
+    end
+
     items
       .reject { |li| params[:price] && (li[:last_trade] < params[:price].to_f) }
-      .reject { |li| params[:mclt] && (li[:market_cap].nil? || (li[:market_cap] < (params[:mclt].to_f * 1_000_000_000))) }
-      .reject { |li| params[:mcgt] && (li[:market_cap].nil? || (li[:market_cap] > (params[:mcgt].to_f * 1_000_000_000))) }
+      .reject { |li| params[:mclt] && (li[:market_cap].nil? || (li[:market_cap] < (params[:mclt].to_f * 700_000_000))) }
+      .reject { |li| params[:mcgt] && (li[:market_cap].nil? || (li[:market_cap] > (params[:mcgt].to_f * 700_000_000))) }
   end
 
   def report_date
@@ -291,6 +306,6 @@ private
   end
 
   def sort_field
-    params[:sort_field].try(:to_sym) || :volume_ratio
+    @sort_field ||= params[:sort_field].try(:to_sym) || :volume_ratio
   end
 end

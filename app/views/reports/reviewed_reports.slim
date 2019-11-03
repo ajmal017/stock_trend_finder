@@ -1,0 +1,19 @@
+h1 Reviewed Reports
+
+- if flash[:notice]
+  .alert.alert-info.alert-dismissible.fixed-alert
+    = flash[:notice]
+
+table.table.table-bordered( style="width: 500px;" )
+  thead
+    th Date
+    th 52 High
+    th 52 Low
+    th Active
+  - @report[:lines].each do |line|
+    tr
+      td= line[:date].strftime('%Y-%m-%d')
+      td= line[:week52_highs].is_a?(Date) ? "✅ " + line[:week52_highs].strftime('%Y-%m-%d') : link_to_report(:week52_highs, line[:date])
+      td= line[:week52_lows].is_a?(Date) ? "✅ " + line[:week52_lows].strftime('%Y-%m-%d') : link_to_report(:week52_lows, line[:date])
+      td= line[:active_stocks].is_a?(Date) ? "✅ " + line[:active_stocks].strftime('%Y-%m-%d') : link_to_report(:active_stocks, line[:date])
+

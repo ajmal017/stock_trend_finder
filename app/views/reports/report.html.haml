@@ -6,7 +6,10 @@
 
 -if @report.count > 0
   %div Last Updated: #{@report[:last_updated]}
-  %div Items: #{@report[:item_count]}
+  - if @report[:unfiltered_item_count]
+    %div Items: #{@report[:item_count]} (#{@report[:unfiltered_item_count]} unfiltered)
+  - else
+    %div Items: #{@report[:item_count]}
 
 .row{ style: "padding-left: 10px;" }
   .col-md-3

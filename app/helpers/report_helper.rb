@@ -16,6 +16,11 @@ module ReportHelper
     :short_percent_of_float
   ]
 
+  def link_to_report(page, report_date)
+    s = link_to("Go to Report", send("reports_#{page}_path", report_date: report_date.strftime("%Y%m%d")))
+    s.html_safe
+  end
+
   def report_date_form(page, current_report_date)
     s = form_tag "/reports/#{page}", method: :get, authenticity_token: false do
       b = text_field_tag :report_date, current_report_date.strftime('%m/%d/%Y')
