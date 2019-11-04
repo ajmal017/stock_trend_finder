@@ -13,7 +13,12 @@ module MarketDataPull
 
       def components
         component_table.css('tr').map do |tr|
-          tr.css('td').first.try(:text).try(:gsub, '.', '/')
+          tr
+            .css('td')
+            .first
+            &.text
+            &.gsub('.', '/')
+            &.strip
         end.compact
       end
 
