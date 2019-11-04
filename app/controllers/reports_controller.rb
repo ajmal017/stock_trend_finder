@@ -267,7 +267,8 @@ private
     return items unless params[:price] || params[:mclt] || params[:mcgt] || params[:default_filter]
 
     if params[:default_filter]
-      @sort_field = :week_52_streak
+      @sort_field = [{field: :volume_ratio, direction: :desc}, {field: :week_52_streak, direction: :asc}]
+      # @sort_field = [{field: :week_52_streak, direction: :asc}]
       return items
         .reject { |li| (li[:market_cap] || 0) < 700_000 } # market cap is in thousands
         # .reject { |li| (li[:week_52_streak] || 6).to_f > 5 }
