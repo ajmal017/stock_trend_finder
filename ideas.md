@@ -39,8 +39,13 @@
   - Have stocktwits notes appear in a discord
 
 
+* Big volume - within 95% of 52 week high and 3X normal volume 
 * yields report
+* 10% down
 * Dividend yield scanner
+  - Utilities
+  - REITS
+* SPY top 20 winners and losers
 * Scrape 13Fs from SEC website (EDGAR project)
 * 200DMA break - turning point (gets above the 200 and curvature shifts) - RDUS, NVDA
 * Highlight stocks of interest on the scans

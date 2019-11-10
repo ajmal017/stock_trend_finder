@@ -40,7 +40,7 @@ module TDAmeritradeDataInterface
 
     def run_finalize_realtime_snapshot_daemon
       scheduler = Rufus::Scheduler.new
-      scheduler.cron('10 17 * * FRI') do
+      scheduler.cron('10 19 * * FRI') do
         puts "Finalizing real time quotes: #{Time.now}"
         if is_market_day? Date.today
           ActiveRecord::Base.connection_pool.with_connection do
@@ -75,7 +75,8 @@ module TDAmeritradeDataInterface
           puts "Premarket Quote Import: #{Time.now}"
           if is_market_day? Date.today
             ActiveRecord::Base.connection_pool.with_connection do
-              import_premarket_quotes(date: Date.today)
+              # import_premarket_quotes(date: Date.today)
+              MarketDataPull::TDAmeritrade::PremarketQuotes::PullRealTimeQuotes.call
             end
 
             puts "Done #{Time.now}"

@@ -6,7 +6,7 @@ module MarketDataPull; module Nasdaq; module InstitutionalHoldings
 
     def call
       InstitutionalOwnershipSnapshot.find_or_create_by(data)
-      Ticker.find_by(symbol: symbol).update(institutional_holdings_percent: data['institutional_ownership_pct'])
+      Ticker.find_by(symbol: symbol).update(institutional_holdings_percent: data['SharesOutstandingPCT'])
     end
 
     private

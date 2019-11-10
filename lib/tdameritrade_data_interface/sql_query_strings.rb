@@ -1025,19 +1025,6 @@ where price_date='#{date.strftime('%Y-%m-%d')}'
 SQL
       end
 
-      def insert_memoized_fields_into_premarket_prices(date)
-        <<SQL
-update premarket_prices pp
-set
-previous_high=mf.premarket_previous_high,
-previous_low=mf.premarket_previous_low,
-previous_close=mf.premarket_previous_close,
-average_volume_50day=mf.premarket_average_volume_50day
-from memoized_fields mf
-where pp.price_date='#{date.strftime('%Y-%m-%d')}' and mf.price_date=pp.price_date and mf.ticker_symbol=pp.ticker_symbol
-SQL
-      end
-
     end
 
   end

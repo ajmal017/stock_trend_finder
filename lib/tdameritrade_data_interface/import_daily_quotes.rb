@@ -12,125 +12,6 @@ module TDAmeritradeDataInterface
     scrape.select { |ticker| DailyStockPrice.where("ticker_symbol=? AND price_date=?", ticker, Date.today-20).count == 0 }
   end
 
-  def self.quick_reset_ticker_symbol(symbol)
-    DailyStockPrice.where(ticker_symbol: symbol).delete_all
-    import_quotes(symbols: [symbol])
-  end
-
-  def self.import_quotes(opts={})
-    begin_date = (opts.has_key? :begin_date) && (opts[:begin_date].is_a? Date) ? opts[:begin_date] : nil
-    end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date] : Date.today
-    #end_date = (opts.has_key? :end_date) && (opts[:end_date].is_a? Date) ? opts[:end_date].strftime('%Y%m%d') : Date.today.strftime('%Y%m%d')
-
-    cache_file =  File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
-    log_file = File.join(Rails.root, 'downloads', 'import_quotes.log')
-
-    c = TDAmeritradeApi::Client.new
-    c.login
-    log = ""
-    #c.session_id = "128459556EEA989391FBAAA5E2BF8EB4.cOr5v8xckaAXQxWmG7bn2g"
-
-    symbols = opts[:symbols] || Ticker.watching.map(&:symbol)
-    symbols.each.with_index(1) do |symbol, i|
-      puts "Processing #{i}: #{symbol}"
-      begin
-        error_count = 0
-        prices = Array.new
-        last_dsp = DailyStockPrice.where(ticker_symbol: symbol).order(price_date: :desc).first
-
-        while error_count < 3 && error_count != -1 # error count should be -1 on a successful download of data
-          if last_dsp.present?
-            if last_dsp.price_date == end_date
-              prices = [{already_processed: true}]
-            else
-              if begin_date.nil?
-                prices = c.get_daily_price_history(symbol, (last_dsp.price_date+1), end_date)
-              else
-                prices = c.get_daily_price_history(symbol, begin_date, end_date)
-              end
-            end
-          else
-            prices = c.get_daily_price_history(symbol, NEW_TICKER_BEGIN_DATE, end_date)
-          end
-          if get_history_returned_error?(prices)
-            # TODO Change this so that it handles an exception rather than checks for error condition
-            error_count += 1
-            puts "Error processing #{symbol} - (attempt ##{error_count}) #{prices.first[:error]}"
-          else
-            error_count = -1
-          end
-        end
-
-        next if get_history_returned_error?(prices) || prices.first.has_key?(:already_processed)
-
-        of = open(cache_file, "w")
-        of.write("ticker_symbol,price_date,open,high,low,close,volume,created_at,updated_at\n")
-
-        price_date_list=Array.new
-        prices.each do |bar|
-          if price_date_list.index(bar[:timestamp]).nil?
-            of.write "#{symbol},#{bar[:timestamp].month}/#{bar[:timestamp].day}/#{bar[:timestamp].year},#{bar[:open]},#{bar[:high]},#{bar[:low]},#{bar[:close]},#{bar[:volume]/10},'#{Time.now}','#{Time.now}'\n"
-            price_date_list << bar[:timestamp]
-          end
-        end
-        of.close
-      rescue => e
-        puts "Error processing #{symbol} - #{e.message}"
-        log = log + "Error processing #{symbol} - #{e.message}\n"
-        next
-      end
-
-      begin
-        ActiveRecord::Base.connection.execute(
-            "COPY daily_stock_prices (ticker_symbol,price_date,open,high,low,close,volume,created_at,updated_at)
-              FROM '#{cache_file}'
-              WITH (FORMAT 'csv', HEADER)"
-        )
-
-      rescue => e
-        puts "#{e.message}"
-        log = log + "#{e.message}\n"
-      end
-
-    end
-
-
-    puts log
-
-    puts "Updating Previous Close Cache - #{Time.now}"
-    populate_previous_close
-
-    puts "Updating Previous High Cache - #{Time.now}"
-    populate_previous_high(Date.today)
-
-    puts "Updating Previous Low Cache - #{Time.now}"
-    populate_previous_low(Date.today)
-
-    puts "Updating 52 Week High Cache - #{Time.now}"
-    populate_high_52_weeks(Date.today)
-
-    puts "Calculating Average Daily Volumes - #{Time.now}"
-    populate_average_volume_50day(NEW_TICKER_BEGIN_DATE)
-
-    puts "Calculating SMA50's - #{Time.now}"
-    populate_sma50
-
-    puts "Calculating SMA200's - #{Time.now}"
-    populate_sma200
-
-    of = open(log_file, "w")
-    of.write(log)
-    of.close
-
-    log_problem_tickers=""
-    log.lines.each do |line|
-      log_problem_tickers+="#{/Error processing (.*?) -/.match(line)[1]}," if /\b#{/Error processing (.*?) -/.match(line)[1]}\b/.match(log_problem_tickers).nil?
-    end
-    log_problem_tickers.slice!(log_problem_tickers.length-1) if log_problem_tickers.last==","
-    puts "Summary report of problem tickers: #{log_problem_tickers}"
-
-  end
-
   def self.prepopulate_daily_stock_prices(prepopulate_date)
     if is_market_day?(prepopulate_date)
       puts "Prepopulating Daily Stock Prices for #{prepopulate_date} - #{Time.now}"
@@ -166,6 +47,7 @@ module TDAmeritradeDataInterface
     end
   end
 
+  # DEPRECATED Just leaving this here for emergency rollback in initial week of testing
   def self.import_premarket_quotes(opts={})
     date = opts[:date]
     if !date.is_a? Date
@@ -243,20 +125,21 @@ module TDAmeritradeDataInterface
     of.write(log)
     of.close
 
-    puts "Copying Memoized Premarket Previous Close, High, Low, and Average Daily Volumes - #{Time.now}"
-    copy_memoized_fields_to_premarket_prices date
+    # puts "Copying Memoized Premarket Previous Close, High, Low, and Average Daily Volumes - #{Time.now}"
+    # copy_memoized_fields_to_premarket_prices date
 
-    puts "Updating Premarket Previous Close Cache - #{Time.now}"
-    populate_premarket_previous_close date
-
-    puts "Updating Premarket Previous High Cache - #{Time.now}"
-    populate_premarket_previous_high date
-
-    puts "Updating Premarket Previous Low Cache - #{Time.now}"
-    populate_premarket_previous_low date
-
-    puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
-    populate_premarket_average_volume_50day(date)
+    # puts "Updating Premarket Previous Close Cache - #{Time.now}"
+    # populate_premarket_previous_close date
+    #
+    # puts "Updating Premarket Previous High Cache - #{Time.now}"
+    # populate_premarket_previous_high date
+    #
+    # puts "Updating Premarket Previous Low Cache - #{Time.now}"
+    # populate_premarket_previous_low date
+    #
+    # puts "Calculating Premarket Average Daily Volumes - #{Time.now}"
+    # populate_premarket_average_volume_50day(date)
+    ::MarketDataPull::TDAmeritrade::PremarketQuotes::Calculated::PopulateAll.call(date: Date.current)
 
     puts "Done"
   end
@@ -358,24 +241,24 @@ module TDAmeritradeDataInterface
   end
 
   # WARNING THIS FUNCTION IS BROKEN - NEEDS TO BE UPDATED TO USE NEW API CALLS
-  def self.catch_up(date, vacuum=true)
-    unless date.is_a? Date
-      puts "Enter an input date"
-      return
-    end
-
-    prepopulate_daily_stock_prices(date)
-    DailyStockPrice.where(price_date: date).update_all(snapshot_time: date)
-
-    # update_daily_stock_prices_from_real_time_snapshot
-    # import_premarket_quotes(date: date)
-    # import_afterhours_quotes(date: date)
-
-    if vacuum
-      ActiveRecord::Base.connection.execute "VACUUM FULL"
-      ActiveRecord::Base.connection.execute "VACUUM ANALYZE"
-    end
-  end
+  # def self.catch_up(date, vacuum=true)
+  #   unless date.is_a? Date
+  #     puts "Enter an input date"
+  #     return
+  #   end
+  #
+  #   prepopulate_daily_stock_prices(date)
+  #   DailyStockPrice.where(price_date: date).update_all(snapshot_time: date)
+  #
+  #   # update_daily_stock_prices_from_real_time_snapshot
+  #   # import_premarket_quotes(date: date)
+  #   # import_afterhours_quotes(date: date)
+  #
+  #   if vacuum
+  #     ActiveRecord::Base.connection.execute "VACUUM FULL"
+  #     ActiveRecord::Base.connection.execute "VACUUM ANALYZE"
+  #   end
+  # end
 
   def self.populate_high_52_weeks(begin_date=NEW_TICKER_BEGIN_DATE)
     ActiveRecord::Base.connection.execute update_high_52_week(begin_date)

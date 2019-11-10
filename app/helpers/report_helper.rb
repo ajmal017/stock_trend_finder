@@ -136,7 +136,8 @@ module ReportHelper
 
     link_to(
       "#{line_item[:ticker_symbol]}",
-      "https://old.nasdaq.com/symbol/#{line_item[:ticker_symbol].downcase}",
+      "https://www.reuters.com/company/#{line_item[:ticker_symbol]}",
+      # "https://old.nasdaq.com/symbol/#{line_item[:ticker_symbol].downcase}",
       target: '_blank'
     ) + outside_52_wk_marker + symbol_icon(line_item[:ticker_symbol])
   end
