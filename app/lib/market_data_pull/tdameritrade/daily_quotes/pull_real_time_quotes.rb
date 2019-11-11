@@ -5,6 +5,8 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
 
     CACHE_FILE = File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
 
+    input optional: [:is_premarket]
+
     def call
       RealTimeQuote.reset_cache
 
@@ -20,17 +22,17 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
 
           quotes.keys.each do |symbol|
             begin
-              bar = quotes[symbol]
+              candle = quotes[symbol]
 
-              if bar['mark'] > 0 && bar['openPrice'] > 0 && bar['highPrice'] > 0 && bar['lowPrice'] > 0
+              if candle_is_valid?(candle)
                 line =
                   "#{symbol}," \
-                  "#{bar['mark']}," \
-                  "#{bar['tradeTimeInLong'] > 0 ? long_to_time(bar['tradeTimeInLong']).to_s : nil}," \
-                  "#{bar['openPrice']}," \
-                  "#{bar['highPrice']}," \
-                  "#{bar['lowPrice']}," \
-                  "#{bar['totalVolume']}\n"
+                  "#{candle['mark']}," \
+                  "#{candle['tradeTimeInLong'] > 0 ? long_to_time(candle['tradeTimeInLong']).to_s : nil}," \
+                  "#{candle['openPrice']}," \
+                  "#{candle['highPrice']}," \
+                  "#{candle['lowPrice']}," \
+                  "#{candle['totalVolume']}\n"
 
                 of.write(line)
               end
@@ -58,6 +60,15 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
     end
 
     private
+
+    def candle_is_valid?(candle)
+      (premarket? && candle['mark'] > 0 && candle['totalVolume'] > 0) ||
+      (candle['mark'] > 0 && candle['openPrice'] > 0 && candle['highPrice'] > 0 && candle['lowPrice'] > 0)
+    end
+
+    def premarket?
+      @is_premarket || false
+    end
 
     def ticker_watch_list
       @ticker_watch_list ||= Ticker.watching.pluck(:symbol)
