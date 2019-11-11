@@ -4,7 +4,7 @@ module MarketDataPull; module TDAmeritrade; module PremarketQuotes
     include Verbalize::Action
 
     def call
-      ::MarketDataPull::TDAmeritrade::DailyQuotes::PullRealTimeQuotes.call
+      ::MarketDataPull::TDAmeritrade::DailyQuotes::PullRealTimeQuotes.call(premarket: true)
       copy_realtime_quotes_to_premarket_prices
 
       puts "Copying Memoized Premarket Previous Close, High, Low, and Average Daily Volumes - #{Time.now}"

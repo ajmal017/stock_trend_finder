@@ -5,7 +5,7 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
 
     CACHE_FILE = File.join(Rails.root, 'downloads', "tdameritrade_daily_stock_prices_cache.csv")
 
-    input optional: [:is_premarket]
+    input optional: [:premarket]
 
     def call
       RealTimeQuote.reset_cache
@@ -67,7 +67,7 @@ module MarketDataPull; module TDAmeritrade; module DailyQuotes
     end
 
     def premarket?
-      @is_premarket || false
+      @premarket || false
     end
 
     def ticker_watch_list
