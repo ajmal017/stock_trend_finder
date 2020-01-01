@@ -39,6 +39,7 @@
   - Have stocktwits notes appear in a discord
 
 
+* Spot parabolics. Look at properties of LEN, WDFC, etc.
 * Big volume - within 95% of 52 week high and 3X normal volume 
 * yields report
 * 10% down

@@ -6,7 +6,7 @@ namespace :stock_trend_finder do
     $stf.run_finalize_realtime_snapshot_daemon
     $stf.run_premarket_quotes_daemon
     $stf.run_premarket_memoization_daemon
-    $stf.run_afterhours_quotes_daemon
+    # $stf.run_afterhours_quotes_daemon
     $stf.run_prepopulate_daily_stock_quotes_daemon
     $stf.run_fundamentals_history_daemon
     $stf.run_report_snapshots_daemon
