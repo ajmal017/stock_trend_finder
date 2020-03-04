@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 ### Rails and related ###
 gem 'rails', '4.2.7'
 gem 'pg',    '~> 0.18.1'
-gem 'puma',  '~> 3.6'
+gem 'puma',  '~> 3.12'
 
 gem 'dotenv-rails',   '~> 2.2', groups: [:development, :test] # Needs to be here so gems that use it will have access
 
